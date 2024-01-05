@@ -24,12 +24,17 @@
 
 ### Libraries and Tools:
 
-- Spring Data JPA
-- Spring Web
-- Spring Security
-- Thymeleaf
-- Hibernate
+- Spring Boot Starter Data JPA
+- Spring Boot Starter Security
+- Spring Boot Starter Thymeleaf
+- Thymeleaf Extras Spring Security 6
+- Spring Boot DevTools (Development Only)
+- Spring Boot Starter Validation
+- Spring Boot Starter Web
 - MySQL Connector/J
+- Spring Boot Starter Test
+- Spring Security Test
+- MariaDB Java Client
 
 ---
 
