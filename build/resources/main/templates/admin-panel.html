@@ -9,7 +9,7 @@
 <body class="bg-secondary">
 
 <!-- Navbar -->
-<nav class = "navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class = "navbar navbar-expand-lg navbar-dark bg-dark shadow-lg">
     <div class = "container-fluid">
         <a class="navbar-brand">Work Flow || Admin Panel</a>
         <ul class="navbar-nav ms-auto">
@@ -19,15 +19,18 @@
 
             <!-- Navbar Admin Panel Button -->
             <li  class="nav-item"  sec:authorize="hasRole('ADMIN')">   <!-- Add a link to point to /adminPanel ... this is for the admins -->
-                <form class="nav-link" th:action="@{/adminPanel}" method="get">
+                <form class="nav-link" th:action="@{/workFlow/adminPanel}" method="get">
                     <input type= "submit" value="ADMIN" class="btn btn-outline-warning"/>
                 </form>
             </li>
+
             <li class="nav-item">
                 <form class="nav-link" th:action="@{/}" method="get">
                     <input type= "submit" value="Apps" class="btn btn-outline-secondary"/>
                 </form>
             </li>
+
+
             <!-- Navbar Logout Button -->
             <li class="nav-item">
                 <form class="nav-link" th:action="@{/logout}" method="POST">
