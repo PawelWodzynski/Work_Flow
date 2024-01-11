@@ -13,11 +13,4 @@ public class ViewController {
     public String showHomeAppCenter(){
         // Returns the view name "app-center" to be rendered
         return "app-center";}
-
-    @GetMapping("/adminPanel")
-    public String showAdminPanel(){
-        // Returns the view name "admin-panel" to be rendered
-        return "admin-panel";
-    }
-
 }

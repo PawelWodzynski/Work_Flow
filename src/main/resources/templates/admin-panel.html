@@ -19,11 +19,12 @@
 
             <!-- Navbar Admin Panel Button -->
             <li  class="nav-item"  sec:authorize="hasRole('ADMIN')">   <!-- Add a link to point to /adminPanel ... this is for the admins -->
-                <form class="nav-link" th:action="@{/workFlow/adminPanel}" method="get">
+                <form class="nav-link" th:action="@{/employee/adminPanel}" method="get">
                     <input type= "submit" value="ADMIN" class="btn btn-outline-warning"/>
                 </form>
             </li>
 
+            <!-- Navbar App Center button -->
             <li class="nav-item">
                 <form class="nav-link" th:action="@{/}" method="get">
                     <input type= "submit" value="Apps" class="btn btn-outline-secondary"/>
@@ -37,9 +38,70 @@
                     <input type="submit" value="Logout" class="btn btn-outline-danger"/>
                 </form>
             </li>
+
         </ul>
     </div>
 </nav> <!-- Navbar End -->
+
+
+<div class="container">
+
+    <br> <!-- page header -->
+    <h3 class="container d-flex justify-content-center align-items-center text-orange ">Admin Panel</h3>
+    <hr> <!-- END page header -->
+
+
+    <!-- existing employees table  -->
+    <table class="table table-dark table-bordered table-striped">
+        <thead class="table-dark">
+            <tr> <!-- table row for header cells -->
+                <th class="bg-dark">First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+        <tr th:each="tempEmployee : ${employees}">  <!-- table row for data cells -->
+
+            <td th:text="${tempEmployee.firstName}"/>
+            <td th:text="${tempEmployee.lastName}"/>
+            <td th:text="${tempEmployee.userName}"/>
+            <td th:text="${tempEmployee.email}"/>
+
+            <td> <!-- data cell whitch get only one role the highest in hierarhy -->
+                 <span th:if="${tempEmployee.roles != null and
+                          #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+    Admin <!-- this will be displayed when user have the ADMIN role -->
+                </span>
+
+                <span th:if="${tempEmployee.roles != null and
+                 #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+    Manager <!-- this will be displayed when user not have ADMIN role but only has the MANAGER role -->
+                </span>
+
+                <span th:if="${tempEmployee.roles != null and
+                 #strings.contains(tempEmployee.roles.toString(), 'ROLE_EMPLOYEE') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')}">
+    Employee <!-- this will be displayed when user not have ADMIN and MANAGER roles but only has the EMPLOYEE role -->
+                </span>
+            </td>
+
+        </tr> <!-- end table row for data cells -->
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
 
 
 

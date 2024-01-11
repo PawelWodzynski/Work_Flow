@@ -2,7 +2,13 @@ package com.workflow.WorkFlowDEMO.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,19 +33,57 @@ public class WebSecurityConfig {
         // Create a new instance of JdbcUserDetailsManager using the provided DataSource
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        // Define the query to retrieve a user by username
+        // Query to retrieve user details by username
         jdbcUserDetailsManager.setUsersByUsernameQuery(
-                "select user_id, pw, active from user where user_id=?"
+                "select username, password, 1 as enabled from employee where username=?"
         );
 
-        // Define the query to retrieve the authorities/roles by username
+        // Query to retrieve user authorities (roles) by username
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "select user_id, role from role where user_id=?"
+                "select u.username, r.name from employee_roles ur " +
+                        "join employee u on ur.user_id = u.id " +
+                        "join role r on ur.role_id = r.id " +
+                        "where u.username=?"
         );
 
         // Return the configured JdbcUserDetailsManager bean
         return jdbcUserDetailsManager;
     }
+
+
+
+
+    /**
+     * Bean definition for the password encoder.
+     *
+     * @return BCryptPasswordEncoder bean for encoding passwords.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+
+
+    /**
+     * Bean definition for the AuthenticationManager.
+     *
+     * @param userDetailsService UserDetailsService bean for retrieving user details.
+     * @param encoder PasswordEncoder bean for encoding passwords.
+     * @return AuthenticationManager bean configured with a DaoAuthenticationProvider.
+     * @throws Exception Throws an exception in case of configuration error.
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder encoder) throws Exception {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(encoder);
+        return new ProviderManager(provider);
+    }
+
+
+
 
 
     /**
@@ -62,7 +106,7 @@ public class WebSecurityConfig {
         httpSecurity.authorizeHttpRequests(configurer ->
                         configurer
                                 .requestMatchers("/workFlow/appCenter").hasRole("EMPLOYEE") // For the main page, the "EMPLOYEE" role is required
-                                .requestMatchers("/workFlow/adminPanel").hasRole("ADMIN") // For the Admin Panel Page "ADMIN" role is required
+                                .requestMatchers("/employee/adminPanel").hasRole("ADMIN") // For the Admin Panel Page "ADMIN" role is required
                                 .anyRequest().authenticated() // For other paths, general authentication is required
                 )
                 // Login form configuration
@@ -83,20 +127,4 @@ public class WebSecurityConfig {
         // Returns the configured SecurityFilterChain object
         return httpSecurity.build();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
