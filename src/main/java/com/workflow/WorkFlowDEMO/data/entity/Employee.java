@@ -2,6 +2,7 @@ package com.workflow.WorkFlowDEMO.data.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -116,6 +117,7 @@ public class Employee {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
 
     // Adding toString method for debugging
     @Override

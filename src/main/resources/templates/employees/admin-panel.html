@@ -19,7 +19,7 @@
 
             <!-- Navbar Admin Panel Button -->
             <li  class="nav-item"  sec:authorize="hasRole('ADMIN')">   <!-- Add a link to point to /adminPanel ... this is for the admins -->
-                <form class="nav-link" th:action="@{/employee/adminPanel}" method="get">
+                <form class="nav-link" th:action="@{/employees/adminPanel}" method="get">
                     <input type= "submit" value="ADMIN" class="btn btn-outline-warning"/>
                 </form>
             </li>
@@ -44,12 +44,21 @@
 </nav> <!-- Navbar End -->
 
 
+
+
+
+
 <div class="container">
+
 
     <br> <!-- page header -->
     <h3 class="container d-flex justify-content-center align-items-center text-orange ">Admin Panel</h3>
     <hr> <!-- END page header -->
 
+    <!-- Add Employee Button -->
+    <a th:href="@{/employees/addEmployee}" class="btn btn-success btn-sm mb-3  text=dark ">
+        Add Employee
+    </a>
 
     <!-- existing employees table  -->
     <table class="table table-dark table-bordered table-striped">

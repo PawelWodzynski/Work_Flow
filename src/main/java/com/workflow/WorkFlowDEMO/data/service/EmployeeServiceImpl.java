@@ -22,4 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> findAll() {
         return employeeRepository.findAllByOrderByLastNameAsc();
     }
+
+    @Override
+    public Employee save(Employee theEmployee) {
+        return employeeRepository.save(theEmployee);
+    }
+
+
 }

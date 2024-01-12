@@ -28,7 +28,7 @@
 
                 <!-- Navbar Admin Panel Button -->
                 <li  class="nav-item"  sec:authorize="hasRole('ADMIN')">   <!-- Add a link to point to /adminPanel ... this is for the admins -->
-                    <form class="nav-link" th:action="@{/employee/adminPanel}" method="get">
+                    <form class="nav-link" th:action="@{/employees/adminPanel}" method="get">
                         <input type= "submit" value="ADMIN" class="btn btn-outline-warning"/>
                     </form>
                 </li>
