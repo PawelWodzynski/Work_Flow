@@ -5,8 +5,8 @@
 .idea/
 
 # Gradle
-.gradle/
-build/
+.gradle/*
+build/*
 
 # Binaries
 bin/
