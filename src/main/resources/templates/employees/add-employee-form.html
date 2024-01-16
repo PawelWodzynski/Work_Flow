@@ -31,7 +31,6 @@
                 </form>
             </li>
 
-
             <!-- Navbar Logout Button -->
             <li class="nav-item">
                 <form class="nav-link" th:action="@{/logout}" method="POST">
@@ -44,6 +43,8 @@
 </nav> <!-- Navbar End -->
 
 
+
+        <!-- Create Employee Form -->
         <form action="#"  th:action="@{/employees/saveEmployee}"
                       th:object="${employee}" method="POST">
 
@@ -53,22 +54,36 @@
             <input type="text" th:field="*{lastName}"
                    class="form-control mb-4 w-25" placeholder="Last Name">
 
-            <input type="text" th:field="*{userName}"
+            <input type="hidden" th:field="*{userName}"
                    class="form-control mb-4 w-25" placeholder="Username">
 
-            <input type="text" th:field="*{password}"
+            <input type="hidden" th:field="*{password}"
                    class="form-control mb-4 w-25" placeholder="Password">
 
             <input type="text" th:field="*{email}"
                    class="form-control mb-4 w-25" placeholder="Email">
 
-            <input type="text" th:field="*{roles}"
-                   class="form-control mb-4 w-25" placeholder="Roles">
+            <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio1" name="selectedRole" value="ADMIN"
+                       >ADMIN
+                <label class="form-check-label" for="radio1"></label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio2" name="selectedRole" value="MANAGER"
+                       >MANAGER
+                <label class="form-check-label" for="radio2"></label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio3" name="selectedRole" value="EMPLOYEE"
+                       checked>EMPLOYEE
+                <label class="form-check-label" for="radio3"></label>
+            </div> <!-- END radio buttons -->
 
 
             <button type="submit" class="btn btn-info col-2">Save</button>
 
-         </form>
+         </form>   <!-- END create employee form -->
 
 
 

@@ -1,20 +1,24 @@
 package com.workflow.WorkFlowDEMO.data.service;
 
 import com.workflow.WorkFlowDEMO.data.DAO.EmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.DAO.RoleRepository;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
+import com.workflow.WorkFlowDEMO.data.entity.Role;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 // Service implementation for Employee-related operations
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private RoleRepository roleRepository;
 
     // Constructor with EmployeeRepository injection
-    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository){
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository, RoleRepository theRoleRepository){
         employeeRepository = theEmployeeRepository;
+        roleRepository = theRoleRepository;
     }
 
     // Implementation of the method to retrieve a list of all employees
@@ -24,7 +28,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee save(Employee theEmployee) {
+    public Employee save(Employee theEmployee, String selectedRole) {
+
+        // if role collection does't exist, create new ArrayList for collecting roles
+        if (theEmployee.getRoles() == null) {
+            theEmployee.setRoles(new ArrayList<>());
+        }
+
+        // find appriopriate roles in DB
+        Role role_admin = roleRepository.findByName("ROLE_ADMIN");
+        Role role_manager= roleRepository.findByName("ROLE_MANAGER");
+        Role role_employee = roleRepository.findByName("ROLE_EMPLOYEE");
+
+        // Add role/roles for employee according to choice in add-employee-form.html
+        // When empleyee will have highter rank role from lower rank role, must to have all lower rank roles
+        if (selectedRole.contains("ADMIN")){
+            theEmployee.getRoles().addAll(List.of(role_admin,role_manager,role_employee)); // Adding roles for existed role collection
+        } else if(selectedRole.contains("MANAGER")){
+            theEmployee.getRoles().addAll(List.of(role_manager, role_employee));
+        } else if (selectedRole.contains("EMPLOYEE")) {
+            theEmployee.getRoles().add(role_employee);
+        }
+
+        // Save employee in DB
         return employeeRepository.save(theEmployee);
     }
 

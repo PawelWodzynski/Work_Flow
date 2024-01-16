@@ -4,10 +4,7 @@ import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.service.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class EmployeeController {
         employeeService = theEmployeeService;
     }
 
-    // Handling GET request at "/employee/adminPanel"
+    // Handling GET request at "/employee/adminPanel" for admin-panel.html
     @GetMapping("/adminPanel")
     public  String listEmployees(Model theModel){
 
@@ -37,7 +34,7 @@ public class EmployeeController {
         return "employees/admin-panel";
     }
 
-    // Method handling GET request at "/addEmployee"
+    // Method handling GET request at "/addEmployee" in admin-panel.html
     @GetMapping("/addEmployee")
     public String addEmployeeForm(Model theModel){
 
@@ -49,12 +46,13 @@ public class EmployeeController {
         return "employees/add-employee-form"; // Return the view name for the add-employee form
     }
 
-    //Method handling POST request at "/saveEmployee"
+    //Method handling POST request at "/saveEmployee" in add-employee-form.html
     @PostMapping("/saveEmployee")
-    public String saveEmployee(@ModelAttribute("employee") Employee theEmployee){
+    public String saveEmployee(@ModelAttribute("employee") Employee theEmployee, @RequestParam("selectedRole") String theRole){
+
 
         //save the employee using the appropriate service (employeeService)
-        employeeService.save(theEmployee);
+        employeeService.save(theEmployee, theRole);
 
         // redirect to the /employees/adminPanel to prevent duplicate submissions
         return "redirect:/employees/adminPanel";

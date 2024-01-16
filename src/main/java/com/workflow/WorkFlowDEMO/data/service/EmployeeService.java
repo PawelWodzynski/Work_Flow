@@ -10,6 +10,7 @@ public interface EmployeeService {
     // Method to retrieve a list of all employees
     List<Employee> findAll();
 
-    Employee save(Employee theEmployee);
+    // Method to save employee with selected role from add-employee-form.html
+    Employee save(Employee theEmployee, String selectedRole);
 
 }
