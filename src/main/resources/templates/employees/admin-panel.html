@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
 <body class="bg-secondary">
@@ -55,10 +56,58 @@
     <h3 class="container d-flex justify-content-center align-items-center text-orange ">Admin Panel</h3>
     <hr> <!-- END page header -->
 
-    <!-- Add Employee Button -->
-    <a th:href="@{/employees/addEmployee}" class="btn btn-success btn-sm mb-3  text=dark ">
-        Add Employee
-    </a>
+
+    <!-- Collapse Add Employee Button -->
+    <div>
+        <button class="btn btn-success btn-sm mb-1" data-bs-toggle="collapse" data-bs-target="#employeeFormCollapse">Add Employee</button>
+        <div id="employeeFormCollapse" class="collapse mt-3">
+
+            <!-- Create Employee Form -->
+            <form action="#" th:action="@{/employees/saveEmployee}" th:object="${employee}" method="POST">
+
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <input type="text" th:field="*{firstName}" class="form-control form-control-sm" placeholder="First Name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="text" th:field="*{lastName}" class="form-control form-control-sm" placeholder="Last Name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="text" th:field="*{email}" class="form-control form-control-sm" placeholder="Email">
+                    </div>
+
+                    <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio1" name="selectedRole" value="ADMIN">ADMIN
+                            <label class="form-check-label" for="radio1"></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio2" name="selectedRole" value="MANAGER">MANAGER
+                            <label class="form-check-label" for="radio2"></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio3" name="selectedRole" value="EMPLOYEE" checked>EMPLOYEE
+                            <label class="form-check-label" for="radio3"></label>
+                        </div> <!-- END radio buttons -->
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <button type="submit" class="btn btn-success btn-sm">Save Employee</button>
+                    </div>
+                </div>
+
+            </form>   <!-- END create employee form -->
+        </div>
+    </div>
+    <!-- END Collapse Add Employee Button -->
+
+
+
+
+
+
+
 
     <!-- existing employees table  -->
     <table class="table table-dark table-bordered table-striped">
@@ -104,7 +153,7 @@
 
         </tr> <!-- end table row for data cells -->
         </tbody>
-    </table>
+    </table> <!--  END existing employees table  -->
 
 </div>
 

@@ -25,32 +25,27 @@ public class EmployeeController {
 
     // Handling GET request at "/employee/adminPanel" for admin-panel.html
     @GetMapping("/adminPanel")
-    public  String listEmployees(Model theModel){
-
+    public  String listAndAddEmployees(Model theModel){
+//  List of EMPLOYEES
         // Retrieve the list of employees from the service
-        List<Employee> theEmployee = employeeService.findAll();
+        List<Employee> theEmployees = employeeService.findAll();
 
         // Add the list of employees to the model to make it available in the view
-        theModel.addAttribute("employees", theEmployee);
+        theModel.addAttribute("employees", theEmployees);
 
-        // Return the view name to be rendered
-        return "employees/admin-panel";
-    }
 
-    // Method handling GET request at "/addEmployee" in admin-panel.html
-    @GetMapping("/addEmployee")
-    public String addEmployeeForm(Model theModel){
-
-        // Creating new employee object
+//  Add Employee
+        // Creating new employee object for add employee function in Add Employee button
         Employee theEmployee = new Employee();
 
         // creating model attribute to bind form data
         // Adding the Employee object to the model
         theModel.addAttribute("employee", theEmployee);
 
-        // Return the view name for the add-employee form
-        return "employees/add-employee-form";
+        // Return the view name to be rendered
+        return "employees/admin-panel";
     }
+
 
     //Method handling POST request at "/saveEmployee" in add-employee-form.html
     @PostMapping("/saveEmployee")
