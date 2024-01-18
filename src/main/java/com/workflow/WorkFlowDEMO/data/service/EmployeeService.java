@@ -13,4 +13,10 @@ public interface EmployeeService {
     // Method to save employee with selected role from add-employee-form.html
     Employee save(Employee theEmployee, String selectedRole);
 
+    // Method to find all usernames matched to username
+    List<Employee> FindByUsernameContaining(String userName);
+
+
+
+
 }

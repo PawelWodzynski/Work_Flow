@@ -11,4 +11,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     // Method to find all employees and order them by last name in ascending order
     public List<Employee> findAllByOrderByLastNameAsc();
 
+    // Method to find all usernames matched to username
+    List<Employee> findByUserNameContaining(String userName);
 }

@@ -27,6 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAllByOrderByLastNameAsc();
     }
 
+    // Implementating save method from EmployeeService
     @Override
     public Employee save(Employee theEmployee, String selectedRole) {
 
@@ -52,6 +53,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // Save employee in DB
         return employeeRepository.save(theEmployee);
+    }
+
+
+    // Implementating find all users mached by username method from EmployeeService
+    @Override
+    public List<Employee> FindByUsernameContaining(String userName) {
+        // find appriocrate usernames
+        return employeeRepository.findByUserNameContaining(userName);
     }
 
 
