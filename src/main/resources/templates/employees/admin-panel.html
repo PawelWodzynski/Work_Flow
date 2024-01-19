@@ -118,6 +118,7 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -149,9 +150,17 @@
                  not #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')}">
     Employee <!-- this will be displayed when user not have ADMIN and MANAGER roles but only has the EMPLOYEE role -->
                 </span>
-            </td>
+            </td><!-- END data cell whitch get only one role the highest in hierarhy -->
 
-        </tr> <!-- end table row for data cells -->
+            <td> <!-- Delete Employee Button -->
+                <a th:href="@{/employees/deleteEmployee(employeeId=${tempEmployee.id})}"
+                class="btn btn-danger btn-sm text-dark"
+                onclick="if (!(confirm('Are you sure you want to delete this employee?'))) return false;">
+                    Delete
+                </a>
+            </td> <!-- END Delete Employee Button -->
+
+        </tr> <!-- END table row for data cells -->
         </tbody>
     </table> <!--  END existing employees table  -->
 

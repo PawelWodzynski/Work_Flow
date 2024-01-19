@@ -16,6 +16,10 @@ public interface EmployeeService {
     // Method to find all usernames matched to username
     List<Employee> FindByUsernameContaining(String userName);
 
+    // Method to delete employee by id
+    void deleteById(int theId);
+
+
 
 
 

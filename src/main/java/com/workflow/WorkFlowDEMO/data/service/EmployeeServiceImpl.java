@@ -4,6 +4,9 @@ import com.workflow.WorkFlowDEMO.data.DAO.EmployeeRepository;
 import com.workflow.WorkFlowDEMO.data.DAO.RoleRepository;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.Role;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,6 +17,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private RoleRepository roleRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     // Constructor with EmployeeRepository injection
     public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository, RoleRepository theRoleRepository){
@@ -62,6 +68,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         // find appriocrate usernames
         return employeeRepository.findByUserNameContaining(userName);
     }
+
+
+    // Implementating delete employee by id method from EmployeeService using EmployeeRepository
+    @Override
+    @Transactional
+    public void deleteById(int theId) {
+
+        // finding the employee by id
+        Employee theEmployee = entityManager.find(Employee.class, theId);
+
+
+        // before deleting an employee, remove the role that the employee has
+        if(theEmployee != null){
+           // deleting roles that the employee has
+            theEmployee.setRoles(null);
+
+            // deleting employee
+            entityManager.remove(theEmployee);
+        }
+
+    }
+
+
+
 
 
 }
