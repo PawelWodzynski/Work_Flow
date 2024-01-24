@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.data.DAO;
+package com.workflow.WorkFlowDEMO.data.repository;
 
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.service;
 
-import com.workflow.WorkFlowDEMO.data.DAO.EmployeeRepository;
-import com.workflow.WorkFlowDEMO.data.DAO.RoleRepository;
+import com.workflow.WorkFlowDEMO.data.repository.EmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.repository.RoleRepository;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.Role;
 import jakarta.persistence.EntityManager;
@@ -33,9 +33,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAllByOrderByLastNameAsc();
     }
 
-    // Implementating save method from EmployeeService
+    // Implementating saveWithRole method from EmployeeService
     @Override
-    public Employee save(Employee theEmployee, String selectedRole) {
+    public Employee saveWithRole(Employee theEmployee, String selectedRole) {
 
         // if role collection does't exist, create new ArrayList for collecting roles
         if (theEmployee.getRoles() == null) {
@@ -90,8 +90,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    // implementation method to find employee by id using employee repository (JpaRepository)
+    @Override
+    public Optional<Employee> findById(int theId) {
+        return employeeRepository.findById(theId);
+    }
 
-
+    // implementation method to save employee without role using employee repository (JpaRepository)
+    @Override
+    public Employee saveWithoutRole(Employee theEmployee) {
+        return employeeRepository.save(theEmployee);
+    }
 
 
 }

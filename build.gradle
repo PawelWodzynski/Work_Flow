@@ -55,6 +55,8 @@ dependencies {
 // Starter for Spring security testing
 	testImplementation 'org.springframework.security:spring-security-test'
 
+// Java Mail Sender
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
