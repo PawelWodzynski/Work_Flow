@@ -25,9 +25,11 @@ public class EmployeeController {
         emailService = theEmailService;
     }
 
-    // Handling GET request at "/employee/adminPanel" for admin-panel.html
+    // Handling GET request for admin-panel.html
+    // This method has task, add to model list of all employees
+    // And add to model object of new employee for add employee form
     @GetMapping("/adminPanel")
-    public  String listAndAddEmployees(Model theModel){
+    public  String listOfAllEmployeesAndAddEmployee(Model theModel){
 //  List of EMPLOYEES
         // Retrieve the list of employees from the service
         List<Employee> theEmployees = employeeService.findAll();
@@ -49,7 +51,36 @@ public class EmployeeController {
     }
 
 
-    //Method handling POST request at "/saveEmployee" in add-employee-form.html
+
+    // Handling GET request for admin-panel.html
+    // This method has the task of adding to the model a list of all employees searched by the word in the search bar in admin-panel.html
+    // And add to model object of new employee for add employee form
+    @GetMapping("/adminPanelFindByUsername")
+    public  String listOfEmployeesFindedByUsernameAndAddEmployee(@RequestParam("findByUsername") String searchedName, Model theModel){
+//  List of EMPLOYEES finded by username
+        // Retrieve the list of employees from the service
+        List<Employee> theEmployees = employeeService.FindByUsernameContaining(searchedName);
+
+        // Add the list of employees to the model to make it available in the view
+        theModel.addAttribute("employees", theEmployees);
+
+
+//  Add Employee
+        // Creating new employee object for add employee function in Add Employee button
+        Employee theEmployee = new Employee();
+
+        // creating model attribute to bind form data
+        // Adding the Employee object to the model
+        theModel.addAttribute("employee", theEmployee);
+
+        // Return the view name to be rendered
+        return "employees/admin-panel";
+    }
+
+
+    // Method handling POST request at "/saveEmployee" in add-employee-form.html
+    // This method has task get employee from add employee form
+    // And save new employee in DB
     @PostMapping("/saveEmployee")
     public String saveEmployee(@ModelAttribute("employee") Employee theEmployee, @RequestParam("selectedRole") String theRole, Model theModel){
 
@@ -103,7 +134,9 @@ public class EmployeeController {
     }
 
     // this method handilng POST request for reset employee password, and has task generate new password,
-    // saveWithRole the password in DB and send mail with current psasword for employee email
+    // this method using saveWithoutRole method from EmployeeService
+    // in order to overwrite only the employee's data with new password to DB
+    // and send mail with current psasword for employee email
     @PostMapping ("/resetPassword")
     public String resetEmployeePassword(@RequestParam("employeeId") int theId){
 
@@ -136,8 +169,8 @@ public class EmployeeController {
 
     }
 
-    // This method handling POST request for update employee, and has task saveWithRole the updated employee in DB
-    // optional will send mail with new username if employee first and last name has been updated
+    // This method handling POST request for update employee, and has task saveWithRole/saveWithoutRole the updated employee to DB
+    // optional will send mail with new username if employee first or last name has been updated
     // optional will set new role for employee
     @PostMapping("/updateEmployee")
     public String updateEmpleyee(@RequestParam("updatedEmployeeId") int theId,@RequestParam("updatedEmployeeFirstName") String theFirstName,
@@ -155,7 +188,7 @@ public class EmployeeController {
 
         // if employee updated first name not equals to current first name in DB or if employee last name not equals to last name in DB,
         // set new first and last name for updating employee and
-        // generate new username for employee and send mail with new username to employee current email
+        // generate new username for employee, and send mail with new username to employee current email
         if (!theFirstName.equals(updatedEmployee.getFirstName()) || !theLastName.equals(updatedEmployee.getLastName())){
             updatedEmployee.setFirstName(theFirstName);
             updatedEmployee.setLastName(theLastName);
@@ -170,8 +203,8 @@ public class EmployeeController {
         // Defining current role witch has employee by converted employee role
         String definedEmployeeRole = DefiningCurrentEmployeeRole.defineEmployeeRole(currentEmployeeRole);
 
-        // if current employee role it's differs from role from employee update form set up new employee role and saveWithRole employee with new role
-        // if current employee role it's not differs from role from employee update form saveWithRole employee withotu role for keep current role
+        // if current employee role it's differs from role from employee update form, set up new employee role and use saveWithRole method for save with new role
+        // if current employee role it's not differs from role from employee update form, use saveWithoutRole method for keep current role
         if (!definedEmployeeRole.equals(theRole)){
             updatedEmployee.setRoles(null);
             employeeService.saveWithRole(updatedEmployee,theRole);
