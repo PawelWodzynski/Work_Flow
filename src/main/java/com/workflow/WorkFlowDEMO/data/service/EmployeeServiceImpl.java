@@ -1,12 +1,14 @@
 package com.workflow.WorkFlowDEMO.data.service;
 
 import com.workflow.WorkFlowDEMO.data.repository.EmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
 import com.workflow.WorkFlowDEMO.data.repository.RoleRepository;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,22 +17,22 @@ import java.util.*;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private EntityManager entityManager;
 
-    // Constructor with EmployeeRepository injection
-    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository, RoleRepository theRoleRepository){
-        employeeRepository = theEmployeeRepository;
-        roleRepository = theRoleRepository;
-    }
+    @Autowired
+    private PageEmployeeRepository pageEmployeeRepository;
 
     // Implementation of the method to retrieve a list of all employees
     @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAllByOrderByLastNameAsc();
+    public List<Employee> findAll(Pageable pageable) {
+        return employeeRepository.findAllByOrderByLastNameAsc(pageable);
     }
 
     // Implementating saveWithRole method from EmployeeService
@@ -64,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // Implementating find all users mached by username method from EmployeeService
     @Override
-    public List<Employee> FindByUsernameContaining(String userName) {
+    public List<Employee> findByUsernameContaining(String userName) {
         // find appriocrate usernames
         return employeeRepository.findByUserNameContaining(userName);
     }
@@ -77,7 +79,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // finding the employee by id
         Employee theEmployee = entityManager.find(Employee.class, theId);
-
 
         // before deleting an employee, remove the role that the employee has
         if(theEmployee != null){
@@ -102,5 +103,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(theEmployee);
     }
 
+    // implementation method to define count of employees in DB
+    @Override
+    public long employeesCountInDB() {
+        return employeeRepository.count();
+    }
 
 }

@@ -1,6 +1,11 @@
 package com.workflow.WorkFlowDEMO.api.utils;
 
+import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.service.EmployeeService;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsernameGenerator {
 
@@ -20,11 +25,11 @@ public class UsernameGenerator {
     // Lowercasing sythesizes initials
     String lowercaseInitials = synthesizedInitials.toLowerCase();
 
-        // finding list of the same matched useres to lowercased initials
-        employeeService.FindByUsernameContaining(lowercaseInitials);
+        // get list of all cointained employees by lowercase initials
+        List<Employee> listOfContainedEmployees = employeeService.findByUsernameContaining(lowercaseInitials);
 
-        // counting the same matched users
-        int numberOfUsers = employeeService.FindByUsernameContaining(lowercaseInitials).size();
+        // checking employees count in listOfContainedEmployees
+        int numberOfUsers = listOfContainedEmployees.size();
 
         // Creating empty string of final username
         String finalUsername = "";
@@ -33,9 +38,37 @@ public class UsernameGenerator {
         if (numberOfUsers == 0){
             finalUsername = lowercaseInitials;
         }
-        // if lower cased initials exist in DB append count of existed users number to basic lowercased initials for username
+        // if lower cased initials exist in DB append the highest number from the same username to new employee username
         else if(numberOfUsers > 0){
-            finalUsername = lowercaseInitials + numberOfUsers;
+
+            // initialize new ArrayList for numbers from usernames
+            List<Integer> theHightestUsernameNumber = new ArrayList<>();
+
+            // get all users from listOfContainedEmployees
+            for (Employee employee : listOfContainedEmployees) {
+                // get username and leave only number from string
+                String usernameStringNumber = employee.getUserName().replaceAll("[^0-9]", "");
+                // convert string numbers to int number
+                int usernameNumber = Integer.parseInt(usernameStringNumber);
+                //put number to arraylist
+                theHightestUsernameNumber.add(usernameNumber);
+            }
+
+
+            // define the highest number
+            int highestNumber = 0;
+            for (int number : theHightestUsernameNumber) {
+                if (number > highestNumber) {
+                    highestNumber = number;
+                }
+            }
+
+            // add 1 to highest number, because new username must be highter from highest number in username of employee
+            highestNumber++;
+
+            // define final username
+            finalUsername = lowercaseInitials + highestNumber;
+
         }
 
         // return final username

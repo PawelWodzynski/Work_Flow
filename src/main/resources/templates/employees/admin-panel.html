@@ -74,11 +74,11 @@
     <hr> <!-- END page header -->
 
     <div class="row"> <!-- Search bar -->
-            <form class="d-flex justify-content-center" th:action="@{/employees/adminPanelFindByUsername}" method="GET">
+            <form class="d-flex justify-content-center" th:action="@{/employees/adminPanelFindByUsername/0}" method="GET">
                 <div class="col-4 d-flex justify-content-end">
                     <a class="btn btn-dark btn-sm" th:href="@{/employees/adminPanel}">Reset</a>
                 </div>
-                <div class="col-4 d-flex  ">
+                <div class="col-4 d-flex">
                     <input class="form-control " name="findByUsername" type="text" placeholder="Search employee by username">
                 </div>
                 <div class="col-4 d-flex">
@@ -88,7 +88,6 @@
     </div> <!-- END Search bar -->
 
 
-    <br><br>
 
     <!-- Collapse Add Employee Button -->
     <div>
@@ -287,6 +286,31 @@
         </tr><!-- END Table Row For Data Cells -->
         </tbody><!-- End Body of Table -->
     </table> <!--  END Existing Employees Table  -->
+
+
+
+    <!-- Paging -->
+    <div class = "row">
+        <div class="col">
+            <ul class="pagination pagination-sm justify-content-center">
+
+                <!-- if statement for assessing the situation, whether the user is looking for an employee or not,
+                    if it searches, site pagination must be working, for searched username pages -->
+
+                    <li th:if="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity - 1)}">
+                        <a class="page-link" th:href="@{/employees/adminPanelFindByUsername/{page}(page=${pageNumber},findByUsername=${searchedName})}" th:text="${pageNumber + 1}"></a>
+                    </li>
+
+                    <li th:unless="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity - 1)}">
+                        <a class="page-link" th:href="@{/employees/adminPanel/{page}(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                    </li>
+
+            </ul>
+        </div>
+    </div> <!-- END Paging -->
+
+
+
 
 
 
