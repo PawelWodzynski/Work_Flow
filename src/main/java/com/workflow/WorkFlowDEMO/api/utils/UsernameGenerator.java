@@ -46,6 +46,18 @@ public class UsernameGenerator {
 
             // get all users from listOfContainedEmployees
             for (Employee employee : listOfContainedEmployees) {
+
+                // if username of employee does't ending with number
+                // we must add 0 number to end of username to prevent error
+                if (!employee.getUserName().matches(".*\\d$")) {
+                    // gettig current employee name
+                    String employeeUsername = employee.getUserName();
+                    // adding 0 number to end of username
+                    String employeeUsernameWithZeroNumber = employeeUsername += "0";
+                    // setting username with 0 number on end of username
+                    employee.setUserName(employeeUsernameWithZeroNumber);
+                }
+
                 // get username and leave only number from string
                 String usernameStringNumber = employee.getUserName().replaceAll("[^0-9]", "");
                 // convert string numbers to int number
