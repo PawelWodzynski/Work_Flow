@@ -54,16 +54,20 @@ public class UsernameGenerator {
                     String employeeUsername = employee.getUserName();
                     // adding 0 number to end of username
                     String employeeUsernameWithZeroNumber = employeeUsername += "0";
-                    // setting username with 0 number on end of username
-                    employee.setUserName(employeeUsernameWithZeroNumber);
+                    // get username and leave only number from string
+                    String usernameStringNumber = employeeUsernameWithZeroNumber.replaceAll("[^0-9]", "");
+                    // convert string numbers to int number
+                    int usernameNumber = Integer.parseInt(usernameStringNumber);
+                    //put number to arraylist
+                    theHightestUsernameNumber.add(usernameNumber);
+                }else {
+                    // get username and leave only number from string
+                    String usernameStringNumber = employee.getUserName().replaceAll("[^0-9]", "");
+                    // convert string numbers to int number
+                    int usernameNumber = Integer.parseInt(usernameStringNumber);
+                    //put number to arraylist
+                    theHightestUsernameNumber.add(usernameNumber);
                 }
-
-                // get username and leave only number from string
-                String usernameStringNumber = employee.getUserName().replaceAll("[^0-9]", "");
-                // convert string numbers to int number
-                int usernameNumber = Integer.parseInt(usernameStringNumber);
-                //put number to arraylist
-                theHightestUsernameNumber.add(usernameNumber);
             }
 
 
