@@ -1,6 +1,10 @@
 package com.workflow.WorkFlowDEMO.api;
 
-import com.workflow.WorkFlowDEMO.api.utils.*;
+import com.workflow.WorkFlowDEMO.api.utils.bcrypt.BcryptPasswordEncoder;
+import com.workflow.WorkFlowDEMO.api.utils.email.EmailService;
+import com.workflow.WorkFlowDEMO.api.utils.employee.DefiningCurrentEmployeeRole;
+import com.workflow.WorkFlowDEMO.api.utils.generators.RandomPasswordGenerator;
+import com.workflow.WorkFlowDEMO.api.utils.generators.UsernameGenerator;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
 import com.workflow.WorkFlowDEMO.data.service.EmployeeService;
@@ -18,7 +22,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/employees")
-public class EmployeeController {
+public class EmployeeHtmlController {
 
     // Dependency Injection: EmployeeService
     @Autowired
@@ -139,51 +143,6 @@ public class EmployeeController {
         // Return the view name to be rendered
         return "employees/admin-panel";
     }
-
-
-    // Method handling POST request at "/saveEmployee" in add-employee-form.html
-    // This method has task get employee from add employee form
-    // And save new employee in DB
-    @PostMapping("/saveEmployee")
-    public String saveEmployee(@ModelAttribute("employee") Employee theEmployee, @RequestParam("selectedRole") String theRole, Model theModel){
-
-        // Generating username from first and last name from add-employee-form.html
-        String generatedUsername = UsernameGenerator.generateUsername(theEmployee.getFirstName(),theEmployee.getLastName(),employeeService);
-
-        // seting generated username for employee
-        theEmployee.setUserName(generatedUsername);
-
-        // generating random password for employee
-        String generatedPassword = RandomPasswordGenerator.randomPassword();
-
-        // encoding generated password
-        String encodedPassword = BcryptPasswordEncoder.encodePassword(generatedPassword);
-
-        // setting generated password to employee
-        theEmployee.setPassword(encodedPassword);
-
-        //saveWithRole the employee using the appropriate service (employeeService)
-        employeeService.saveWithRole(theEmployee, theRole);
-
-        // sending mail with username and password to new registred employee
-        emailService.sendEmail(theEmployee.getEmail(),
-                emailService.greetingSubjectForNewUsers(),
-                  "Your Username: " + generatedUsername +"\n" +
-                        "Your Password: " + generatedPassword +
-                        emailService.passwordBodyWarningMessage());
-
-        // creating model attribute to bind data
-        // adding generated username to the model
-        theModel.addAttribute("generated_username",generatedUsername);
-
-        // creating model attribute to bind data
-        // adding generated password to the model
-        theModel.addAttribute("generated_password", generatedPassword);
-
-        // return employee confirmation page with model attributes
-        return "employees/add-employee-confirmation-page";
-    }
-
 
     // Method handling GET request for delete employee
     @GetMapping("/deleteEmployee")

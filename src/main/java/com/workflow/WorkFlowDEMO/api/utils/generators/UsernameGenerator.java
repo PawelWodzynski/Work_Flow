@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils;
+package com.workflow.WorkFlowDEMO.api.utils.generators;
 
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.service.EmployeeService;

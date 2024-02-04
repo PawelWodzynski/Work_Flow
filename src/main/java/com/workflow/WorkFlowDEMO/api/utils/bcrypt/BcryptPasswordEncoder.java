@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils;
+package com.workflow.WorkFlowDEMO.api.utils.bcrypt;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 

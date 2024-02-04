@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils;
+package com.workflow.WorkFlowDEMO.api.utils.generators;
 
 import java.security.SecureRandom;
 

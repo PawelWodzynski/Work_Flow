@@ -1,13 +1,14 @@
 package com.workflow.WorkFlowDEMO.data.entity;
 
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.EmployeeValidation;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "employee")
+@EmployeeValidation
 public class Employee {
 
     @Id // Primary key

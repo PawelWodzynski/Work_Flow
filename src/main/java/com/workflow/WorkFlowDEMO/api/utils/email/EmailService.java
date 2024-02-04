@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils;
+package com.workflow.WorkFlowDEMO.api.utils.email;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
