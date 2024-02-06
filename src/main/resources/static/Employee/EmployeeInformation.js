@@ -1,7 +1,18 @@
-// EmployeeInformation.js
 // async function handling employee save
 async function employeeSaveForm(event) {
     event.preventDefault(); // Stop the form's default behavior
+
+    var sendEmployeeButton = document.getElementById("sendEmployee");
+
+    sendEmployeeButton.onclick = function() {
+        document.getElementById('validationTextPlaceholder').innerText = 'Processing';
+        document.getElementById('validationTextPlaceholder').style.display = "block";
+    };
+
+    // Disable the button
+    sendEmployeeButton.disabled = true;
+
+
 
     try {
         // Get data from the form with id 'employeeForm' using the FormData object
@@ -17,7 +28,36 @@ async function employeeSaveForm(event) {
         // Check if the response is not ok and the status is 400 (Bad Request)
         if (!response.ok && response.status === 400) {
             // If the response is Bad Request, set the text in the respective div
-            document.getElementById('validationTextPlaceholder').innerText = data.firstName !== undefined ? `Validation: ${data.firstName}` : '';
+            let validationText = '';
+
+            // Check if firstName is present in the response data
+            if (data.firstName !== undefined) {
+                validationText += `First Name: ${data.firstName} `;
+            }
+
+            // Check if lastName is present in the response data
+            if (data.lastName !== undefined) {
+                // Add a new line if both firstName and lastName are present
+                if (Object.keys(data).length > 1) {
+                    validationText += '\n';
+                }
+                // Add lastName information to validationText
+                validationText += `Last Name: ${data.lastName}`;
+            }
+
+            // Check if email is present in the response data
+            if(data.email !== undefined){
+                // Add a new line if both firstName and lastName are present
+                if (Object.keys(data).length > 1) {
+                    validationText += '\n';
+                }
+                // Add lastName information to validationText
+                validationText += `Email : ${data.email}`
+            }
+
+
+            // Set validationText in the placeholder and display the div
+            document.getElementById('validationTextPlaceholder').innerText = validationText;
             document.getElementById('validationTextPlaceholder').style.display = "block";
         } else if (response.ok) {
             // If the response is ok, hide the div and clear it
@@ -35,11 +75,17 @@ async function employeeSaveForm(event) {
                 '\nGenerated Password' + data.generatedPassword +
                 '\n\n\nThe user\'s login details have been sent to his e-mail address';
 
+            // Clear the form inputs
+            document.getElementById('employeeForm').reset();
+
             // Show the modal
             myModal.show();
         }
     } catch (error) {
         // In case of an error, set an appropriate message
         document.getElementById('validationTextPlaceholder').innerText = 'Unidentified error';
+    } finally {
+        // Enable the button regardless of the operation's result
+        document.getElementById('sendEmployee').disabled = false;
     }
 }

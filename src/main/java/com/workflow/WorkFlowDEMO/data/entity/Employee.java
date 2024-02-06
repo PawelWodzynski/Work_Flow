@@ -1,6 +1,9 @@
 package com.workflow.WorkFlowDEMO.data.entity;
 
-import com.workflow.WorkFlowDEMO.api.utils.validation.employee.EmployeeValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.EmployeeEmailValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.EmployeeFirstNameValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.EmployeeLastNameValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.EmployeeRoleValidation;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -8,7 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "employee")
-@EmployeeValidation
+@EmployeeFirstNameValidation
+@EmployeeLastNameValidation
+@EmployeeEmailValidation
+@EmployeeRoleValidation
 public class Employee {
 
     @Id // Primary key
