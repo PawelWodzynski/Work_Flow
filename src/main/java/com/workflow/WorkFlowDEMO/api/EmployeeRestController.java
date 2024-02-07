@@ -2,9 +2,11 @@ package com.workflow.WorkFlowDEMO.api;
 
 import com.workflow.WorkFlowDEMO.api.utils.bcrypt.BcryptPasswordEncoder;
 import com.workflow.WorkFlowDEMO.api.utils.email.EmailService;
+import com.workflow.WorkFlowDEMO.api.utils.employee.DefiningCurrentEmployeeRole;
 import com.workflow.WorkFlowDEMO.api.utils.generators.RandomPasswordGenerator;
 import com.workflow.WorkFlowDEMO.api.utils.generators.UsernameGenerator;
 import com.workflow.WorkFlowDEMO.api.utils.validation.employee.messages.CreateEmployeeDTO;
+import com.workflow.WorkFlowDEMO.api.utils.validation.employee.messages.EditEmployeeDTO;
 import com.workflow.WorkFlowDEMO.api.utils.validation.employee.messages.ValidationError;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
@@ -13,14 +15,39 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.FieldError;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employeeRequest")
 public class EmployeeRestController {
+
+
+    @Autowired
+    private Validator validator; // Dodaj walidator
+
+    // Metoda do obsługi walidacji pracownika
+    private Map<String, String> validateEmployee(Employee employee) {
+        // Tworzy obiekt BindingResult do zbierania wyników walidacji
+        BeanPropertyBindingResult result = new BeanPropertyBindingResult(employee, "employee");
+
+        // Wywołuje walidację pracownika
+        validator.validate(employee, result);
+
+        // Zbiera błędy walidacji i zwraca jako mapę
+        return result.getFieldErrors().stream()
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+    }
+
+
+
 ////////////////////////////////////////////// Dependency Injections ///////////////////////////////////////////////////
 
     @Autowired
@@ -78,6 +105,78 @@ public class EmployeeRestController {
             CreateEmployeeDTO createEmployeeDTO = new CreateEmployeeDTO(generatedUsername,generatedPassword);
             return ResponseEntity.ok(createEmployeeDTO);
         }
+    }
+
+
+    // This method handling POST request for update employee, and has task saveWithRole/saveWithoutRole the updated employee to DB
+    // optional will send mail with new username if employee first or last name has been updated
+    // optional will set new role for employee
+    // On the end method sends JSON response with errors or employee informations with appriopriate messages
+    @PostMapping("/updateEmployee")
+    public ResponseEntity<?> updateEmpleyee(@RequestParam("updatedEmployeeId") int theId, @RequestParam("updatedEmployeeFirstName") String theFirstName,
+                                                              @RequestParam("updatedEmployeeLastName") String theLastName, @RequestParam("updatedEmployeeRole") String theRole,
+                                                              @RequestParam("updatedEmployeeEmail") String theEmail){
+
+        // marking appropriate variables for further activities
+        String generatedUsername = "";
+        String editedEmployeeMessage = "New generated username is sended to employee email";
+        boolean editedEmployee = false;
+
+        // Getting employee by id
+        Optional<Employee> existingEmployee = employeeService.findById(theId);
+
+        // Creating new employee which inherits current information about existing employee
+        Employee updatedEmployee = existingEmployee.get();
+
+        // Setting employee email before optional sending mail with new username
+        updatedEmployee.setEmail(theEmail);
+
+        // if employee updated first name not equals to current first name in DB or if employee last name not equals to last name in DB,
+        // set new first and last name for updating employee and
+        // generate new username for employee, and send mail with new username to employee current email
+        if (!theFirstName.equals(updatedEmployee.getFirstName()) || !theLastName.equals(updatedEmployee.getLastName())){
+            updatedEmployee.setFirstName(theFirstName);
+            updatedEmployee.setLastName(theLastName);
+            String generateNewUsername = UsernameGenerator.generateUsername(theFirstName,theLastName,employeeService);
+            updatedEmployee.setUserName(generateNewUsername);
+            generatedUsername = generateNewUsername;
+            emailService.sendEmail(updatedEmployee.getEmail(),emailService.newUsernameSubject(),"Username: " + generateNewUsername);
+            editedEmployee = true;
+        }
+
+
+        // convert role of employee to String
+        String currentEmployeeRole = updatedEmployee.getRoles().toString();
+        // Defining current role witch has employee by converted employee role
+        String definedEmployeeRole = DefiningCurrentEmployeeRole.defineEmployeeRole(currentEmployeeRole);
+
+
+
+        Map<String, String> fieldErrors = validateEmployee(updatedEmployee);
+
+        // Check whether validation was successful
+        if (!fieldErrors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldErrors);
+        }else {
+            // if current employee role it's differs from role from employee update form, set up new employee role and use saveWithRole method for save with new role
+            // if current employee role it's not differs from role from employee update form, use saveWithoutRole method for keep current role
+            if (!definedEmployeeRole.equals(theRole)){
+                updatedEmployee.setRoles(null);
+                employeeService.saveWithRole(updatedEmployee,theRole);
+            }else{
+                employeeService.saveWithoutRole(updatedEmployee);
+            }
+
+            EditEmployeeDTO editEmployeeDTO = new EditEmployeeDTO(editedEmployee,editedEmployeeMessage,"Employee updated successfully",theFirstName,theLastName,generatedUsername,theEmail,theRole);
+            return ResponseEntity.ok(editEmployeeDTO);
+        }
+
+
+
+
+
+
+
 
 
     }

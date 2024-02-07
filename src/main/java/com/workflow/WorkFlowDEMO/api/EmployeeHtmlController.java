@@ -191,54 +191,7 @@ public class EmployeeHtmlController {
 
     }
 
-    // This method handling POST request for update employee, and has task saveWithRole/saveWithoutRole the updated employee to DB
-    // optional will send mail with new username if employee first or last name has been updated
-    // optional will set new role for employee
-    @PostMapping("/updateEmployee")
-    public String updateEmpleyee(@RequestParam("updatedEmployeeId") int theId,@RequestParam("updatedEmployeeFirstName") String theFirstName,
-                                 @RequestParam("updatedEmployeeLastName") String theLastName, @RequestParam("updatedEmployeeRole") String theRole,
-                                 @RequestParam("updatedEmployeeEmail") String theEmail){
 
-        // Getting employee by id
-        Optional<Employee> existingEmployee = employeeService.findById(theId);
-
-        // Creating new employee which inherits current information about existing employee
-        Employee updatedEmployee = existingEmployee.get();
-
-        // Setting employee email before optional sending mail with new username
-        updatedEmployee.setEmail(theEmail);
-
-        // if employee updated first name not equals to current first name in DB or if employee last name not equals to last name in DB,
-        // set new first and last name for updating employee and
-        // generate new username for employee, and send mail with new username to employee current email
-        if (!theFirstName.equals(updatedEmployee.getFirstName()) || !theLastName.equals(updatedEmployee.getLastName())){
-            updatedEmployee.setFirstName(theFirstName);
-            updatedEmployee.setLastName(theLastName);
-            String generateNewUsername = UsernameGenerator.generateUsername(theFirstName,theLastName,employeeService);
-            updatedEmployee.setUserName(generateNewUsername);
-            emailService.sendEmail(updatedEmployee.getEmail(),emailService.newUsernameSubject(),"Username: " + generateNewUsername);
-        }
-
-
-        // convert role of employee to String
-        String currentEmployeeRole = updatedEmployee.getRoles().toString();
-        // Defining current role witch has employee by converted employee role
-        String definedEmployeeRole = DefiningCurrentEmployeeRole.defineEmployeeRole(currentEmployeeRole);
-
-        // if current employee role it's differs from role from employee update form, set up new employee role and use saveWithRole method for save with new role
-        // if current employee role it's not differs from role from employee update form, use saveWithoutRole method for keep current role
-        if (!definedEmployeeRole.equals(theRole)){
-            updatedEmployee.setRoles(null);
-            employeeService.saveWithRole(updatedEmployee,theRole);
-        }else{
-            employeeService.saveWithoutRole(updatedEmployee);
-        }
-
-
-
-        // reload employee list page
-        return "redirect:/employees/adminPanel";
-    }
 
 
 
