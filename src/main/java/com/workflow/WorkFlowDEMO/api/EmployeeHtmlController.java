@@ -155,41 +155,7 @@ public class EmployeeHtmlController {
         return "redirect:/employees/adminPanel";
     }
 
-    // this method handilng POST request for reset employee password, and has task generate new password,
-    // this method using saveWithoutRole method from EmployeeService
-    // in order to overwrite only the employee's data with new password to DB
-    // and send mail with current psasword for employee email
-    @PostMapping ("/resetPassword")
-    public String resetEmployeePassword(@RequestParam("employeeId") int theId){
 
-        // find employee object in DB by employee id
-        Optional<Employee> optionalEmployee = employeeService.findById(theId);
-
-        // Creating new employee which inherits current information about existing employee
-        Employee theEmployee = optionalEmployee.get();
-
-        // generating random password for employee
-        String generatedPassword = RandomPasswordGenerator.randomPassword();
-
-        // encoding generated password
-        String encodedPassword = BcryptPasswordEncoder.encodePassword(generatedPassword);
-
-        // setting generated password to employee
-        theEmployee.setPassword(encodedPassword);
-
-        //saving the employee using the appropriate service (employeeService)
-        employeeService.saveWithoutRole(theEmployee);
-
-        // sending mail with new password for employee
-        emailService.sendEmail(theEmployee.getEmail(),emailService.resetPasswordRequestSubject(),
-                "Your Username: " + theEmployee.getUserName() +"\n" +
-                        "Your Password: " + generatedPassword +
-                        emailService.passwordBodyWarningMessage());
-
-
-        return "redirect:/employees/adminPanel";
-
-    }
 
 
 
