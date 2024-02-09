@@ -144,16 +144,7 @@ public class EmployeeHtmlController {
         return "employees/admin-panel";
     }
 
-    // Method handling GET request for delete employee
-    @GetMapping("/deleteEmployee")
-    public String deleteEmployeeById(@RequestParam("employeeId") int theId){
 
-        // Delete the employee
-        employeeService.deleteById(theId);
-
-        // refresh admin panel page for visual update employees list
-        return "redirect:/employees/adminPanel";
-    }
 
 
 

@@ -62,6 +62,22 @@ public class EmployeeRestController {
 
 //////////////////////////////////////////////////// Endpoints /////////////////////////////////////////////////////////
 
+
+
+    // Method handling GET request for delete employee
+    // This method has task deleted appropriate employee
+    @PostMapping("/deleteEmployee")
+    public ResponseEntity<?> deleteEmployeeById(@RequestParam("employeeId") int theId){
+
+        // Delete the employee
+        employeeService.deleteById(theId);
+
+        // refresh admin panel page for visual update employees list
+        SimpleMessageDTO simpleMessageDTO = new SimpleMessageDTO("employee has been deleted id:" + theId);
+        return ResponseEntity.ok(simpleMessageDTO);
+    }
+
+
     // Method handling POST request at "/saveEmployee" in add-employee-form.html
     // This method has task get employee from add employee form
     // Validate and save new employee in DB

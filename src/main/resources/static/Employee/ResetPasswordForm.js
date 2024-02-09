@@ -15,13 +15,13 @@ async function resetPasswordForm(event) {
     document.querySelector('#DialogModal .modal-title').innerText = 'Success';
     // Find modal body element
     var modalBody = document.getElementById('modalBody');
-    // Disable the sendEmployeeButton
+    // Disable the resetPasswordButton
     resetPasswordButton.disabled = true;
 
     try {
-        // Get data from the form with id 'editEmployeeForm' using the FormData object
+        // Get data from the form with id 'resetEmployeeForm' using the FormData object
         const formData = new FormData(document.getElementById( `resetEmployeeForm` + iterIndex));
-        // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/saveEmployee' endpoint using the POST method
+        // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/resetPassword' endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/resetPassword', {
             method: 'POST',
             body: formData

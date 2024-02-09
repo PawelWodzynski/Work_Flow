@@ -30,7 +30,7 @@ async function editEmployeeSaveForm(event) {
         // Get data from the form with id 'editEmployeeForm' using the FormData object
         const formData = new FormData(document.getElementById( `editEmployeeForm-` + iterIndex));
 
-        // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/saveEmployee' endpoint using the POST method
+        // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/updateEmployee' endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/updateEmployee', {
             method: 'POST',
             body: formData
