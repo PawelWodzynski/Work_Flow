@@ -29,11 +29,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PageEmployeeRepository pageEmployeeRepository;
 
-    // Implementation of the method to retrieve a list of all employees
+    // Implementation of the method to retrieve a list of all employees sorted by last name asc and role hierarchy
     @Override
     public List<Employee> findAll(Pageable pageable) {
-        return employeeRepository.findAllByOrderByLastNameAsc(pageable);
+        List<Employee> employees = employeeRepository.findAllByOrderByLastNameAsc(pageable);
+
+        // Sort employees by role hierarchy : ROLE_ADMIN > ROLE_MANAGER > ROLE_EMPLOYEE
+        employees.sort(Comparator.comparing(employee -> {
+            if (employee.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"))) {
+                return 1;
+            } else if (employee.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_MANAGER"))) {
+                return 2;
+            } else {
+                return 3;
+            }
+        }));
+
+        return employees;
     }
+
 
     // Implementating saveWithRole method from EmployeeService
     @Override
