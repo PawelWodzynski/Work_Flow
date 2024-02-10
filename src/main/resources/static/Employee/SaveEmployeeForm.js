@@ -80,6 +80,13 @@ async function employeeSaveForm(event) {
 
             // Show the modal
             myModal.show();
+
+            // Listen for the modal hidden event
+            myModal._element.addEventListener('hidden.bs.modal', function () {
+                // Reload current page after modal is closed
+                location.reload();
+            });
+
         }
     } catch (error) {
         // In case of an error, set an appropriate message
@@ -89,20 +96,3 @@ async function employeeSaveForm(event) {
         document.getElementById('sendEmployee').disabled = false;
     }
 }
-
-// Function to refresh current page after modal is closed
-function refreshCurrentPage() {
-    // Create a new modal instance using Bootstrap
-    var myModal = new bootstrap.Modal(document.getElementById('DialogModal'));
-
-    // Listen for the modal hidden event
-    myModal._element.addEventListener('hidden.bs.modal', function () {
-
-        // reload current page
-        location.reload();
-
-    });
-}
-
-// Call the function to refresh current page
-refreshCurrentPage();
