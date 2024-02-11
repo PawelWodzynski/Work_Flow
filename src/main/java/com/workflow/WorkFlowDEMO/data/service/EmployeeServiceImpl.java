@@ -8,6 +8,7 @@ import com.workflow.WorkFlowDEMO.data.entity.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +122,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public long employeesCountInDB() {
         return employeeRepository.count();
+    }
+
+    @Override
+    public Page<Employee> findByUserNameContaining(String userName, Pageable pageable) {
+        return pageEmployeeRepository.findByUserNameContaining(userName,pageable);
     }
 
 }

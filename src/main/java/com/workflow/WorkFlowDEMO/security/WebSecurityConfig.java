@@ -107,6 +107,7 @@ public class WebSecurityConfig {
                         configurer
                                 .requestMatchers("/workFlow/appCenter").hasRole("EMPLOYEE") // For the main page, the "EMPLOYEE" role is required
                                 .requestMatchers("/employees/**").hasRole("ADMIN") // For the Employees Pages "ADMIN" role is required, Employees pages is used for employee managment
+                                .requestMatchers("/employeeRequest/**").hasRole("ADMIN") // For the employee request required role is ADMIN
                                 .anyRequest().authenticated() // For other paths, general authentication is required
                 )
                 // Login form configuration

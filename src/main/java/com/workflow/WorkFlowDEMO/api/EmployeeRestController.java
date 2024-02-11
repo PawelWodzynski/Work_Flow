@@ -131,8 +131,8 @@ public class EmployeeRestController {
     // On the end method sends JSON response with errors or employee informations with appriopriate messages
     @PostMapping("/updateEmployee")
     public ResponseEntity<?> updateEmpleyee(@RequestParam("updatedEmployeeId") int theId, @RequestParam("updatedEmployeeFirstName") String theFirstName,
-                                                              @RequestParam("updatedEmployeeLastName") String theLastName, @RequestParam("updatedEmployeeRole") String theRole,
-                                                              @RequestParam("updatedEmployeeEmail") String theEmail){
+                                            @RequestParam("updatedEmployeeLastName") String theLastName, @RequestParam("updatedEmployeeRole") String theRole,
+                                            @RequestParam("updatedEmployeeEmail") String theEmail){
 
         // marking appropriate variables for further activities
         String generatedUsername = "";

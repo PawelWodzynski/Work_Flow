@@ -14,6 +14,7 @@ import java.util.List;
 @EmployeeFirstNameValidation
 @EmployeeLastNameValidation
 @EmployeeEmailValidation
+@EmployeeRoleValidation
 public class Employee {
 
     @Id // Primary key

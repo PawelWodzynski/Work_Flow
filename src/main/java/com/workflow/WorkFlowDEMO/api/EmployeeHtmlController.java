@@ -112,7 +112,7 @@ public class EmployeeHtmlController {
 
 //  Page of EMPLOYEES finded by username
         // Retrieve the page of employees from the service
-        Page<Employee> theEmployees = pageEmployeeRepository.findByUserNameContaining(searchedName, PageRequest.of(page, pageSize));
+        Page<Employee> theEmployees = employeeService.findByUserNameContaining(searchedName, PageRequest.of(page, pageSize));
 
         // Add the list of employees to the model to make it available in the view
         theModel.addAttribute("employees", theEmployees);

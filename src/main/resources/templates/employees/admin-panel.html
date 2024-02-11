@@ -300,7 +300,7 @@
                 <!-- if statement for assessing the situation, whether the user is looking for an employee or not,
                     if it searches, site pagination must be working, for searched username pages -->
 
-                    <li th:if="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity)}">
+                    <li th:if="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity - 1)}">
                         <a class="page-link" th:href="@{/employees/adminPanelFindByUsername/{page}(page=${pageNumber},findByUsername=${searchedName})}" th:text="${pageNumber + 1}"></a>
                     </li>
 

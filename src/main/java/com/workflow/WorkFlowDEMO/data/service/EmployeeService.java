@@ -31,6 +31,9 @@ public interface EmployeeService {
     // Method for define count of employees in DB
     long employeesCountInDB();
 
+    // Method to pagable find users containing by username
+    Page<Employee>findByUserNameContaining(String userName, Pageable pageable);
+
 
 
 
