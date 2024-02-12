@@ -140,23 +140,23 @@
 
 
 
-
+    <div class="table-responsive">
     <!-- Existing Employees Table  -->
-    <table class="table table-dark table-bordered table-striped">
+    <table class="table table-lg table-dark table-bordered table-striped">
 
         <!-- Table Header -->
-        <thead class="table-dark">
+        <thead>
 
         <!-- Table Rows For Header Cells -->
-        <tr>
-            <!-- Defined Cells For Table -->
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th><!-- END Defined Cells For Table -->
-        </tr><!-- END Table Row For Header Cells -->
+               <tr>
+                   <!-- Defined Cells For Table -->
+                   <th>First Name</th>
+                   <th>Last Name</th>
+                   <th>Username</th>
+                   <th>Email</th>
+                   <th>Role</th>
+                   <th>Actions</th><!-- END Defined Cells For Table -->
+               </tr><!-- END Table Row For Header Cells -->
 
         </thead><!-- End Table Header -->
 
@@ -193,20 +193,24 @@
             </td><!-- END Data (ROLE) Cell Which Gets Only One Role, The Highest In Hierarchy -->
 
 
+
             <!-- Actions Cell -->
-            <td class="d-flex align-items-center">
+            <td class="d-flex">
+                <div class="row"> <!-- row -->
+                    <div class="col-12"> <!-- col -->
 
+                        <div class="row"> <!-- row na delete i edit -->
 
-                <!-- Delete Employee Button -->
-                <form th:id="'deleteEmployeeForm'+${iterStat.index}" th:data-delete-index="${iterStat.index}" th:action="@{/employeeRequest/deleteEmployee}" method="POST" onsubmit="deleteEmployee(event)">
-                    <input type="hidden" name="employeeId" th:value="${tempEmployee.id}" />
-                    <button type="submit" class="btn btn-danger btn-sm text-dark"
-                            onclick="return confirm('Are you sure you want to delete this employee?')">
-                        Delete
-                    </button>
-                </form>
-                <!-- END Delete Employee Button -->
-
+                            <div class="col-12 d-flex">
+                    <!-- Delete Employee Button -->
+                    <form th:id="'deleteEmployeeForm'+${iterStat.index}" th:data-delete-index="${iterStat.index}" th:action="@{/employeeRequest/deleteEmployee}" method="POST" onsubmit="deleteEmployee(event)">
+                        <input type="hidden" name="employeeId" th:value="${tempEmployee.id}" />
+                        <button type="submit" class="btn btn-danger btn-sm text-dark"
+                                onclick="return confirm('Are you sure you want to delete this employee?')">
+                            Delete
+                        </button>
+                    </form>
+                    <!-- END Delete Employee Button -->
 
                 <!-- Edit Employee Button Collapse Button -->
                 <button
@@ -214,36 +218,41 @@
                         th:data-bs-target="'#editEmployeeCollapse-' + ${iterStat.index}">
                     Edit
                 </button> <!-- END Edit Employee Collapse Button -->
+                            </div>
+                        </div>
 
 
                 <!-- Grid Of Edit Form -->
                 <!-- Collapsible Edit Employee Section -->
-                <div th:id="'editEmployeeCollapse-' + ${iterStat.index}" class="collapse ms-3 mt-3 no-anim">
+                <div class="row">
+                <div th:id="'editEmployeeCollapse-' + ${iterStat.index}" class="col-12 collapse no-anim mt-2">
 
-                    <div class = container >
+                    <div class = "container" >
                         <!-- Edit Employee Form -->
                         <form th:id="'editEmployeeForm-' + ${iterStat.index}"   th:data-index="${iterStat.index}" action="#" th:action="@{/employeeRequest/updateEmployee}"  th:method="POST" onsubmit="editEmployeeSaveForm(event)">
 
                             <input type="hidden" name="updatedEmployeeId" th:value="${tempEmployee.id}"/>
 
                             <div class = "row">
-                                <div class="col-xxl-3">
+                                <div class="col-3">
                                     <input type="text" class="form-control form-control-sm no-anim"
                                            name="updatedEmployeeFirstName"    th:value="${tempEmployee.firstName}"  placeholder="First Name">
                                 </div>
-                                <div class="col-xxl-4">
+                                <div class="col-4">
                                     <input type="text" class="form-control form-control-sm no-anim"
                                            name="updatedEmployeeLastName" th:value="${tempEmployee.lastName}" placeholder="Last Name">
                                 </div>
-                                <div class="col-xxl-5">
+                                <div class="col-5">
                                     <input type="text" class="form-control form-control-sm no-anim"
                                            name="updatedEmployeeEmail" th:value="${tempEmployee.email}" placeholder="Email">
                                 </div>
 
                             </div>
 
-                            <div class = "row" >
-                                <div class="col-xxl-9 d-flex">
+                            <div class = "row" > <!-- ROW -->
+                                <div class="d-flex"> <!-- d-flex container -->
+
+                                <div class="col-9 d-flex"> <!-- col-9 -->
                                     <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
                                     <div class="form-check form-check-inline">
                                         <input type="radio" class="form-check-input" id="radio4" name="updatedEmployeeRole" value="ADMIN"
@@ -266,11 +275,12 @@
                                         EMPLOYEE<!-- this will be checked when user not have ADMIN and MANAGER roles but only has the EMPLOYEE role -->
                                         <label class="form-check-label" for="radio5"></label>
                                     </div><!-- END radio buttons -->
-                                </div>
-                                <div class="col-xxl-3 "> <!-- Save Changes Butoon -->
+                                </div> <!-- end of col-9 -->
+                                <div class="col-3"> <!-- Save Changes Butoon -->
                                     <input th:id="'sendEditedEmployee' + ${iterStat.index}" type="submit" value="Save Changes" class="btn btn-success btn-sm"/>
                                 </div> <!-- End Save Changes Button -->
-                            </div>
+                                </div> <!-- END of d-flex container -->
+                            </div> <!-- END of ROW -->
                         </form><!-- End Edit Employee Form -->
 
                         <form th:id="'resetEmployeeForm' +${iterStat.index}" th:data-reset-index="${iterStat.index}" th:action="@{/employeeRequest/resetPassword}" method="POST" onsubmit="resetPasswordForm(event)">
@@ -281,20 +291,21 @@
                             </button>
                         </form>
 
-                    </div>
+                    </div> <!-- End of Container -->
+                </div>
                 </div><!-- END Collapsible Edit Employee Section -->
-
-
+            </div> <!-- end of col -->
+            </div><!--end of row -->
             </td><!-- END Actions Cell -->
         </tr><!-- END Table Row For Data Cells -->
         </tbody><!-- End Body of Table -->
     </table> <!--  END Existing Employees Table  -->
-
+    </div> <!-- END Of Table Responsive DIV -->
 
 
     <!-- Paging -->
     <div class = "row">
-        <div class="col">
+        <div class="col-12">
             <ul class="pagination pagination-sm justify-content-center">
 
                 <!-- if statement for assessing the situation, whether the user is looking for an employee or not,

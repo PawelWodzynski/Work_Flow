@@ -68,14 +68,6 @@ async function editEmployeeSaveForm(event) {
                 validationText += `Email : ${data.email}`
             }
 
-            if (data.roles !== undefined){
-                // Add a new line if both firstName and lastName are present
-                if (Object.keys(data).length > 1) {
-                    validationText += '\n';
-                }
-                validationText += `Role : ${data.role}`
-            }
-
             // Set validationText in the modal body
             modalBody.innerText = validationText;
 

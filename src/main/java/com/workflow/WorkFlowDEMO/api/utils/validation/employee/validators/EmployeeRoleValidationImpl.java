@@ -36,7 +36,7 @@ public class EmployeeRoleValidationImpl implements ConstraintValidator<EmployeeR
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(errorMessage.toString()).addPropertyNode("role").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(errorMessage.toString()).addPropertyNode("roles").addConstraintViolation();
         }
 
         return isValid;
