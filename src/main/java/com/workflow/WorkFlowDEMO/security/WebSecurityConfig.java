@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,6 +109,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/workFlow/appCenter").hasRole("EMPLOYEE") // For the main page, the "EMPLOYEE" role is required
                                 .requestMatchers("/employees/**").hasRole("ADMIN") // For the Employees Pages "ADMIN" role is required, Employees pages is used for employee managment
                                 .requestMatchers("/employeeRequest/**").hasRole("ADMIN") // For the employee request required role is ADMIN
+                                .requestMatchers("/swagger-ui/**").hasRole("ADMIN") // For Swagger UI required role is ADMIN
+                                .requestMatchers("/v3/**").hasRole("ADMIN") // For Swagger JSON api docs required role is ADMIN
                                 .anyRequest().authenticated() // For other paths, general authentication is required
                 )
                 // Login form configuration
@@ -128,4 +131,15 @@ public class WebSecurityConfig {
         // Returns the configured SecurityFilterChain object
         return httpSecurity.build();
     }
+
+
+
+
+    // Configures web security to ignore requests matching the specified pattern,
+    // necessary for accessing endpoints via Swagger UI
+    @Bean
+    public WebSecurityCustomizer ignoringCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/employeeRequest/**");
+    }
+
 }

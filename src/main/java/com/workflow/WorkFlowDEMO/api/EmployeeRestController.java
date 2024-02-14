@@ -7,7 +7,7 @@ import com.workflow.WorkFlowDEMO.api.utils.generators.RandomPasswordGenerator;
 import com.workflow.WorkFlowDEMO.api.utils.generators.UsernameGenerator;
 import com.workflow.WorkFlowDEMO.data.dto.CreateEmployeeDTO;
 import com.workflow.WorkFlowDEMO.data.dto.EditEmployeeDTO;
-import com.workflow.WorkFlowDEMO.api.utils.validation.employee.messages.ValidationError;
+import com.workflow.WorkFlowDEMO.api.utils.validation.messages.ValidationError;
 import com.workflow.WorkFlowDEMO.data.dto.SimpleMessageDTO;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
@@ -31,18 +31,19 @@ import java.util.stream.Collectors;
 public class EmployeeRestController {
 
 
+    // Dependency injection of the Validator instance
     @Autowired
-    private Validator validator; // Dodaj walidator
+    private Validator validator;
 
-    // Metoda do obsługi walidacji pracownika
+    // Method for handling employee validation
     private Map<String, String> validateEmployee(Employee employee) {
-        // Tworzy obiekt BindingResult do zbierania wyników walidacji
+        // Creates a BindingResult object to collect validation results
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(employee, "employee");
 
-        // Wywołuje walidację pracownika
+        // Invokes employee validation
         validator.validate(employee, result);
 
-        // Zbiera błędy walidacji i zwraca jako mapę
+        // Collects validation errors and returns them as a map
         return result.getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
     }
@@ -60,22 +61,12 @@ public class EmployeeRestController {
     @Autowired
     private PageEmployeeRepository pageEmployeeRepository;
 
+
 //////////////////////////////////////////////////// Endpoints /////////////////////////////////////////////////////////
 
 
 
-    // Method handling GET request for delete employee
-    // This method has task deleted appropriate employee
-    @PostMapping("/deleteEmployee")
-    public ResponseEntity<?> deleteEmployeeById(@RequestParam("employeeId") int theId){
 
-        // Delete the employee
-        employeeService.deleteById(theId);
-
-        // refresh admin panel page for visual update employees list
-        SimpleMessageDTO simpleMessageDTO = new SimpleMessageDTO("employee has been deleted id:" + theId);
-        return ResponseEntity.ok(simpleMessageDTO);
-    }
 
 
     // Method handling POST request at "/saveEmployee" in add-employee-form.html
@@ -197,37 +188,56 @@ public class EmployeeRestController {
     // this method using saveWithoutRole method from EmployeeService
     // in order to overwrite only the employee's data with new password to DB
     // and send mail with current psasword for employee email
-    @PostMapping ("/resetPassword")
+    @PostMapping("/resetPassword")
     public ResponseEntity<?> resetEmployeePassword(@RequestParam("employeeId") int theId){
 
-        // find employee object in DB by employee id
+        // Find employee object in the database by employee id
         Optional<Employee> optionalEmployee = employeeService.findById(theId);
 
-        // Creating new employee which inherits current information about existing employee
-        Employee theEmployee = optionalEmployee.get();
+        // Check if the optional object contains a value
+        if (optionalEmployee.isPresent()) {
+            // Get the Employee object from the optional object
+            Employee theEmployee = optionalEmployee.get();
 
-        // generating random password for employee
-        String generatedPassword = RandomPasswordGenerator.randomPassword();
+            // Generate a random password for the employee
+            String generatedPassword = RandomPasswordGenerator.randomPassword();
 
-        // encoding generated password
-        String encodedPassword = BcryptPasswordEncoder.encodePassword(generatedPassword);
+            // Encode the generated password
+            String encodedPassword = BcryptPasswordEncoder.encodePassword(generatedPassword);
 
-        // setting generated password to employee
-        theEmployee.setPassword(encodedPassword);
+            // Set the generated password for the employee
+            theEmployee.setPassword(encodedPassword);
 
-        //saving the employee using the appropriate service (employeeService)
-        employeeService.saveWithoutRole(theEmployee);
+            // Save the employee using the appropriate service (employeeService)
+            employeeService.saveWithoutRole(theEmployee);
 
-        // sending mail with new password for employee
-        emailService.sendEmail(theEmployee.getEmail(),emailService.resetPasswordRequestSubject(),
-                "Your Username: " + theEmployee.getUserName() +"\n" +
-                        "Your Password: " + generatedPassword +
-                        emailService.passwordBodyWarningMessage());
+            // Send an email with the new password to the employee
+            emailService.sendEmail(theEmployee.getEmail(), emailService.resetPasswordRequestSubject(),
+                    "Your Username: " + theEmployee.getUserName() + "\n" +
+                            "Your Password: " + generatedPassword +
+                            emailService.passwordBodyWarningMessage());
+
+            SimpleMessageDTO simpleMessageDTO = new SimpleMessageDTO("New password has been sent to the employee's email");
+            return ResponseEntity.ok(simpleMessageDTO);
+        } else {
+            // Handling the case when the employee is not found
+            return ResponseEntity.badRequest().body(new SimpleMessageDTO("Employee not found " +  "ID: " + theId));
+        }
+
+    }
 
 
-        SimpleMessageDTO simpleMessageDTO = new SimpleMessageDTO("New password has been sended to employee email");
+    // Method handling GET request for delete employee
+    // This method has task deleted appropriate employee
+    @PostMapping("/deleteEmployee")
+    public ResponseEntity<?> deleteEmployeeById(@RequestParam("employeeId") int theId){
+
+        // Delete the employee
+        employeeService.deleteById(theId);
+
+        // refresh admin panel page for visual update employees list
+        SimpleMessageDTO simpleMessageDTO = new SimpleMessageDTO("employee has been deleted id:" + theId);
         return ResponseEntity.ok(simpleMessageDTO);
-
     }
 
 

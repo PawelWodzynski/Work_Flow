@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils.validation.employee.messages;
+package com.workflow.WorkFlowDEMO.api.utils.validation.messages;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -7,7 +7,7 @@ import org.springframework.validation.FieldError;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// Result message of validation
+// Result message of validation with BindingResult interface
 public class ValidationError {
 
     // Result Message
