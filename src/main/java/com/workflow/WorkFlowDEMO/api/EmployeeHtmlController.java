@@ -58,7 +58,7 @@ public class EmployeeHtmlController {
     // This method has task, add to model list of all employees
     // And add to model object of new employee for add employee form
     @GetMapping("/adminPanel/{page}")
-    public  String listOfAllEmployeesAndAddEmployee(@PathVariable int page, Model theModel){
+    public  String listOfAllEmployees(@PathVariable int page, Model theModel){
         // If the user, manual enter page uder 0 number, redirect to page 0
         if (page<0  ){
             page = 0;
@@ -80,16 +80,6 @@ public class EmployeeHtmlController {
 
         // Add the page quantity to the model attribute
         theModel.addAttribute("pageQuantity",pageCountRoundedUp);
-
-
-
-//  Add Employee
-        // Creating new employee object for add employee function in Add Employee button
-        Employee theEmployee = new Employee();
-
-        // creating model attribute to bind form data
-        // Adding the Employee object to the model
-        theModel.addAttribute("employee", theEmployee);
 
         // Return the view name to be rendered
         return "employees/admin-panel";
@@ -143,14 +133,5 @@ public class EmployeeHtmlController {
         // Return the view name to be rendered
         return "employees/admin-panel";
     }
-
-
-
-
-
-
-
-
-
 
 }

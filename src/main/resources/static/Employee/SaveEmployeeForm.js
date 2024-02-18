@@ -15,12 +15,21 @@ async function employeeSaveForm(event) {
 
 
     try {
-        // Get data from the form with id 'employeeForm' using the FormData object
-        const formData = new FormData(document.getElementById('employeeForm'));
-        // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/saveEmployee' endpoint using the POST method
+        // Get data from the form and construct JSON object
+        const formData = {
+            firstName: document.querySelector('#employeeForm input[name="firstName"]').value,
+            lastName: document.querySelector('#employeeForm input[name="lastName"]').value,
+            email: document.querySelector('#employeeForm input[name="email"]').value,
+            role: document.querySelector('#employeeForm input[name="role"]:checked').value
+        };
+
+        // Invoke the asynchronous fetch function to send data to the endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/saveEmployee', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
         // Get data from the response in JSON format
         const data = await response.json();

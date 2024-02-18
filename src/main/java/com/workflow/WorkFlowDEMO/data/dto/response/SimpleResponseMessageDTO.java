@@ -1,10 +1,10 @@
-package com.workflow.WorkFlowDEMO.data.dto;
+package com.workflow.WorkFlowDEMO.data.dto.response;
 
-public class SimpleMessageDTO {
+public class SimpleResponseMessageDTO {
 
     private String message;
 
-    public SimpleMessageDTO(String message) {
+    public SimpleResponseMessageDTO(String message) {
         this.message = message;
     }
 
@@ -18,7 +18,7 @@ public class SimpleMessageDTO {
 
     @Override
     public String toString() {
-        return "SimpleMessageDTO{" +
+        return "SimpleResponseMessageDTO{" +
                 "message='" + message + '\'' +
                 '}';
     }

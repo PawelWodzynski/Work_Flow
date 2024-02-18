@@ -95,31 +95,31 @@
         <div id="employeeFormCollapse" class="collapse mt-3">
 
             <!-- Create Employee Form -->
-            <form id="employeeForm" th:action="@{/employeeRequest/saveEmployee}" th:object="${employee}" method="POST" onsubmit="employeeSaveForm(event)">
+            <form id="employeeForm" th:action="@{/employeeRequest/saveEmployee}"  method="POST" onsubmit="employeeSaveForm(event)">
 
                 <div class="row">
                     <div class="col-md-2 mb-3">
-                        <input type="text" th:field="*{firstName}" class="form-control form-control-sm" placeholder="First Name">
+                        <input type="text" name="firstName"  class="form-control form-control-sm" placeholder="First Name">
                     </div>
                     <div class="col-md-2 mb-3">
-                        <input type="text" th:field="*{lastName}" class="form-control form-control-sm" placeholder="Last Name">
+                        <input type="text" name="lastName" class="form-control form-control-sm" placeholder="Last Name">
                     </div>
                     <div class="col-md-2 mb-3">
-                        <input type="text" th:field="*{email}" class="form-control form-control-sm" placeholder="Email">
+                        <input type="text" name="email" class="form-control form-control-sm" placeholder="Email">
                     </div>
 
                     <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
                     <div class="col-md-4 mb-3">
                         <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" id="radio1" name="selectedRole" value="ADMIN">ADMIN
+                            <input type="radio" class="form-check-input" id="radio1" name="role" value="ADMIN">ADMIN
                             <label class="form-check-label" for="radio1"></label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" id="radio2" name="selectedRole" value="MANAGER">MANAGER
+                            <input type="radio" class="form-check-input" id="radio2" name="role" value="MANAGER">MANAGER
                             <label class="form-check-label" for="radio2"></label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" id="radio3" name="selectedRole" value="EMPLOYEE" checked>EMPLOYEE
+                            <input type="radio" class="form-check-input" id="radio3" name="role" value="EMPLOYEE" checked>EMPLOYEE
                             <label class="form-check-label" for="radio3"></label>
                         </div> <!-- END radio buttons -->
                     </div>
@@ -236,15 +236,15 @@
                             <div class = "row">
                                 <div class="col-3">
                                     <input type="text" class="form-control form-control-sm no-anim"
-                                           name="updatedEmployeeFirstName"    th:value="${tempEmployee.firstName}"  placeholder="First Name">
+                                           name="firstName"    th:value="${tempEmployee.firstName}"  placeholder="First Name">
                                 </div>
                                 <div class="col-4">
                                     <input type="text" class="form-control form-control-sm no-anim"
-                                           name="updatedEmployeeLastName" th:value="${tempEmployee.lastName}" placeholder="Last Name">
+                                           name="lastName" th:value="${tempEmployee.lastName}" placeholder="Last Name">
                                 </div>
                                 <div class="col-5">
                                     <input type="text" class="form-control form-control-sm no-anim"
-                                           name="updatedEmployeeEmail" th:value="${tempEmployee.email}" placeholder="Email">
+                                           name="email" th:value="${tempEmployee.email}" placeholder="Email">
                                 </div>
 
                             </div>
@@ -255,20 +255,20 @@
                                 <div class="col-9 d-flex"> <!-- col-9 -->
                                     <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
                                     <div class="form-check form-check-inline">
-                                        <input type="radio" class="form-check-input" id="radio4" name="updatedEmployeeRole" value="ADMIN"
+                                        <input type="radio" class="form-check-input" id="radio4" name="role" value="ADMIN"
                                                th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
                                         ADMIN<!-- this will be checked when user have the ADMIN role -->
                                         <label class="form-check-label" for="radio4"></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input type="radio" class="form-check-input" id="radio6" name="updatedEmployeeRole" value="MANAGER"
+                                        <input type="radio" class="form-check-input" id="radio6" name="role" value="MANAGER"
                                                th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')and
                                            not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
                                         MANAGER<!-- this will be checked when user not have ADMIN role but only has the MANAGER role -->
                                         <label class="form-check-label" for="radio6"></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input type="radio" class="form-check-input" id="radio5" name="updatedEmployeeRole" value="EMPLOYEE"
+                                        <input type="radio" class="form-check-input" id="radio5" name="role" value="EMPLOYEE"
                                                th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_EMPLOYEE')and
                                            not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')and
                                            not #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')}" >
@@ -283,8 +283,8 @@
                             </div> <!-- END of ROW -->
                         </form><!-- End Edit Employee Form -->
 
-                        <form th:id="'resetEmployeeForm' +${iterStat.index}" th:data-reset-index="${iterStat.index}" th:action="@{/employeeRequest/resetPassword}" method="POST" onsubmit="resetPasswordForm(event)">
-                            <input type="hidden" th:name="employeeId" th:value="${tempEmployee.id}" />
+                        <form th:id="'resetEmployeeForm' +${iterStat.index}" th:data-reset-index="${iterStat.index}" action="#" th:action="@{/employeeRequest/resetPassword}" method="POST" onsubmit="resetPasswordForm(event)">
+                            <input type="hidden" name="employeeId" th:value="${tempEmployee.id}" />
                             <button th:id="'resetPasswordButton' +${iterStat.index}" type="submit" class="btn btn-secondary btn-sm reset-button"
                                     onclick="if (!(confirm('If you agree, the user will have his password reset' ))) return false;">
                                 Reset Password

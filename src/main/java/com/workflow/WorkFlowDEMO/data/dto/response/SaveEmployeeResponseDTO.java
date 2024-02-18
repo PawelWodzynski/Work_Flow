@@ -1,15 +1,15 @@
-package com.workflow.WorkFlowDEMO.data.dto;
+package com.workflow.WorkFlowDEMO.data.dto.response;
 
 
 // Data Transfer Object for OK response for EmployeeRestController
 // Contains basic message, generated username and generated password
-public class CreateEmployeeDTO {
+public class SaveEmployeeResponseDTO {
 
     private String bodyMessage = "Sucessfull Added Employee";
     private String generatedUsername;
     private String generatedPassword;
 
-    public CreateEmployeeDTO(String generatedUsername, String generatedPassword) {
+    public SaveEmployeeResponseDTO(String generatedUsername, String generatedPassword) {
         this.generatedUsername = generatedUsername;
         this.generatedPassword = generatedPassword;
     }
@@ -32,7 +32,7 @@ public class CreateEmployeeDTO {
 
     @Override
     public String toString() {
-        return "CreateEmployeeDTO{" +
+        return "SaveEmployeeResponseDTO{" +
                 "bodyMessage='" + bodyMessage + '\'' +
                 ", generatedUsername='" + generatedUsername + '\'' +
                 ", generatedPassword='" + generatedPassword + '\'' +

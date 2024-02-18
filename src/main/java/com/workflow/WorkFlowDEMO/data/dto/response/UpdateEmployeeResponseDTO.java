@@ -1,9 +1,9 @@
-package com.workflow.WorkFlowDEMO.data.dto;
+package com.workflow.WorkFlowDEMO.data.dto.response;
 
 // Data Transfer Object for OK response for EmployeeRestController
 // Contains message for no edited first or last name employee or for employee with edited first and last name employee
 // and employee first and last name, username and email, role
-public class EditEmployeeDTO {
+public class UpdateEmployeeResponseDTO {
 
     private boolean employeeEdited;
 
@@ -22,7 +22,7 @@ public class EditEmployeeDTO {
     private String role;
 
 
-    public EditEmployeeDTO(boolean employeeEdited, String messageEditedEmployee, String messageNoEditedEmployee, String firstName, String lastName, String username, String email, String role) {
+    public UpdateEmployeeResponseDTO(boolean employeeEdited, String messageEditedEmployee, String messageNoEditedEmployee, String firstName, String lastName, String username, String email, String role) {
         this.employeeEdited = employeeEdited;
         this.messageEditedEmployee = messageEditedEmployee;
         this.messageNoEditedEmployee = messageNoEditedEmployee;
@@ -100,7 +100,7 @@ public class EditEmployeeDTO {
 
     @Override
     public String toString() {
-        return "EditEmployeeDTO{" +
+        return "UpdateEmployeeResponseDTO{" +
                 "employeeEdited=" + employeeEdited +
                 ", messageEditedEmployee='" + messageEditedEmployee + '\'' +
                 ", messageNoEditedEmployee='" + messageNoEditedEmployee + '\'' +
