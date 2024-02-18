@@ -34,6 +34,8 @@ public interface EmployeeService {
     // Method to pagable find users containing by username
     Page<Employee>findByUserNameContaining(String userName, Pageable pageable);
 
+    boolean existById(int theId);
+
 
 
 

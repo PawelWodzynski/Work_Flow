@@ -1,8 +1,8 @@
 package com.workflow.WorkFlowDEMO.data.service;
 
-import com.workflow.WorkFlowDEMO.data.repository.EmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.repository.EmployeeJpaRepository;
 import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
-import com.workflow.WorkFlowDEMO.data.repository.RoleRepository;
+import com.workflow.WorkFlowDEMO.data.repository.RoleJpaRepository;
 import com.workflow.WorkFlowDEMO.data.entity.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.Role;
 import jakarta.persistence.EntityManager;
@@ -19,10 +19,10 @@ import java.util.*;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeJpaRepository employeeJPARepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleJpaRepository roleRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     // Implementation of the method to retrieve a list of all employees sorted by last name asc and role hierarchy
     @Override
     public List<Employee> findAll(Pageable pageable) {
-        List<Employee> employees = employeeRepository.findAllByOrderByLastNameAsc(pageable);
+        List<Employee> employees = employeeJPARepository.findAllByOrderByLastNameAsc(pageable);
 
         // Sort employees by role hierarchy : ROLE_ADMIN > ROLE_MANAGER > ROLE_EMPLOYEE
         employees.sort(Comparator.comparing(employee -> {
@@ -75,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         // Save employee in DB
-        return employeeRepository.save(theEmployee);
+        return employeeJPARepository.save(theEmployee);
     }
 
 
@@ -83,23 +83,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findByUsernameContaining(String userName) {
         // find appriocrate usernames
-        return employeeRepository.findByUserNameContaining(userName);
+        return employeeJPARepository.findByUserNameContaining(userName);
     }
 
 
-    // Implementating delete employee by id method from EmployeeService using EmployeeRepository
+    // Implementating delete employee by id method from EmployeeService using EmployeeJPARepository
     @Override
     @Transactional
     public void deleteById(int theId) {
 
         // finding the employee by id
         Employee theEmployee = entityManager.find(Employee.class, theId);
-
         // before deleting an employee, remove the role that the employee has
         if(theEmployee != null){
            // deleting roles that the employee has
             theEmployee.setRoles(null);
-
             // deleting employee
             entityManager.remove(theEmployee);
         }
@@ -109,24 +107,30 @@ public class EmployeeServiceImpl implements EmployeeService {
     // implementation method to find employee by id using employee repository (JpaRepository)
     @Override
     public Optional<Employee> findById(int theId) {
-        return employeeRepository.findById(theId);
+        return employeeJPARepository.findById(theId);
     }
 
     // implementation method to save employee without role using employee repository (JpaRepository)
     @Override
     public Employee saveWithoutRole(Employee theEmployee) {
-        return employeeRepository.save(theEmployee);
+        return employeeJPARepository.save(theEmployee);
     }
 
     // implementation method to define count of employees in DB
     @Override
     public long employeesCountInDB() {
-        return employeeRepository.count();
+        return employeeJPARepository.count();
     }
 
     @Override
     public Page<Employee> findByUserNameContaining(String userName, Pageable pageable) {
         return pageEmployeeRepository.findByUserNameContaining(userName,pageable);
+    }
+
+    // implementation method for checking whether record exist in DB by ID
+    @Override
+    public boolean existById(int theId) {
+        return employeeJPARepository.existsById(theId);
     }
 
 }

@@ -18,9 +18,13 @@ async function resetPasswordForm(event) {
     // Disable the resetPasswordButton
     resetPasswordButton.disabled = true;
 
+    // Show the modal
+    modalBody.innerText= 'Processing';
+    myModal.show();
+
     try {
         // Get data from the form with id 'resetEmployeeForm' using the FormData object
-        const formData = new FormData(document.getElementById( `resetEmployeeForm` + iterIndex));
+        const formData = new FormData(document.getElementById(`resetEmployeeForm` + iterIndex));
         // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/resetPassword' endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/resetPassword', {
             method: 'POST',
@@ -30,8 +34,6 @@ async function resetPasswordForm(event) {
         const data = await response.json();
         // set message from endpoint response to modal
         modalBody.innerText = data.message;
-        // Show the modal
-        myModal.show();
     } catch (error) {
         // In case of an error, set an appropriate message
         errorText = 'Unidentified error';

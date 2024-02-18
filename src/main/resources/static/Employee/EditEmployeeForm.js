@@ -28,12 +28,21 @@ async function editEmployeeSaveForm(event) {
 
     try {
         // Get data from the form with id 'editEmployeeForm' using the FormData object
-        const formData = new FormData(document.getElementById( `editEmployeeForm-` + iterIndex));
+        const formData = {
+            updatedEmployeeId: document.querySelector('#editEmployeeForm-' + iterIndex + ' input[name="updatedEmployeeId"]').value,
+            firstName: document.querySelector('#editEmployeeForm-' + iterIndex + ' input[name="firstName"]').value,
+            lastName: document.querySelector('#editEmployeeForm-' + iterIndex + ' input[name="lastName"]').value,
+            email: document.querySelector('#editEmployeeForm-' + iterIndex + ' input[name="email"]').value,
+            role: document.querySelector('#editEmployeeForm-' + iterIndex + ' input[name="role"]:checked').value
+        };
 
         // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/updateEmployee' endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/updateEmployee', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
         // Get data from the response in JSON format
         const data = await response.json();
