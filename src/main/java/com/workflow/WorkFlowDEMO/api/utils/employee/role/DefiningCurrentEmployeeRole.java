@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils.employee;
+package com.workflow.WorkFlowDEMO.api.utils.employee.role;
 
 public class DefiningCurrentEmployeeRole {
 

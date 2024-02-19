@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.data.dto.response;
+package com.workflow.WorkFlowDEMO.data.dto.employee.response;
 
 // Data Transfer Object for OK response for EmployeeRestController
 // Contains message for no edited first or last name employee or for employee with edited first and last name employee

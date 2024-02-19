@@ -1,6 +1,6 @@
-package com.workflow.WorkFlowDEMO.data.repository;
+package com.workflow.WorkFlowDEMO.data.repository.employee;
 
-import com.workflow.WorkFlowDEMO.data.entity.Role;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleJpaRepository extends JpaRepository <Role, Long>{

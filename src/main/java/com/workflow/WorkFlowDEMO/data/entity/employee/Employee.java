@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.data.entity;
+package com.workflow.WorkFlowDEMO.data.entity.employee;
 
 import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.*;
 import jakarta.persistence.*;

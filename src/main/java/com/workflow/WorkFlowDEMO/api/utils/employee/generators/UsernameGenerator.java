@@ -1,8 +1,7 @@
-package com.workflow.WorkFlowDEMO.api.utils.generators;
+package com.workflow.WorkFlowDEMO.api.utils.employee.generators;
 
-import com.workflow.WorkFlowDEMO.data.entity.Employee;
-import com.workflow.WorkFlowDEMO.data.service.EmployeeService;
-import org.springframework.data.domain.PageRequest;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
+import com.workflow.WorkFlowDEMO.data.service.employee.EmployeeService;
 
 import java.util.ArrayList;
 import java.util.List;

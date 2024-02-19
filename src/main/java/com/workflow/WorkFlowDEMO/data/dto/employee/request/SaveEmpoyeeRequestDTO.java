@@ -1,28 +1,17 @@
-package com.workflow.WorkFlowDEMO.data.dto.request;
+package com.workflow.WorkFlowDEMO.data.dto.employee.request;
 
-
-public class UpdateEmployeeRequestDTO {
-
-    private int updatedEmployeeId;
+public class SaveEmpoyeeRequestDTO {
     private String firstName;
     private String lastName;
     private String role;
     private String email;
 
-    public UpdateEmployeeRequestDTO(int updatedEmployeeId, String firstName, String lastName, String role, String email) {
-        this.updatedEmployeeId = updatedEmployeeId;
+
+    public SaveEmpoyeeRequestDTO(String firstName, String lastName, String role, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.email = email;
-    }
-
-    public int getUpdatedEmployeeId() {
-        return updatedEmployeeId;
-    }
-
-    public void setUpdatedEmployeeId(int updatedEmployeeId) {
-        this.updatedEmployeeId = updatedEmployeeId;
     }
 
     public String getFirstName() {

@@ -1,6 +1,6 @@
-package com.workflow.WorkFlowDEMO.data.service;
+package com.workflow.WorkFlowDEMO.data.service.employee;
 
-import com.workflow.WorkFlowDEMO.data.entity.Employee;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

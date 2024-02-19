@@ -1,6 +1,6 @@
 package com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators;
 
-import com.workflow.WorkFlowDEMO.data.entity.Employee;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

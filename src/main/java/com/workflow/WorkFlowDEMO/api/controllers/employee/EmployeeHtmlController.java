@@ -1,13 +1,9 @@
-package com.workflow.WorkFlowDEMO.api;
+package com.workflow.WorkFlowDEMO.api.controllers.employee;
 
-import com.workflow.WorkFlowDEMO.api.utils.bcrypt.BcryptPasswordEncoder;
 import com.workflow.WorkFlowDEMO.api.utils.email.EmailService;
-import com.workflow.WorkFlowDEMO.api.utils.employee.DefiningCurrentEmployeeRole;
-import com.workflow.WorkFlowDEMO.api.utils.generators.RandomPasswordGenerator;
-import com.workflow.WorkFlowDEMO.api.utils.generators.UsernameGenerator;
-import com.workflow.WorkFlowDEMO.data.entity.Employee;
-import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
-import com.workflow.WorkFlowDEMO.data.service.EmployeeService;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
+import com.workflow.WorkFlowDEMO.data.repository.employee.PageEmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.service.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -18,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/employees")

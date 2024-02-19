@@ -1,10 +1,10 @@
-package com.workflow.WorkFlowDEMO.data.service;
+package com.workflow.WorkFlowDEMO.data.service.employee;
 
-import com.workflow.WorkFlowDEMO.data.repository.EmployeeJpaRepository;
-import com.workflow.WorkFlowDEMO.data.repository.PageEmployeeRepository;
-import com.workflow.WorkFlowDEMO.data.repository.RoleJpaRepository;
-import com.workflow.WorkFlowDEMO.data.entity.Employee;
-import com.workflow.WorkFlowDEMO.data.entity.Role;
+import com.workflow.WorkFlowDEMO.data.repository.employee.EmployeeJpaRepository;
+import com.workflow.WorkFlowDEMO.data.repository.employee.PageEmployeeRepository;
+import com.workflow.WorkFlowDEMO.data.repository.employee.RoleJpaRepository;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
+import com.workflow.WorkFlowDEMO.data.entity.employee.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

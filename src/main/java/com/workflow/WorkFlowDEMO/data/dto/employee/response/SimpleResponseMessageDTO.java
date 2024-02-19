@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.data.dto.response;
+package com.workflow.WorkFlowDEMO.data.dto.employee.response;
 
 public class SimpleResponseMessageDTO {
 

@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.data.entity;
+package com.workflow.WorkFlowDEMO.data.entity.employee;
 
 import jakarta.persistence.*;
 
