@@ -3,11 +3,13 @@ package com.workflow.WorkFlowDEMO.data.service.employee;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 // Service interface for Employee-related operations
+@Service
 public interface EmployeeService {
 
     // Method to retrieve a list of all employees

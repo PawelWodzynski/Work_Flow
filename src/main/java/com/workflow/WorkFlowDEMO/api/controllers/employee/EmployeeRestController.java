@@ -8,6 +8,7 @@ import com.workflow.WorkFlowDEMO.api.utils.employee.generators.RandomPasswordGen
 import com.workflow.WorkFlowDEMO.api.utils.employee.generators.UsernameGenerator;
 import com.workflow.WorkFlowDEMO.data.dto.employee.request.SaveEmpoyeeRequestDTO;
 import com.workflow.WorkFlowDEMO.data.dto.employee.request.UpdateEmployeeRequestDTO;
+import com.workflow.WorkFlowDEMO.data.dto.employee.response.FindEmployeeByIdResponesetDTO;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SaveEmployeeResponseDTO;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.UpdateEmployeeResponseDTO;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
@@ -19,10 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/employeeRequest")
@@ -43,6 +41,33 @@ public class EmployeeRestController {
 
 
 //////////////////////////////////////////////////// Endpoints /////////////////////////////////////////////////////////
+
+    //Method handling GET request at "/findById"
+    @GetMapping("/findById")
+    public ResponseEntity<?> findEmployeeById (@RequestParam("employeeId") int employeeId){
+        // checking before operations whether record is existed in DB
+        if (employeeService.existById(employeeId)){
+            Optional<Employee> findedEmployeeObject = employeeService.findById(employeeId);
+            if (findedEmployeeObject.isPresent()){
+                Employee theEmployee = findedEmployeeObject.get();
+                Collection<Role> roles = theEmployee.getRoles();
+                Role role = roles.iterator().next();
+                List<String> employeeRoles = new ArrayList<>();
+                int roleId = 0;
+                for (Role employeeRole : roles) {
+                    roleId++;
+                    String roleName = employeeRole.getName();
+                    employeeRoles.add(roleName);
+                }
+                return ResponseEntity.ok(new FindEmployeeByIdResponesetDTO(theEmployee.getId(),theEmployee.getFirstName(),theEmployee.getLastName(),theEmployee.getUserName(),employeeRoles,theEmployee.getEmail()));
+            }else {
+                return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO("Object of Employee is null ID: " + employeeId));
+            }
+        }else {
+            return ResponseEntity.badRequest().body( new SimpleResponseMessageDTO("Employee not found ID: " + employeeId));
+        }
+    }
+
 
 
     // Method handling POST request at "/saveEmployee" in add-employee-form.html
@@ -114,6 +139,7 @@ public class EmployeeRestController {
     @PostMapping("/updateEmployee")
     public ResponseEntity<?> updateEmpleyee(@RequestBody UpdateEmployeeRequestDTO updateEmployeeRequestDTO) {
 
+        // checking before operations whether record is existed in DB
         if (employeeService.existById(updateEmployeeRequestDTO.getUpdatedEmployeeId())){
             // Getting employee by id
             Optional<Employee> existingEmployee = employeeService.findById(updateEmployeeRequestDTO.getUpdatedEmployeeId());
@@ -215,8 +241,6 @@ public class EmployeeRestController {
 
 
 
-
-
     // this method handilng POST request for reset employee password, and has task generate new password,
     // this method using saveWithoutRole method from EmployeeService
     // in order to overwrite only the employee's data with new password to DB
@@ -225,7 +249,7 @@ public class EmployeeRestController {
     public ResponseEntity<?> resetEmployeePassword(@RequestParam("employeeId") int employeeId ){
 
 
-
+        // checking before operations whether record is existed in DB
         if (employeeService.existById(employeeId)){
             // Find employee object in the database by employee id
             Optional<Employee> optionalEmployee = employeeService.findById(employeeId);
@@ -270,6 +294,7 @@ public class EmployeeRestController {
     // This method has task deleted appropriate employee
     @PostMapping("/deleteEmployee")
     public ResponseEntity<?> deleteEmployeeById(@RequestParam("employeeId") int employeeId){
+        // checking before operations whether record is existed in DB
         if (employeeService.existById(employeeId)){
             // Delete the employee
             employeeService.deleteById(employeeId);

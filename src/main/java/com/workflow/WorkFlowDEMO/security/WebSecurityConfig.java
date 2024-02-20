@@ -139,7 +139,7 @@ public class WebSecurityConfig {
     // necessary for accessing endpoints via Swagger UI
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/employeeRequest/**");
+        return (web) -> web.ignoring().requestMatchers("/employeeRequest/**","/roleRequest/**");
     }
 
 }
