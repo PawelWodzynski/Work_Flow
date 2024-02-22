@@ -11,6 +11,7 @@ import java.util.List;
 
 // EmployeeJPARepository interface extending JpaRepository for database operations
 @Repository
+@Hidden
 public interface EmployeeJpaRepository extends JpaRepository<Employee, Integer> {
 
     // Method to find all employees and order them by last name in ascending order with paging

@@ -1,5 +1,6 @@
 package com.workflow.WorkFlowDEMO.api.controllers.employee;
 
+import com.workflow.WorkFlowDEMO.api.documentation.employee.EmployeeRestControllerDocumentation;
 import com.workflow.WorkFlowDEMO.api.utils.validation.service.ValidationService;
 import com.workflow.WorkFlowDEMO.api.utils.bcrypt.BcryptPasswordEncoder;
 import com.workflow.WorkFlowDEMO.api.utils.email.EmailService;
@@ -15,6 +16,7 @@ import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessag
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Role;
 import com.workflow.WorkFlowDEMO.data.service.employee.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +44,10 @@ public class EmployeeRestController {
 
 //////////////////////////////////////////////////// Endpoints /////////////////////////////////////////////////////////
 
-    //Method handling GET request at "/findById"
+
+    @Operation(summary = "Find an employee based on his ID.",
+               description = EmployeeRestControllerDocumentation.findEmployeeByIdDsc
+    )
     @GetMapping("/findById")
     public ResponseEntity<?> findEmployeeById (@RequestParam("employeeId") int employeeId){
         // checking before operations whether record is existed in DB
@@ -70,10 +75,9 @@ public class EmployeeRestController {
 
 
 
-    // Method handling POST request at "/saveEmployee" in add-employee-form.html
-    // This method has task get employee from add employee form
-    // Validate and save new employee in DB
-    // On the end, method has returning employee login informations for save confirm
+    @Operation(summary = "Create new employee with authorization role",
+            description = EmployeeRestControllerDocumentation.saveEmployeeDsc
+    )
     @PostMapping("/saveEmployee")
     public ResponseEntity<?> saveEmployee(@RequestBody SaveEmpoyeeRequestDTO updateEmployeeRequestDTO) {
 
@@ -132,10 +136,10 @@ public class EmployeeRestController {
     }
 
 
-    // This method handling POST request for update employee, and has task saveWithRole/saveWithoutRole the updated employee to DB
-    // optional will send mail with new username if employee first or last name has been updated
-    // optional will set new role for employee
-    // On the end method sends JSON response with errors or employee informations with appriopriate messages
+
+    @Operation(summary = "Update informations of employee",
+               description = EmployeeRestControllerDocumentation.updateEmployeeDsc
+    )
     @PostMapping("/updateEmployee")
     public ResponseEntity<?> updateEmpleyee(@RequestBody UpdateEmployeeRequestDTO updateEmployeeRequestDTO) {
 
@@ -241,13 +245,14 @@ public class EmployeeRestController {
 
 
 
-    // this method handilng POST request for reset employee password, and has task generate new password,
-    // this method using saveWithoutRole method from EmployeeService
-    // in order to overwrite only the employee's data with new password to DB
-    // and send mail with current psasword for employee email
+
+    @Operation(summary = "Generate new random password for appropriate employee",
+               description = EmployeeRestControllerDocumentation.resetEmployeePasswordDsc
+    )
     @PostMapping("/resetPassword")
     public ResponseEntity<?> resetEmployeePassword(@RequestParam("employeeId") int employeeId ){
 
+        System.out.println(employeeId);
 
         // checking before operations whether record is existed in DB
         if (employeeService.existById(employeeId)){
@@ -258,14 +263,18 @@ public class EmployeeRestController {
             if (optionalEmployee.isPresent()) {
                 // Get the Employee object from the optional object
                 Employee theEmployee = optionalEmployee.get();
+                System.out.println("GET");
+                System.out.println(theEmployee);
                 // Generate a random password for the employee
                 String generatedPassword = RandomPasswordGenerator.randomPassword();
                 // Encode the generated password
                 String encodedPassword = BcryptPasswordEncoder.encodePassword(generatedPassword);
                 // Set the generated password for the employee
                 theEmployee.setPassword(encodedPassword);
+                System.out.println("Set password");
                 // Save the employee using the appropriate service (employeeService)
                 employeeService.saveWithoutRole(theEmployee);
+                System.out.println("Save Without Role");
                 // Send an email with the new password to the employee
                 emailService.sendEmail(theEmployee.getEmail(), emailService.resetPasswordRequestSubject(),
                         "Your Username: " + theEmployee.getUserName() + "\n" +
@@ -290,9 +299,11 @@ public class EmployeeRestController {
     }
 
 
-    // Method handling GET request for delete employee
-    // This method has task deleted appropriate employee
-    @PostMapping("/deleteEmployee")
+
+    @Operation(summary = "Delete appropriate employee by id",
+               description = EmployeeRestControllerDocumentation.deleteEmployeeByIdDsc
+    )
+    @DeleteMapping("/deleteEmployee")
     public ResponseEntity<?> deleteEmployeeById(@RequestParam("employeeId") int employeeId){
         // checking before operations whether record is existed in DB
         if (employeeService.existById(employeeId)){

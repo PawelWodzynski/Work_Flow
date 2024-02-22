@@ -10,7 +10,7 @@ async function deleteEmployee(event) {
         const formData = new FormData(document.getElementById(`deleteEmployeeForm` + iterIndex));
         // Invoke the asynchronous fetch function to send data to the 'http://localhost:8080/employeeRequest/deleteEmployee' endpoint using the POST method
         const response = await fetch('http://localhost:8080/employeeRequest/deleteEmployee', {
-            method: 'POST',
+            method: 'DELETE',
             body: formData
         });
         // Get data from the response in JSON format
