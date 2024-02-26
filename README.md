@@ -117,7 +117,7 @@ The project aims to consolidate the knowledge acquired thus far and serve as a p
 - 1.Search Bar 
   Just above the list of all users in the center of the screen, you can see the Search Bar, in this field, you can search for a user by their username, which consists of their first and last name.
   The Reset Button is used to return to the first page of the list.
-  You can both delete and edit the searched user on the list, the description of the user editing section can be found below in point 4.
+  You can both delete and edit the searched user on the list, the description of the user editing section can be found below in point 5.
 
 - 2.Add Employee 
   Below the Search Bar on the right side, you can find the button to add users.
