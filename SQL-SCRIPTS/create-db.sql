@@ -75,7 +75,6 @@ CREATE TABLE `employee_roles` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-SET FOREIGN_KEY_CHECKS = 1;
 
 --
 -- Dumping data for table `employee_roles`
@@ -89,3 +88,73 @@ VALUES
 (2, 1),
 (2, 2),
 (3, 1);
+
+
+
+CREATE TABLE `todo_date` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` varchar(10) DEFAULT NULL,  
+  `employee_id` int DEFAULT NULL,
+  
+  PRIMARY KEY (`id`),
+  
+  KEY `FK_EMPLOYEE_idx` (`employee_id`),
+  
+  CONSTRAINT `FK_EMPLOYEE` 
+  FOREIGN KEY (`employee_id`) 
+  REFERENCES `employee` (`id`) 
+  
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `todo_point` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `content` varchar(256) DEFAULT NULL,
+  `order` int NOT NULL,
+  `from_date` varchar(10) DEFAULT NULL,  
+  `to_date` varchar(10) DEFAULT NULL,
+  `completed` BOOLEAN NOT NULL,
+  `todo_date_id` int DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+
+  KEY `FK_TODO_DATE_ID_idx` (`todo_date_id`),
+
+  CONSTRAINT `FK_TODO_DATE` 
+  FOREIGN KEY (`todo_date_id`) 
+  REFERENCES `todo_date` (`id`) 
+
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE `todo_extended_point` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `content` varchar(256) DEFAULT NULL,
+  `order` int NOT NULL,
+  `completed` BOOLEAN NOT NULL,
+  `todo_point_id` int DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+
+  KEY `FK_TODO_POINT_ID_idx` (`todo_point_id`),
+
+  CONSTRAINT `FK_TODO_POINT` 
+  FOREIGN KEY (`todo_point_id`) 
+  REFERENCES `todo_point` (`id`) 
+
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+
+
+
+
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+

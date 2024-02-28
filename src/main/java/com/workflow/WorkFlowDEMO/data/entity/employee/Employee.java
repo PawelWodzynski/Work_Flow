@@ -1,6 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.entity.employee;
 
 import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.*;
+import com.workflow.WorkFlowDEMO.data.entity.todo.TodoDate;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -40,6 +41,10 @@ public class Employee {
             joinColumns = @JoinColumn(name = "user_id"), // Owning side of the relationship
             inverseJoinColumns = @JoinColumn(name = "role_id")) // Inverse side of the relationship
     private List<Role> roles; // Collection to store roles (typically ArrayList or LinkedHashMap)
+
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TodoDate> todoDates;
 
 
     // Default constructor
