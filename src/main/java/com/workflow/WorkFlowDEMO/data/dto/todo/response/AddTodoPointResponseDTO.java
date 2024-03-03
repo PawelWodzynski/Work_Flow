@@ -4,18 +4,18 @@ public class AddTodoPointResponseDTO {
     private String successfulMessage;
     private String todoContent;
     private int todoPointOrder;
-    private String fromDate;
-    private String toDate;
+    private int fromDayNumber;
+    private int toDayNumber;
     private boolean completed;
     private int todoDateId;
     private int todoPointId;
 
-    public AddTodoPointResponseDTO(String successfulMessage, String todoContent, int todoPointOrder, String fromDate, String toDate, boolean completed, int todoDateId, int todoPointId) {
+    public AddTodoPointResponseDTO(String successfulMessage, String todoContent, int todoPointOrder, int fromDayNumber, int toDayNumber, boolean completed, int todoDateId, int todoPointId) {
         this.successfulMessage = successfulMessage;
         this.todoContent = todoContent;
         this.todoPointOrder = todoPointOrder;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+        this.fromDayNumber = fromDayNumber;
+        this.toDayNumber = toDayNumber;
         this.completed = completed;
         this.todoDateId = todoDateId;
         this.todoPointId = todoPointId;
@@ -45,20 +45,20 @@ public class AddTodoPointResponseDTO {
         this.todoPointOrder = todoPointOrder;
     }
 
-    public String getFromDate() {
-        return fromDate;
+    public int getFromDayNumber() {
+        return fromDayNumber;
     }
 
-    public void setFromDate(String fromDate) {
-        this.fromDate = fromDate;
+    public void setFromDayNumber(int fromDayNumber) {
+        this.fromDayNumber = fromDayNumber;
     }
 
-    public String getToDate() {
-        return toDate;
+    public int getToDayNumber() {
+        return toDayNumber;
     }
 
-    public void setToDate(String toDate) {
-        this.toDate = toDate;
+    public void setToDayNumber(int toDayNumber) {
+        this.toDayNumber = toDayNumber;
     }
 
     public boolean isCompleted() {

@@ -93,7 +93,8 @@ VALUES
 
 CREATE TABLE `todo_date` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `date` varchar(10) DEFAULT NULL,  
+  `mounth_number` int DEFAULT NULL,  
+  `year` int DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
   
   PRIMARY KEY (`id`),
@@ -112,8 +113,8 @@ CREATE TABLE `todo_point` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` varchar(256) DEFAULT NULL,
   `point_order` int NOT NULL,
-  `from_date` varchar(10) DEFAULT NULL,  
-  `to_date` varchar(10) DEFAULT NULL,
+  `from_day_number` int  DEFAULT NULL,  
+  `to_day_number` int DEFAULT NULL,
   `completed` BOOLEAN NOT NULL,
   `todo_date_id` int DEFAULT NULL,
 

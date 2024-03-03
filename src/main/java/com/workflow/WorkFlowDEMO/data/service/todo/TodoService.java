@@ -6,6 +6,8 @@ import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Hidden
 public interface TodoService {
@@ -13,9 +15,11 @@ public interface TodoService {
 /////////////////////////////////// TODO DATE //////////////////////////////////////////////////////////////////
     TodoDate saveTodoDate(TodoDate todoDate);
 
-    boolean findTodoDateDuplicateForEmployeeId(int employeeId,String todoDate);
+    boolean findTodoDateDuplicateForEmployeeId(int employeeId,int year, int mounthNumber);
 
     boolean checkExistenceOfTodoDateById(int todoDateId);
+
+    List<TodoDate> findAllTodoDatesByEmployeeId(int employeeId);
 
 
     /////////////////////////////////////// TODO POINT ///////////////////////////////////////////////////////////
@@ -23,7 +27,7 @@ public interface TodoService {
 
     boolean checkExistenceOfTodoPointById(int todoPointId);
 
-    boolean checkOrderExistenceOfTodoPointByTodoDateIdAndOrder(int todoDateId,String fromDate,int pointOrder);
+    boolean checkOrderExistenceOfTodoPointByTodoDateIdAndOrder(int todoDateId,int fromDayNumber,int pointOrder);
 
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////

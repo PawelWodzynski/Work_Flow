@@ -1,6 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import jakarta.persistence.*;
 
@@ -17,16 +18,21 @@ public class TodoDate {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "date")
-    private String date;
+    @Column(name = "mounth_number")
+    private int mounthNumber;
+
+    @Column(name = "year")
+    private int year;
 
     @Column(name = "employee_id")
     private int employeeId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    @ManyToOne( fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "employee_id", insertable = false, updatable = false)
     private Employee employee;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "todo_date_id")
     private List<TodoPoint> todoPoints;
@@ -35,8 +41,9 @@ public class TodoDate {
 
     public TodoDate(){}
 
-    public TodoDate(String date){
-        this.date = date;
+    public TodoDate(int mounthNumber, int year) {
+        this.mounthNumber = mounthNumber;
+        this.year = year;
     }
 
     public int getId() {
@@ -47,20 +54,20 @@ public class TodoDate {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
+    public int getMounthNumber() {
+        return mounthNumber;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setMounthNumber(int mounthNumber) {
+        this.mounthNumber = mounthNumber;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public int getYear() {
+        return year;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public int getEmployeeId() {
@@ -71,6 +78,22 @@ public class TodoDate {
         this.employeeId = employeeId;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public List<TodoPoint> getTodoPoints() {
+        return todoPoints;
+    }
+
+    public void setTodoPoints(List<TodoPoint> todoPoints) {
+        this.todoPoints = todoPoints;
+    }
+
     public void addTodoPoint(TodoPoint thePoint){
         if (todoPoints == null){
             todoPoints = new ArrayList<>();
@@ -79,12 +102,5 @@ public class TodoDate {
         todoPoints.add(thePoint);
     }
 
-    @Override
-    public String toString() {
-        return "TodoDate{" +
-                "id=" + id +
-                ", date='" + date + '\'' +
-                ", employee=" + employee +
-                '}';
-    }
+
 }

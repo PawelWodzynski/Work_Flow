@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/todoRequest")
 public class TodoRestController {
@@ -30,23 +33,25 @@ public class TodoRestController {
     public ResponseEntity<?> addTodoDate(@RequestBody AddTodoDateRequestDTO addTodoDateRequestDTO){
         try {
             if (employeeService.existById(addTodoDateRequestDTO.getEmployeeId())){
-                if (!todoService.findTodoDateDuplicateForEmployeeId(addTodoDateRequestDTO.getEmployeeId(), addTodoDateRequestDTO.getTodoDate())){
-                    TodoDate todoDate = new TodoDate();
-                    todoDate.setDate(addTodoDateRequestDTO.getTodoDate());
+                if (!todoService.findTodoDateDuplicateForEmployeeId(addTodoDateRequestDTO.getEmployeeId(), addTodoDateRequestDTO.getYear(),addTodoDateRequestDTO.getMounthNumber())){
+                    TodoDate todoDate = new TodoDate(addTodoDateRequestDTO.getMounthNumber(), addTodoDateRequestDTO.getYear());
                     todoDate.setEmployeeId(addTodoDateRequestDTO.getEmployeeId());
                     todoService.saveTodoDate(todoDate);
                     return ResponseEntity.ok(
                             new AddTodoDateResponseDTO(
                                     "TODO date successfully added",
-                                    addTodoDateRequestDTO.getTodoDate(),
+                                    addTodoDateRequestDTO.getYear(),
+                                    addTodoDateRequestDTO.getMounthNumber(),
                                     addTodoDateRequestDTO.getEmployeeId(),
                                     todoDate.getId()
                             ));
                 }else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "You can't have the same two months of TODO " +
-                                            addTodoDateRequestDTO.getTodoDate()
+                                    "Error of adding TO DO date" +
+                                    "You can't have the same two months of TO DO in the same year " +
+                                            "( year: " + addTodoDateRequestDTO.getYear() + " ) " +
+                                            "(!!!! mounth: " + addTodoDateRequestDTO.getMounthNumber() + " !!!! ) "
                             ));
                 }
             }else {
@@ -68,25 +73,25 @@ public class TodoRestController {
             if (todoService.checkExistenceOfTodoDateById(addTodoPointRequestDTO.getTodoDateId())){
                 if (!todoService.checkOrderExistenceOfTodoPointByTodoDateIdAndOrder
                         (addTodoPointRequestDTO.getTodoDateId(),
-                                addTodoPointRequestDTO.getFromDate(),
+                                addTodoPointRequestDTO.getFromDayNumber(),
                                 addTodoPointRequestDTO.getTodoPointOrder()
                         )){
                     TodoPoint todoPoint = new TodoPoint(
                             addTodoPointRequestDTO.getTodoContent(),
                             addTodoPointRequestDTO.getTodoPointOrder(),
-                            addTodoPointRequestDTO.getFromDate(),
-                            addTodoPointRequestDTO.getToDate(),
+                            addTodoPointRequestDTO.getFromDayNumber(),
+                            addTodoPointRequestDTO.getToDayNumber(),
                             false
                     );
                     todoPoint.setTodoDateId(addTodoPointRequestDTO.getTodoDateId());
                     todoService.saveTodoPoint(todoPoint);
                     return ResponseEntity.ok(
                             new AddTodoPointResponseDTO(
-                                    "TODO point successfully added",
+                                    "TO DO point successfully added",
                                     addTodoPointRequestDTO.getTodoContent(),
                                     addTodoPointRequestDTO.getTodoPointOrder(),
-                                    addTodoPointRequestDTO.getFromDate(),
-                                    addTodoPointRequestDTO.getToDate(),
+                                    addTodoPointRequestDTO.getFromDayNumber(),
+                                    addTodoPointRequestDTO.getToDayNumber(),
                                     false,
                                     addTodoPointRequestDTO.getTodoDateId(),
                                     todoPoint.getId()
@@ -94,9 +99,9 @@ public class TodoRestController {
                 }else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "Error adding a point to the todo date, " +
-                                            "the added point cannot have the same order as the one already existing on a given fromDate " +
-                                            "(fromDate: " + addTodoPointRequestDTO.getFromDate() + " ) " +
+                                    "Error adding a point to the TO DO date, " +
+                                            "the added point cannot have the same order as the one already existing on a given fromDayNumber " +
+                                            "(fromDayNumber: " + addTodoPointRequestDTO.getFromDayNumber() + " ) " +
                                             "(!!!! pointOrder: " + addTodoPointRequestDTO.getTodoPointOrder() + " !!!! ) " +
                                             "(todoDateId: " + addTodoPointRequestDTO.getTodoDateId() + " ) "
 
@@ -105,7 +110,7 @@ public class TodoRestController {
             }else {
                 return ResponseEntity.badRequest().body(
                         new SimpleResponseMessageDTO(
-                                "todo date does not exist ID " +
+                                "TO DO date does not exist ID " +
                                         addTodoPointRequestDTO.getTodoDateId() +
                                         ", to assign a point you must first create a date"
                         ));
@@ -133,7 +138,7 @@ public class TodoRestController {
                     todoService.saveTodoExtendedPoint(todoExtendedPoint);
                     return ResponseEntity.ok(
                             new AddTodoExtendedPointResponseDTO(
-                                    "TODO extended point successfully added",
+                                    "TO DO extended point successfully added",
                                     addTodoExtendedPointRequestDTO.getTodoExtendedPointContent(),
                                     addTodoExtendedPointRequestDTO.getTodoExtededPointOrder(),
                                     addTodoExtendedPointRequestDTO.getTodoPointId(),
@@ -143,7 +148,7 @@ public class TodoRestController {
                 }else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "Error adding a extended point to the todo point, " +
+                                    "Error adding a extended point to the TO DO point, " +
                                             "the added point cannot have the same order as the one already existing on a given todoPointId " +
                                             "( todoPointId: " + addTodoExtendedPointRequestDTO.getTodoPointId() + ") " +
                                             "(!!!!! pointOrder: " + addTodoExtendedPointRequestDTO.getTodoExtededPointOrder() + "!!!!! ) "
@@ -153,7 +158,7 @@ public class TodoRestController {
             }else {
                 return  ResponseEntity.badRequest().body(
                         new SimpleResponseMessageDTO(
-                                "todo point does not exist ID " +
+                                "TO DO point does not exist ID " +
                                 addTodoExtendedPointRequestDTO.getTodoPointId() +
                                 " to assign an extended point you must first create a date "
                         ));
@@ -161,6 +166,18 @@ public class TodoRestController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
         }
+    }
+
+    @GetMapping("/findAllTodoDatesByEmployeeId")
+    public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam int employeeId){
+
+        if (employeeService.existById(employeeId)){
+            List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
+            return ResponseEntity.ok(todoDates);
+        }else {
+            return ResponseEntity.badRequest().body("employee not found");
+        }
+
     }
 
 

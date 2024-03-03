@@ -1,5 +1,6 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ public class TodoPoint {
     @Column(name = "point_order")
     private int pointOrder;
 
-    @Column(name = "from_date")
-    private String fromDate;
+    @Column(name = "from_day_number")
+    private int fromDayNumber;
 
-    @Column(name = "to_date")
-    private String toDate;
+    @Column(name = "to_day_number")
+    private int toDayNumber;
 
     @Column(name = "completed")
     private boolean completed;
@@ -33,7 +34,8 @@ public class TodoPoint {
     @Column(name = "todo_date_id")
     private int todoDateId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "todo_date_id", insertable = false, updatable = false)
     private TodoDate todoDate;
 
@@ -43,14 +45,13 @@ public class TodoPoint {
 
     public TodoPoint(){}
 
-    public TodoPoint(String content, int pointOrder, String fromDate, String toDate, boolean completed){
+    public TodoPoint(String content, int pointOrder, int fromDayNumber, int toDayNumber, boolean completed) {
         this.content = content;
         this.pointOrder = pointOrder;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+        this.fromDayNumber = fromDayNumber;
+        this.toDayNumber = toDayNumber;
         this.completed = completed;
     }
-
 
     public int getId() {
         return id;
@@ -76,20 +77,20 @@ public class TodoPoint {
         this.pointOrder = pointOrder;
     }
 
-    public String getFromDate() {
-        return fromDate;
+    public int getFromDayNumber() {
+        return fromDayNumber;
     }
 
-    public void setFromDate(String fromDate) {
-        this.fromDate = fromDate;
+    public void setFromDayNumber(int fromDayNumber) {
+        this.fromDayNumber = fromDayNumber;
     }
 
-    public String getToDate() {
-        return toDate;
+    public int getToDayNumber() {
+        return toDayNumber;
     }
 
-    public void setToDate(String toDate) {
-        this.toDate = toDate;
+    public void setToDayNumber(int toDayNumber) {
+        this.toDayNumber = toDayNumber;
     }
 
     public boolean isCompleted() {
@@ -100,10 +101,6 @@ public class TodoPoint {
         this.completed = completed;
     }
 
-    public TodoDate getTodoDate() {
-        return todoDate;
-    }
-
     public int getTodoDateId() {
         return todoDateId;
     }
@@ -112,8 +109,20 @@ public class TodoPoint {
         this.todoDateId = todoDateId;
     }
 
+    public TodoDate getTodoDate() {
+        return todoDate;
+    }
+
     public void setTodoDate(TodoDate todoDate) {
         this.todoDate = todoDate;
+    }
+
+    public List<TodoExtendedPoint> getTodoExtendedPoints() {
+        return todoExtendedPoints;
+    }
+
+    public void setTodoExtendedPoints(List<TodoExtendedPoint> todoExtendedPoints) {
+        this.todoExtendedPoints = todoExtendedPoints;
     }
 
     public void addExtendedTodoPoint(TodoExtendedPoint todoExtendedPoint){
@@ -130,8 +139,8 @@ public class TodoPoint {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", pointOrder=" + pointOrder +
-                ", fromDate='" + fromDate + '\'' +
-                ", toDate='" + toDate + '\'' +
+                ", fromDate='" + fromDayNumber + '\'' +
+                ", toDate='" + toDayNumber + '\'' +
                 ", completed=" + completed +
                 ", todoDate=" + todoDate +
                 '}';

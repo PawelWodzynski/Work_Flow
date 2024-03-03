@@ -11,6 +11,6 @@ public interface TodoPointJpaRepository extends JpaRepository<TodoPoint,Integer>
 
     boolean existsById(int todoPointId);
 
-    boolean existsByTodoDateIdAndFromDateContainingAndPointOrderEquals(int todoDateId,String fromDate,int PointOrder);
+    boolean existsByTodoDateIdAndFromDayNumberEqualsAndPointOrderEquals(int todoDateId,int fromDayNumber,int PointOrder);
 
 }

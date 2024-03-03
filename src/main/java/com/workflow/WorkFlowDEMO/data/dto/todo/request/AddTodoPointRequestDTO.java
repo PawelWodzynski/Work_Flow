@@ -8,15 +8,17 @@ public class AddTodoPointRequestDTO {
 
     private int todoPointOrder;
 
-    private String fromDate;
+    private int fromDayNumber;
 
-    private String toDate;
+    private int toDayNumber;
 
     private int todoDateId;
 
-    public AddTodoPointRequestDTO(String fromDate, String toDate, int todoDateId) {
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+    public AddTodoPointRequestDTO(String todoContent, int todoPointOrder, int fromDayNumber, int toDayNumber, int todoDateId) {
+        this.todoContent = todoContent;
+        this.todoPointOrder = todoPointOrder;
+        this.fromDayNumber = fromDayNumber;
+        this.toDayNumber = toDayNumber;
         this.todoDateId = todoDateId;
     }
 
@@ -36,20 +38,20 @@ public class AddTodoPointRequestDTO {
         this.todoPointOrder = todoPointOrder;
     }
 
-    public String getFromDate() {
-        return fromDate;
+    public int getFromDayNumber() {
+        return fromDayNumber;
     }
 
-    public void setFromDate(String fromDate) {
-        this.fromDate = fromDate;
+    public void setFromDayNumber(int fromDayNumber) {
+        this.fromDayNumber = fromDayNumber;
     }
 
-    public String getToDate() {
-        return toDate;
+    public int getToDayNumber() {
+        return toDayNumber;
     }
 
-    public void setToDate(String toDate) {
-        this.toDate = toDate;
+    public void setToDayNumber(int toDayNumber) {
+        this.toDayNumber = toDayNumber;
     }
 
     public int getTodoDateId() {

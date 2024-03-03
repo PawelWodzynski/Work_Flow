@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Hidden
 public class TodoServiceImpl implements TodoService {
@@ -32,13 +34,18 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public boolean findTodoDateDuplicateForEmployeeId(int employeeId, String todoDate) {
-        return todoDateJpaRepository.existsByEmployeeIdAndDateContaining(employeeId,todoDate);
+    public boolean findTodoDateDuplicateForEmployeeId(int employeeId, int year, int mounthNumber) {
+        return todoDateJpaRepository.existsByEmployeeIdAndYearEqualsAndAndMounthNumberEquals(employeeId,year,mounthNumber);
     }
 
     @Override
     public boolean checkExistenceOfTodoDateById(int todoDateId) {
         return todoDateJpaRepository.existsById(todoDateId);
+    }
+
+    @Override
+    public List<TodoDate> findAllTodoDatesByEmployeeId(int employeeId) {
+        return todoDateJpaRepository.findAllByEmployeeId(employeeId);
     }
 
 
@@ -54,8 +61,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public boolean checkOrderExistenceOfTodoPointByTodoDateIdAndOrder(int todoDateId,String fromDate,int pointOrder) {
-        return todoPointJpaRepository.existsByTodoDateIdAndFromDateContainingAndPointOrderEquals(todoDateId,fromDate,pointOrder);
+    public boolean checkOrderExistenceOfTodoPointByTodoDateIdAndOrder(int todoDateId,int fromDayNumber,int pointOrder) {
+        return todoPointJpaRepository.existsByTodoDateIdAndFromDayNumberEqualsAndPointOrderEquals(todoDateId,fromDayNumber,pointOrder);
     }
 
 
