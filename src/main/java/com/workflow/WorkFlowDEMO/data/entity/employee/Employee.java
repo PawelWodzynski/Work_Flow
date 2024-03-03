@@ -2,8 +2,10 @@ package com.workflow.WorkFlowDEMO.data.entity.employee;
 
 import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.*;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoDate;
+import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -126,6 +128,15 @@ public class Employee {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+
+    public void addTodoDate(TodoDate todoDate){
+        if (todoDates == null){
+            todoDates = new ArrayList<>();
+        }
+
+        todoDates.add(todoDate);
     }
 
 

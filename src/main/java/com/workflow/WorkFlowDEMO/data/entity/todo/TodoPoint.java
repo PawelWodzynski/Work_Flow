@@ -2,6 +2,7 @@ package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,15 +11,15 @@ public class TodoPoint {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "order")
-    private int order;
+    @Column(name = "point_order")
+    private int pointOrder;
 
     @Column(name = "from_date")
     private String fromDate;
@@ -29,8 +30,11 @@ public class TodoPoint {
     @Column(name = "completed")
     private boolean completed;
 
+    @Column(name = "todo_date_id")
+    private int todoDateId;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "todo_date_id")
+    @JoinColumn(name = "todo_date_id", insertable = false, updatable = false)
     private TodoDate todoDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -39,9 +43,9 @@ public class TodoPoint {
 
     public TodoPoint(){}
 
-    public TodoPoint(String content, int order, String fromDate, String toDate, boolean completed){
+    public TodoPoint(String content, int pointOrder, String fromDate, String toDate, boolean completed){
         this.content = content;
-        this.order = order;
+        this.pointOrder = pointOrder;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.completed = completed;
@@ -64,12 +68,12 @@ public class TodoPoint {
         this.content = content;
     }
 
-    public int getOrder() {
-        return order;
+    public int getPointOrder() {
+        return pointOrder;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setPointOrder(int pointOrder) {
+        this.pointOrder = pointOrder;
     }
 
     public String getFromDate() {
@@ -100,8 +104,24 @@ public class TodoPoint {
         return todoDate;
     }
 
+    public int getTodoDateId() {
+        return todoDateId;
+    }
+
+    public void setTodoDateId(int todoDateId) {
+        this.todoDateId = todoDateId;
+    }
+
     public void setTodoDate(TodoDate todoDate) {
         this.todoDate = todoDate;
+    }
+
+    public void addExtendedTodoPoint(TodoExtendedPoint todoExtendedPoint){
+        if (todoExtendedPoints == null){
+            todoExtendedPoints = new ArrayList<>();
+        }
+
+        todoExtendedPoints.add(todoExtendedPoint);
     }
 
     @Override
@@ -109,7 +129,7 @@ public class TodoPoint {
         return "TodoPoint{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", order=" + order +
+                ", pointOrder=" + pointOrder +
                 ", fromDate='" + fromDate + '\'' +
                 ", toDate='" + toDate + '\'' +
                 ", completed=" + completed +

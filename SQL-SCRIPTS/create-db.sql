@@ -111,7 +111,7 @@ CREATE TABLE `todo_date` (
 CREATE TABLE `todo_point` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` varchar(256) DEFAULT NULL,
-  `order` int NOT NULL,
+  `point_order` int NOT NULL,
   `from_date` varchar(10) DEFAULT NULL,  
   `to_date` varchar(10) DEFAULT NULL,
   `completed` BOOLEAN NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `todo_point` (
 CREATE TABLE `todo_extended_point` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` varchar(256) DEFAULT NULL,
-  `order` int NOT NULL,
+  `point_order` int NOT NULL,
   `completed` BOOLEAN NOT NULL,
   `todo_point_id` int DEFAULT NULL,
 

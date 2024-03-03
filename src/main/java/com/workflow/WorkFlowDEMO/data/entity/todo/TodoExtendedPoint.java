@@ -7,28 +7,31 @@ import jakarta.persistence.*;
 public class TodoExtendedPoint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "order")
-    private int order;
+    @Column(name = "point_order")
+    private int pointOrder;
 
     @Column(name = "completed")
     private boolean completed;
 
+    @Column(name = "todo_point_id")
+    private int todoPointId;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "todo_point_id")
+    @JoinColumn(name = "todo_point_id",insertable = false, updatable = false)
     private TodoPoint todoPoint;
 
     public TodoExtendedPoint(){}
 
-    public TodoExtendedPoint(String content, int order, boolean completed){
+    public TodoExtendedPoint(String content, int pointOrder, boolean completed){
         this.content = content;
-        this.order = order;
+        this.pointOrder = pointOrder;
         this.completed = completed;
     }
 
@@ -48,12 +51,12 @@ public class TodoExtendedPoint {
         this.content = content;
     }
 
-    public int getOrder() {
-        return order;
+    public int getPointOrder() {
+        return pointOrder;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setPointOrder(int pointOrder) {
+        this.pointOrder = pointOrder;
     }
 
     public boolean isCompleted() {
@@ -68,6 +71,14 @@ public class TodoExtendedPoint {
         return todoPoint;
     }
 
+    public int getTodoPointId() {
+        return todoPointId;
+    }
+
+    public void setTodoPointId(int todoPointId) {
+        this.todoPointId = todoPointId;
+    }
+
     public void setTodoPoint(TodoPoint todoPoint) {
         this.todoPoint = todoPoint;
     }
@@ -77,7 +88,7 @@ public class TodoExtendedPoint {
         return "TodoExtendedPoint{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", order=" + order +
+                ", pointOrder=" + pointOrder +
                 ", completed=" + completed +
                 ", todoPoint=" + todoPoint +
                 '}';
