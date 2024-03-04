@@ -1,5 +1,6 @@
 package com.workflow.WorkFlowDEMO.api.controllers.todo;
 
+import com.workflow.WorkFlowDEMO.api.utils.todo.NumberOfDaysInMonth;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoDateRequestDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoExtendedPointRequestDTO;
@@ -17,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/todoRequest")
@@ -173,11 +176,32 @@ public class TodoRestController {
 
         if (employeeService.existById(employeeId)){
             List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
-            return ResponseEntity.ok(todoDates);
+            List<Map<String, Object>> formattedDates = new ArrayList<>();
+            int iteration = 0;
+            NumberOfDaysInMonth numberOfDaysInMonth = new NumberOfDaysInMonth();
+            for (TodoDate todoDate : todoDates) {
+                iteration++;
+                Map<String, Object> dateMap = new HashMap<>();
+                int year = todoDate.getYear();
+                int monthNumber = todoDate.getMounthNumber();
+                dateMap.put("id-" + iteration, todoDate.getId());
+                dateMap.put("monthNumber-" + iteration, monthNumber);
+                dateMap.put("year-" + iteration, year);
+                dateMap.put("employeeId-" + iteration, todoDate.getEmployeeId());
+                dateMap.put("monthDays-" + iteration, numberOfDaysInMonth.numberOfDays(year,monthNumber));
+                formattedDates.add(dateMap);
+            }
+            if (todoDates.size() > 0){
+                return ResponseEntity.ok(formattedDates);
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "Employee with ID: " + employeeId + " has no dates"
+                        ));
+            }
         }else {
             return ResponseEntity.badRequest().body("employee not found");
         }
-
     }
 
 
