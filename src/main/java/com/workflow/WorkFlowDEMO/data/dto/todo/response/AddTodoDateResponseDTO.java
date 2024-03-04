@@ -3,14 +3,14 @@ package com.workflow.WorkFlowDEMO.data.dto.todo.response;
 public class AddTodoDateResponseDTO {
     private String successfulMessage;
     private int year;
-    private int mounthNumber;
+    private int monthNumber;
     private int employeeId;
     private int todoDateId;
 
-    public AddTodoDateResponseDTO(String successfulMessage, int year, int mounthNumber, int employeeId, int todoDateId) {
+    public AddTodoDateResponseDTO(String successfulMessage, int year, int monthNumber, int employeeId, int todoDateId) {
         this.successfulMessage = successfulMessage;
         this.year = year;
-        this.mounthNumber = mounthNumber;
+        this.monthNumber = monthNumber;
         this.employeeId = employeeId;
         this.todoDateId = todoDateId;
     }
@@ -31,12 +31,12 @@ public class AddTodoDateResponseDTO {
         this.year = year;
     }
 
-    public int getMounthNumber() {
-        return mounthNumber;
+    public int getMonthNumber() {
+        return monthNumber;
     }
 
-    public void setMounthNumber(int mounthNumber) {
-        this.mounthNumber = mounthNumber;
+    public void setMonthNumber(int monthNumber) {
+        this.monthNumber = monthNumber;
     }
 
     public int getEmployeeId() {

@@ -18,8 +18,8 @@ public class TodoDate {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "mounth_number")
-    private int mounthNumber;
+    @Column(name = "month_number")
+    private int monthNumber;
 
     @Column(name = "year")
     private int year;
@@ -41,8 +41,8 @@ public class TodoDate {
 
     public TodoDate(){}
 
-    public TodoDate(int mounthNumber, int year) {
-        this.mounthNumber = mounthNumber;
+    public TodoDate(int monthNumber, int year) {
+        this.monthNumber = monthNumber;
         this.year = year;
     }
 
@@ -54,12 +54,12 @@ public class TodoDate {
         this.id = id;
     }
 
-    public int getMounthNumber() {
-        return mounthNumber;
+    public int getMonthNumber() {
+        return monthNumber;
     }
 
-    public void setMounthNumber(int mounthNumber) {
-        this.mounthNumber = mounthNumber;
+    public void setMonthNumber(int monthNumber) {
+        this.monthNumber = monthNumber;
     }
 
     public int getYear() {

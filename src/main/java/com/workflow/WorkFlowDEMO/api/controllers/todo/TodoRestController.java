@@ -34,17 +34,18 @@ public class TodoRestController {
 
     @PostMapping("/addTodoDate")
     public ResponseEntity<?> addTodoDate(@RequestBody AddTodoDateRequestDTO addTodoDateRequestDTO){
-        try {
+        System.out.println(addTodoDateRequestDTO.getMonthNumber());
+       try {
             if (employeeService.existById(addTodoDateRequestDTO.getEmployeeId())){
-                if (!todoService.findTodoDateDuplicateForEmployeeId(addTodoDateRequestDTO.getEmployeeId(), addTodoDateRequestDTO.getYear(),addTodoDateRequestDTO.getMounthNumber())){
-                    TodoDate todoDate = new TodoDate(addTodoDateRequestDTO.getMounthNumber(), addTodoDateRequestDTO.getYear());
+                if (!todoService.findTodoDateDuplicateForEmployeeId(addTodoDateRequestDTO.getEmployeeId(), addTodoDateRequestDTO.getYear(),addTodoDateRequestDTO.getMonthNumber())){
+                    TodoDate todoDate = new TodoDate(addTodoDateRequestDTO.getMonthNumber(), addTodoDateRequestDTO.getYear());
                     todoDate.setEmployeeId(addTodoDateRequestDTO.getEmployeeId());
                     todoService.saveTodoDate(todoDate);
                     return ResponseEntity.ok(
                             new AddTodoDateResponseDTO(
                                     "TODO date successfully added",
                                     addTodoDateRequestDTO.getYear(),
-                                    addTodoDateRequestDTO.getMounthNumber(),
+                                    addTodoDateRequestDTO.getMonthNumber(),
                                     addTodoDateRequestDTO.getEmployeeId(),
                                     todoDate.getId()
                             ));
@@ -54,7 +55,7 @@ public class TodoRestController {
                                     "Error of adding TO DO date" +
                                     "You can't have the same two months of TO DO in the same year " +
                                             "( year: " + addTodoDateRequestDTO.getYear() + " ) " +
-                                            "(!!!! mounth: " + addTodoDateRequestDTO.getMounthNumber() + " !!!! ) "
+                                            "(!!!! month: " + addTodoDateRequestDTO.getMonthNumber() + " !!!! ) "
                             ));
                 }
             }else {
@@ -183,7 +184,7 @@ public class TodoRestController {
                 iteration++;
                 Map<String, Object> dateMap = new HashMap<>();
                 int year = todoDate.getYear();
-                int monthNumber = todoDate.getMounthNumber();
+                int monthNumber = todoDate.getMonthNumber();
                 dateMap.put("id-" + iteration, todoDate.getId());
                 dateMap.put("monthNumber-" + iteration, monthNumber);
                 dateMap.put("year-" + iteration, year);

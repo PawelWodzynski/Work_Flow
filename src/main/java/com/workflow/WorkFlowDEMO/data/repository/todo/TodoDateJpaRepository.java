@@ -12,7 +12,7 @@ import java.util.List;
 @Hidden
 public interface TodoDateJpaRepository extends JpaRepository<TodoDate,Integer> {
 
-    boolean existsByEmployeeIdAndYearEqualsAndAndMounthNumberEquals(int employeeId, int year, int mounthNumber);
+    boolean existsByEmployeeIdAndYearEqualsAndAndMonthNumberEquals(int employeeId, int year, int monthNumber);
 
     boolean existsById(int todoDateId);
 

@@ -93,7 +93,7 @@ VALUES
 
 CREATE TABLE `todo_date` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `mounth_number` int DEFAULT NULL,  
+  `month_number` int DEFAULT NULL,
   `year` int DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
   

@@ -1,22 +1,22 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
 public class AddTodoDateRequestDTO {
-    private int mounthNumber;
+    private int monthNumber;
     private int year;
     private int employeeId;
 
-    public AddTodoDateRequestDTO(int mounthNumber, int year, int employeeId) {
-        this.mounthNumber = mounthNumber;
+    public AddTodoDateRequestDTO(int monthNumber, int year, int employeeId) {
+        this.monthNumber = monthNumber;
         this.year = year;
         this.employeeId = employeeId;
     }
 
-    public int getMounthNumber() {
-        return mounthNumber;
+    public int getMonthNumber() {
+        return monthNumber;
     }
 
-    public void setMounthNumber(int mounthNumber) {
-        this.mounthNumber = mounthNumber;
+    public void setMonthNumber(int monthNumber) {
+        this.monthNumber = monthNumber;
     }
 
     public int getYear() {

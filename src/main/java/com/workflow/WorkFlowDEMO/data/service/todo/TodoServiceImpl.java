@@ -34,8 +34,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public boolean findTodoDateDuplicateForEmployeeId(int employeeId, int year, int mounthNumber) {
-        return todoDateJpaRepository.existsByEmployeeIdAndYearEqualsAndAndMounthNumberEquals(employeeId,year,mounthNumber);
+    public boolean findTodoDateDuplicateForEmployeeId(int employeeId, int year, int monthNumber) {
+        return todoDateJpaRepository.existsByEmployeeIdAndYearEqualsAndAndMonthNumberEquals(employeeId,year,monthNumber);
     }
 
     @Override

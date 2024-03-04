@@ -15,7 +15,7 @@ public interface TodoService {
 /////////////////////////////////// TODO DATE //////////////////////////////////////////////////////////////////
     TodoDate saveTodoDate(TodoDate todoDate);
 
-    boolean findTodoDateDuplicateForEmployeeId(int employeeId,int year, int mounthNumber);
+    boolean findTodoDateDuplicateForEmployeeId(int employeeId,int year, int monthNumber);
 
     boolean checkExistenceOfTodoDateById(int todoDateId);
 
