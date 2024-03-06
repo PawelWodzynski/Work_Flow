@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/todoRequest")
@@ -174,34 +171,39 @@ public class TodoRestController {
 
     @GetMapping("/findAllTodoDatesByEmployeeId")
     public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam int employeeId){
-
-        if (employeeService.existById(employeeId)){
-            List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
-            List<Map<String, Object>> formattedDates = new ArrayList<>();
-            int iteration = 0;
-            NumberOfDaysInMonth numberOfDaysInMonth = new NumberOfDaysInMonth();
-            for (TodoDate todoDate : todoDates) {
-                iteration++;
-                Map<String, Object> dateMap = new HashMap<>();
-                int year = todoDate.getYear();
-                int monthNumber = todoDate.getMonthNumber();
-                dateMap.put("id-" + iteration, todoDate.getId());
-                dateMap.put("monthNumber-" + iteration, monthNumber);
-                dateMap.put("year-" + iteration, year);
-                dateMap.put("employeeId-" + iteration, todoDate.getEmployeeId());
-                dateMap.put("monthDays-" + iteration, numberOfDaysInMonth.numberOfDays(year,monthNumber));
-                formattedDates.add(dateMap);
-            }
-            if (todoDates.size() > 0){
-                return ResponseEntity.ok(formattedDates);
-            }else {
+        try {
+            if (employeeService.existById(employeeId)) {
+                List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
+                if (todoDates.size() > 0) {
+                    List<Map<String, Object>> formattedDates = new ArrayList<>();
+                    int iteration = 0;
+                    NumberOfDaysInMonth numberOfDaysInMonth = new NumberOfDaysInMonth();
+                    for (TodoDate todoDate : todoDates) {
+                        iteration++;
+                        Map<String, Object> dateMap = new HashMap<>();
+                        int year = todoDate.getYear();
+                        int monthNumber = todoDate.getMonthNumber();
+                        dateMap.put("Date-" + iteration, todoDate);
+                        formattedDates.add(dateMap);
+                    }
+                        return ResponseEntity.ok(formattedDates);
+                } else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "Employee with ID: " + employeeId + " has no dates"
+                            ));
+                }
+            } else {
                 return ResponseEntity.badRequest().body(
                         new SimpleResponseMessageDTO(
-                                "Employee with ID: " + employeeId + " has no dates"
+                                "Employee not found ID:" + employeeId
                         ));
             }
-        }else {
-            return ResponseEntity.badRequest().body("employee not found");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
         }
     }
 
@@ -210,33 +212,38 @@ public class TodoRestController {
         try {
             if (todoService.checkExistenceOfTodoDateById(todoDateId)) {
                 List<TodoPoint> todoPoints = todoService.findAllTodoPointsByTodoDateId(todoDateId);
-                List<Map<String, Object>> formattedPoints = new ArrayList<>();
-                int iteration = 0;
-                for (TodoPoint todoPoint : todoPoints) {
-                    iteration++;
-                    Map<String, Object> dateMap = new HashMap<>();
-                    Map<String, Object> pointMap = new HashMap<>();
-                    if (todoService.checkExistenceOfExtendedPointByTodoPointId(todoPoint.getId())) {
-                        Map<String, Object> extendedPointsMap = new HashMap<>();
-                        List<TodoExtendedPoint> todoExtendedPoints = todoService.findAllTodoExtendedPointsByTodoPointId(todoPoint.getId());
-                        int extendedIteration = 0;
-                        for (TodoExtendedPoint todoExtendedPoint : todoExtendedPoints) {
-                            extendedIteration++;
-                            Map<String, Object> extendedPointMap = new HashMap<>();
-                            extendedPointMap.put("id", todoExtendedPoint.getId());
-                            extendedPointMap.put("content", todoExtendedPoint.getContent());
-                            extendedPointMap.put("pointOrder", todoExtendedPoint.getPointOrder());
-                            extendedPointMap.put("completed", todoExtendedPoint.isCompleted());
-                            extendedPointMap.put("todoPointId", todoExtendedPoint.getTodoPointId());
-                            extendedPointsMap.put("Extended-" + extendedIteration, extendedPointMap);
+                if (todoPoints.size() > 0) {
+                    List<Map<String, Object>> formattedPoints = new ArrayList<>();
+                    int iteration = 0;
+                    for (TodoPoint todoPoint : todoPoints) {
+                        iteration++;
+                        // Using LinkedHashMap to maintain order
+                        Map<String, Object> pointMap = new LinkedHashMap<>();
+                        pointMap.put("todoPoint", todoPoint);
+
+                        // Add extended points if they exist
+                        if (todoService.checkExistenceOfExtendedPointByTodoPointId(todoPoint.getId())) {
+                            // Using LinkedHashMap to maintain order
+                            Map<String, Object> extendedPointsMap = new LinkedHashMap<>();
+                            List<TodoExtendedPoint> todoExtendedPoints = todoService.findAllTodoExtendedPointsByTodoPointId(todoPoint.getId());
+                            int extendedIteration = 0;
+                            for (TodoExtendedPoint todoExtendedPoint : todoExtendedPoints) {
+                                extendedIteration++;
+                                // Using LinkedHashMap to maintain order
+                                Map<String, Object> extendedPointMap = new LinkedHashMap<>();
+                                extendedPointMap.put("id", todoExtendedPoint.getId());
+                                extendedPointMap.put("content", todoExtendedPoint.getContent());
+                                extendedPointMap.put("pointOrder", todoExtendedPoint.getPointOrder());
+                                extendedPointMap.put("completed", todoExtendedPoint.isCompleted());
+                                extendedPointMap.put("todoPointId", todoExtendedPoint.getTodoPointId());
+                                extendedPointsMap.put("Extended-" + extendedIteration, extendedPointMap);
+                            }
+                            pointMap.put("ExtendedPoints", extendedPointsMap);
                         }
-                        pointMap.put("ExtendedPoints", extendedPointsMap);
+
+                        // Add the pointMap to the formattedPoints list
+                        formattedPoints.add(Collections.singletonMap("Point-" + iteration, pointMap));
                     }
-                    pointMap.put("todoPoint", todoPoint);
-                    dateMap.put("Point-" + iteration, pointMap);
-                    formattedPoints.add(dateMap);
-                }
-                if (!formattedPoints.isEmpty()) {
                     return ResponseEntity.ok(formattedPoints);
                 } else {
                     return ResponseEntity.badRequest().body(
@@ -252,10 +259,12 @@ public class TodoRestController {
                                         " does not exist"
                         ));
             }
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
         }
     }
+
+
 
 
 

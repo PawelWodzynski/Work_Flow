@@ -12,7 +12,7 @@ import java.util.List;
 public interface TodoExtendedPointJpaRepository extends JpaRepository<TodoExtendedPoint,Integer> {
 
     boolean existsByTodoPointIdAndPointOrderEquals(int todoPointId,int pointOrder);
-    List<TodoExtendedPoint> findAllByTodoPointIdOrderByPointOrderAsc(int todoPointId);
+    List<TodoExtendedPoint> findAllByTodoPointIdOrderByPointOrderDesc(int todoPointId);
 
     boolean existsByTodoPointId(int todoPointId);
 

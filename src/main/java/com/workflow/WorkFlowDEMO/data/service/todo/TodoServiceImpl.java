@@ -45,7 +45,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoDate> findAllTodoDatesByEmployeeId(int employeeId) {
-        return todoDateJpaRepository.findAllByEmployeeId(employeeId);
+        return todoDateJpaRepository.findAllByEmployeeIdOrderByYearDescMonthNumberDesc(employeeId);
     }
 
 
@@ -84,7 +84,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoExtendedPoint> findAllTodoExtendedPointsByTodoPointId(int todoPointId) {
-        return todoExtendedPointJpaRepository.findAllByTodoPointIdOrderByPointOrderAsc(todoPointId);
+        return todoExtendedPointJpaRepository.findAllByTodoPointIdOrderByPointOrderDesc(todoPointId);
     }
 
     @Override
