@@ -1,5 +1,6 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,7 +24,8 @@ public class TodoExtendedPoint {
     @Column(name = "todo_point_id")
     private int todoPointId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "todo_point_id",insertable = false, updatable = false)
     private TodoPoint todoPoint;
 

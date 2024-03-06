@@ -70,6 +70,11 @@ public class TodoServiceImpl implements TodoService {
         return todoPointJpaRepository.findAllByTodoDateIdOrderByFromDayNumberAsc(todoDateId);
     }
 
+    @Override
+    public TodoPoint findTodoPointById(int todoPointId) {
+        return todoPointJpaRepository.findById(todoPointId);
+    }
+
 
     //////////////////////////////////// TODO EXTENDED POINT //////////////////////////////////////////////////////
     @Override
@@ -90,6 +95,16 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public boolean checkExistenceOfExtendedPointByTodoPointId(int todoPointId) {
         return todoExtendedPointJpaRepository.existsByTodoPointId(todoPointId);
+    }
+
+    @Override
+    public boolean checkExistenceOfExtendedPointId(int extendedPointId) {
+        return todoExtendedPointJpaRepository.existsById(extendedPointId);
+    }
+
+    @Override
+    public TodoExtendedPoint findTodoExtendedPointById(int extendedPointId) {
+        return todoExtendedPointJpaRepository.findById(extendedPointId);
     }
 
 

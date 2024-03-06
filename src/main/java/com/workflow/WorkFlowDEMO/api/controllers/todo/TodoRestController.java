@@ -265,6 +265,126 @@ public class TodoRestController {
     }
 
 
+    @PutMapping("/updateTodoPoint")
+    public ResponseEntity<?> updateTodoPointById(@RequestParam int todoPointId, @RequestParam String content, @RequestParam int toDay){
+
+        try {
+            if (todoService.checkExistenceOfTodoPointById(todoPointId)){
+                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                todoPoint.setContent(content);
+                if (todoPoint.getToDayNumber() != toDay){
+                    todoPoint.setToDayNumber(toDay);
+                }
+                todoService.saveTodoPoint(todoPoint);
+                return ResponseEntity.ok(todoPoint);
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do point ID:" + todoPointId +
+                                        " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+
+    @PutMapping("/updateTodoExtendedPoint")
+    public ResponseEntity<?> updateTodoExtendedPoint(int todoExtendedPointId,String content){
+
+        try{
+            if (todoService.checkExistenceOfExtendedPointId(todoExtendedPointId)){
+                TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
+                todoExtendedPoint.setContent(content);
+                todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                return ResponseEntity.ok(todoExtendedPoint);
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do Extended Point ID:" + todoExtendedPointId +
+                                " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+    @PutMapping("/changeCompletedStatusOfTodoPoint")
+    public ResponseEntity<?> changeCompletedStatusOfTodoPoint(@RequestParam int todoPointId, @RequestParam boolean isCompleted){
+        try {
+            if (todoService.checkExistenceOfTodoPointById(todoPointId)){
+
+                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                if (!todoPoint.isCompleted() == isCompleted) {
+                    todoPoint.setCompleted(isCompleted);
+                    todoService.saveTodoPoint(todoPoint);
+                    return ResponseEntity.ok(todoPoint);
+                }else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "Status has not changed"
+                            ));
+                }
+
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do point ID:" + todoPointId +
+                                " does not exist"
+                        ));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+    @PutMapping("/changeCompletedStatusOfTodoExtendedPoint")
+    public ResponseEntity<?> changeCompletedStatusOfTodoExtendedPoint(int todoExtendedPointId, boolean isCompleted){
+        try{
+            if (todoService.checkExistenceOfExtendedPointId(todoExtendedPointId)){
+                TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
+                if (!todoExtendedPoint.isCompleted() == isCompleted){
+                    todoExtendedPoint.setCompleted(isCompleted);
+                    todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                    return ResponseEntity.ok(todoExtendedPoint);
+                }else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "Status has not changed"
+                            ));
+                }
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do Extended Point ID:" + todoExtendedPointId +
+                                " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+
 
 
 

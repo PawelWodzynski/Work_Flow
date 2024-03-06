@@ -16,4 +16,8 @@ public interface TodoExtendedPointJpaRepository extends JpaRepository<TodoExtend
 
     boolean existsByTodoPointId(int todoPointId);
 
+    boolean existsById(int extendedPointId);
+
+    TodoExtendedPoint findById(int extendedPointId);
+
 }
