@@ -39,6 +39,7 @@ public class TodoPoint {
     @JoinColumn(name = "todo_date_id", insertable = false, updatable = false)
     private TodoDate todoDate;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "todo_point_id")
     private List<TodoExtendedPoint> todoExtendedPoints;

@@ -29,11 +29,17 @@ public interface TodoService {
 
     boolean checkOrderExistenceOfTodoPointByTodoDateIdAndOrder(int todoDateId,int fromDayNumber,int pointOrder);
 
+    List<TodoPoint> findAllTodoPointsByTodoDateId(int todoDateId);
+
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////
     TodoExtendedPoint saveTodoExtendedPoint(TodoExtendedPoint todoExtendedPoint);
 
     boolean checkOrderExistenceOfTodoExtendedPointByTodoPointIdAndOrder(int todoPointId, int pointOrder);
+
+    List<TodoExtendedPoint> findAllTodoExtendedPointsByTodoPointId(int todoPointId);
+
+    boolean checkExistenceOfExtendedPointByTodoPointId(int todoPointId);
 
 
 

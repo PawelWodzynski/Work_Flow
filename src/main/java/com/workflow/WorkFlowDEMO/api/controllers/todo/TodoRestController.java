@@ -205,6 +205,58 @@ public class TodoRestController {
         }
     }
 
+    @GetMapping("/findAllTodoPointsByTodoDateId")
+    public ResponseEntity<?> findAllTodoPointsByTodoDateId(@RequestParam int todoDateId){
+        try {
+            if (todoService.checkExistenceOfTodoDateById(todoDateId)) {
+                List<TodoPoint> todoPoints = todoService.findAllTodoPointsByTodoDateId(todoDateId);
+                List<Map<String, Object>> formattedPoints = new ArrayList<>();
+                int iteration = 0;
+                for (TodoPoint todoPoint : todoPoints) {
+                    iteration++;
+                    Map<String, Object> dateMap = new HashMap<>();
+                    Map<String, Object> pointMap = new HashMap<>();
+                    if (todoService.checkExistenceOfExtendedPointByTodoPointId(todoPoint.getId())) {
+                        Map<String, Object> extendedPointsMap = new HashMap<>();
+                        List<TodoExtendedPoint> todoExtendedPoints = todoService.findAllTodoExtendedPointsByTodoPointId(todoPoint.getId());
+                        int extendedIteration = 0;
+                        for (TodoExtendedPoint todoExtendedPoint : todoExtendedPoints) {
+                            extendedIteration++;
+                            Map<String, Object> extendedPointMap = new HashMap<>();
+                            extendedPointMap.put("id", todoExtendedPoint.getId());
+                            extendedPointMap.put("content", todoExtendedPoint.getContent());
+                            extendedPointMap.put("pointOrder", todoExtendedPoint.getPointOrder());
+                            extendedPointMap.put("completed", todoExtendedPoint.isCompleted());
+                            extendedPointMap.put("todoPointId", todoExtendedPoint.getTodoPointId());
+                            extendedPointsMap.put("Extended-" + extendedIteration, extendedPointMap);
+                        }
+                        pointMap.put("ExtendedPoints", extendedPointsMap);
+                    }
+                    pointMap.put("todoPoint", todoPoint);
+                    dateMap.put("Point-" + iteration, pointMap);
+                    formattedPoints.add(dateMap);
+                }
+                if (!formattedPoints.isEmpty()) {
+                    return ResponseEntity.ok(formattedPoints);
+                } else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "TO DO Date ID:" + todoDateId +
+                                            " has no TO DO points"
+                            ));
+                }
+            } else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "TO DO Date ID:" + todoDateId +
+                                        " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
+        }
+    }
+
 
 
 
