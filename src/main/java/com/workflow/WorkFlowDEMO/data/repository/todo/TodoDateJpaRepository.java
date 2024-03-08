@@ -17,4 +17,6 @@ public interface TodoDateJpaRepository extends JpaRepository<TodoDate,Integer> {
 
     List<TodoDate> findAllByEmployeeIdOrderByYearDescMonthNumberDesc(int employeeId);
 
+    TodoDate deleteById(int todoDateId);
+
 }

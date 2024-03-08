@@ -26,4 +26,6 @@ public interface TodoPointJpaRepository extends JpaRepository<TodoPoint,Integer>
     List<TodoPoint> findAllByTodoDateIdAndFromDayNumberOrderByPointOrder(int todoDateId, int fromDayNumber);
 
     int countByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber);
+
+    TodoPoint deleteById(int todoPointId);
 }

@@ -26,6 +26,8 @@ public interface TodoExtendedPointJpaRepository extends JpaRepository<TodoExtend
 
     List<TodoExtendedPoint> findAllByTodoPointIdAndPointOrderIsLessThan(int todoPointId, int pointOrder);
 
+    TodoExtendedPoint deleteById(int extendedPointId);
+
 
 
 

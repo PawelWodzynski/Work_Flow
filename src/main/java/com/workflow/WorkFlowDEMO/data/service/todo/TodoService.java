@@ -21,6 +21,8 @@ public interface TodoService {
 
     List<TodoDate> findAllTodoDatesByEmployeeId(int employeeId);
 
+    TodoDate deleteTodoDateById(int todoDateId);
+
 
     /////////////////////////////////////// TODO POINT ///////////////////////////////////////////////////////////
     TodoPoint saveTodoPoint(TodoPoint todoPoint);
@@ -41,6 +43,8 @@ public interface TodoService {
 
     int checkCountOfTodoPointsByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber);
 
+    TodoPoint deleteTodoPointById(int todoPointId);
+
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////
     TodoExtendedPoint saveTodoExtendedPoint(TodoExtendedPoint todoExtendedPoint);
@@ -60,6 +64,8 @@ public interface TodoService {
     List<TodoExtendedPoint> findAllTodoExtendedPointsInHighterOrder(int todoPointId, int pointOrder);
 
     List<TodoExtendedPoint> findAllTodoExtendedPointsInLowerOrder(int todoPointId, int pointOrder);
+
+    TodoExtendedPoint deleteTodoExtendedPoint(int extendedPointId);
 
 
 

@@ -576,6 +576,87 @@ public class TodoRestController {
     }
 
 
+    @DeleteMapping("/deleteTodoDate")
+    public ResponseEntity<?> deleteTodoDate(@RequestParam int todoDateId){
+        try{
+            if (todoService.checkExistenceOfTodoDateById(todoDateId)){
+                todoService.deleteTodoDateById(todoDateId);
+                return ResponseEntity.ok(
+                        new SimpleResponseMessageDTO(
+                                "To Do Date ID:" + todoDateId +
+                                        " has been deleted"
+                        ));
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do date ID:" + todoDateId +
+                                        " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                     e.getMessage()
+                    ));
+        }
+    }
+
+
+    @DeleteMapping("/deleteTodoPoint")
+    public ResponseEntity<?> deleteTodoPoint(@RequestParam int todoPointId){
+        try{
+            if (todoService.checkExistenceOfTodoPointById(todoPointId)){
+                todoService.deleteTodoPointById(todoPointId);
+                return ResponseEntity.ok(
+                        new SimpleResponseMessageDTO(
+                                "To Do Point ID:" + todoPointId +
+                                        " has been deleted"
+                        ));
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do Point ID:" + todoPointId +
+                                        " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+    @DeleteMapping("/deleteTodoExtendedPoint")
+    public ResponseEntity<?> deleteTodoExtendedPoint(@RequestParam int todoExtendedPointId){
+        try {
+            if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)){
+                todoService.deleteTodoExtendedPoint(todoExtendedPointId);
+                return ResponseEntity.ok(
+                        new SimpleResponseMessageDTO(
+                                "To Do Extended Point ID:" + todoExtendedPointId +
+                                        " has been deleted"
+                        ));
+            }else {
+                return ResponseEntity.badRequest().body(
+                        new SimpleResponseMessageDTO(
+                                "To Do Extended Point ID:" + todoExtendedPointId +
+                                        " does not exist"
+                        ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            e.getMessage()
+                    ));
+        }
+    }
+
+
+
+
+
 
 
 

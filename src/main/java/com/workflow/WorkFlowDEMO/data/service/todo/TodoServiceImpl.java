@@ -48,6 +48,11 @@ public class TodoServiceImpl implements TodoService {
         return todoDateJpaRepository.findAllByEmployeeIdOrderByYearDescMonthNumberDesc(employeeId);
     }
 
+    @Override
+    public TodoDate deleteTodoDateById(int todoDateId) {
+        return todoDateJpaRepository.deleteById(todoDateId);
+    }
+
 
     ///////////////////////////////////// TODO POINT ////////////////////////////////////////////////////////////
     @Override
@@ -95,6 +100,11 @@ public class TodoServiceImpl implements TodoService {
         return todoPointJpaRepository.countByTodoDateIdAndFromDayNumber(todoDateId, fromDayNumber);
     }
 
+    @Override
+    public TodoPoint deleteTodoPointById(int todoPointId) {
+        return todoPointJpaRepository.deleteById(todoPointId);
+    }
+
 
     //////////////////////////////////// TODO EXTENDED POINT //////////////////////////////////////////////////////
     @Override
@@ -140,6 +150,11 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public List<TodoExtendedPoint> findAllTodoExtendedPointsInLowerOrder(int todoPointId, int pointOrder) {
         return todoExtendedPointJpaRepository.findAllByTodoPointIdAndPointOrderIsLessThan(todoPointId, pointOrder);
+    }
+
+    @Override
+    public TodoExtendedPoint deleteTodoExtendedPoint(int extendedPointId) {
+        return todoExtendedPointJpaRepository.deleteById(extendedPointId);
     }
 
 
