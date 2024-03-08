@@ -33,6 +33,14 @@ public interface TodoService {
 
     TodoPoint findTodoPointById(int todoPointId);
 
+    List<TodoPoint> findAllTodoPointsInLowerOrder(int todoDateId, int fromDayNumber, int pointOrder);
+
+    List<TodoPoint> findAllTodoPointsInHighterOrder(int todoDateId, int fromDayNumber, int pointOrder);
+
+    List<TodoPoint> findAllTodoPointsByTodoDateIdAndByFromDayNumber(int todoDateId, int fromDayNumber);
+
+    int checkCountOfTodoPointsByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber);
+
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////
     TodoExtendedPoint saveTodoExtendedPoint(TodoExtendedPoint todoExtendedPoint);
@@ -43,9 +51,17 @@ public interface TodoService {
 
     boolean checkExistenceOfExtendedPointByTodoPointId(int todoPointId);
 
-    boolean checkExistenceOfExtendedPointId(int extendedPointId);
+    boolean checkExistenceOfExtendedPointById(int extendedPointId);
 
     TodoExtendedPoint findTodoExtendedPointById(int extendedPointId);
+
+    int checkCountOfTodoExtendedPointsByTodoPointId(int todoPointId);
+
+    List<TodoExtendedPoint> findAllTodoExtendedPointsInHighterOrder(int todoPointId, int pointOrder);
+
+    List<TodoExtendedPoint> findAllTodoExtendedPointsInLowerOrder(int todoPointId, int pointOrder);
+
+
 
 
 

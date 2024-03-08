@@ -75,6 +75,26 @@ public class TodoServiceImpl implements TodoService {
         return todoPointJpaRepository.findById(todoPointId);
     }
 
+    @Override
+    public List<TodoPoint> findAllTodoPointsInLowerOrder(int todoDateId, int fromDayNumber, int pointOrder) {
+        return todoPointJpaRepository.findAllByTodoDateIdAndFromDayNumberAndPointOrderIsLessThan(todoDateId, fromDayNumber, pointOrder);
+    }
+
+    @Override
+    public List<TodoPoint> findAllTodoPointsInHighterOrder(int todoDateId, int fromDayNumber, int pointOrder) {
+        return todoPointJpaRepository.findAllByTodoDateIdAndFromDayNumberAndPointOrderIsGreaterThan(todoDateId, fromDayNumber, pointOrder);
+    }
+
+    @Override
+    public List<TodoPoint> findAllTodoPointsByTodoDateIdAndByFromDayNumber(int todoDateId, int fromDayNumber) {
+        return todoPointJpaRepository.findAllByTodoDateIdAndFromDayNumberOrderByPointOrder(todoDateId, fromDayNumber);
+    }
+
+    @Override
+    public int checkCountOfTodoPointsByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber) {
+        return todoPointJpaRepository.countByTodoDateIdAndFromDayNumber(todoDateId, fromDayNumber);
+    }
+
 
     //////////////////////////////////// TODO EXTENDED POINT //////////////////////////////////////////////////////
     @Override
@@ -89,7 +109,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoExtendedPoint> findAllTodoExtendedPointsByTodoPointId(int todoPointId) {
-        return todoExtendedPointJpaRepository.findAllByTodoPointIdOrderByPointOrderDesc(todoPointId);
+        return todoExtendedPointJpaRepository.findAllByTodoPointIdOrderByPointOrderAsc(todoPointId);
     }
 
     @Override
@@ -98,13 +118,28 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public boolean checkExistenceOfExtendedPointId(int extendedPointId) {
+    public boolean checkExistenceOfExtendedPointById(int extendedPointId) {
         return todoExtendedPointJpaRepository.existsById(extendedPointId);
     }
 
     @Override
     public TodoExtendedPoint findTodoExtendedPointById(int extendedPointId) {
         return todoExtendedPointJpaRepository.findById(extendedPointId);
+    }
+
+    @Override
+    public int checkCountOfTodoExtendedPointsByTodoPointId(int todoPointId) {
+        return todoExtendedPointJpaRepository.countByTodoPointId(todoPointId);
+    }
+
+    @Override
+    public List<TodoExtendedPoint> findAllTodoExtendedPointsInHighterOrder(int todoPointId, int pointOrder) {
+        return todoExtendedPointJpaRepository.findAllByTodoPointIdAndPointOrderIsGreaterThan(todoPointId, pointOrder);
+    }
+
+    @Override
+    public List<TodoExtendedPoint> findAllTodoExtendedPointsInLowerOrder(int todoPointId, int pointOrder) {
+        return todoExtendedPointJpaRepository.findAllByTodoPointIdAndPointOrderIsLessThan(todoPointId, pointOrder);
     }
 
 

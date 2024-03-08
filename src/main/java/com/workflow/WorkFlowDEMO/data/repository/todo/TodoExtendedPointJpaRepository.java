@@ -12,12 +12,21 @@ import java.util.List;
 public interface TodoExtendedPointJpaRepository extends JpaRepository<TodoExtendedPoint,Integer> {
 
     boolean existsByTodoPointIdAndPointOrderEquals(int todoPointId,int pointOrder);
-    List<TodoExtendedPoint> findAllByTodoPointIdOrderByPointOrderDesc(int todoPointId);
+    List<TodoExtendedPoint> findAllByTodoPointIdOrderByPointOrderAsc(int todoPointId);
 
     boolean existsByTodoPointId(int todoPointId);
 
     boolean existsById(int extendedPointId);
 
     TodoExtendedPoint findById(int extendedPointId);
+
+    int countByTodoPointId(int todoPointId);
+
+    List<TodoExtendedPoint> findAllByTodoPointIdAndPointOrderIsGreaterThan(int todoPointId, int pointOrder);
+
+    List<TodoExtendedPoint> findAllByTodoPointIdAndPointOrderIsLessThan(int todoPointId, int pointOrder);
+
+
+
 
 }

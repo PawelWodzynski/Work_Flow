@@ -19,4 +19,11 @@ public interface TodoPointJpaRepository extends JpaRepository<TodoPoint,Integer>
 
     TodoPoint findById(int todoPointId);
 
+    List<TodoPoint> findAllByTodoDateIdAndFromDayNumberAndPointOrderIsLessThan(int todoDateId,int fromDayNumber, int pointOrder);
+
+    List<TodoPoint> findAllByTodoDateIdAndFromDayNumberAndPointOrderIsGreaterThan(int todoDateId,int fromDayNumber, int pointOrder);
+
+    List<TodoPoint> findAllByTodoDateIdAndFromDayNumberOrderByPointOrder(int todoDateId, int fromDayNumber);
+
+    int countByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber);
 }
