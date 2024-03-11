@@ -14,7 +14,7 @@ public class AddExtendedPointRequestDtoContentValidationImpl implements Constrai
     public boolean isValid(AddTodoExtendedPointRequestDTO addTodoExtendedPointRequestDTO, ConstraintValidatorContext context) {
         // Default validity flag
         boolean isValid = true;
-        String content = addTodoExtendedPointRequestDTO.getTodoExtendedPointContent();
+        String content = addTodoExtendedPointRequestDTO.getContent();
         String responseMessage = "";
         if (content == null){
             responseMessage = "Content cannot be null";
@@ -31,7 +31,7 @@ public class AddExtendedPointRequestDtoContentValidationImpl implements Constrai
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("todoExtendedPointContent").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("content").addConstraintViolation();
         }
 
         return isValid;

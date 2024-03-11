@@ -9,9 +9,9 @@ import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.point.dto.
 @PointRequestDtoTodoDateIdValidation
 public class AddTodoPointRequestDTO {
 
-    private String todoContent;
+    private String content;
 
-    private Integer todoPointOrder;
+    private Integer pointOrder;
 
     private Integer fromDayNumber;
 
@@ -19,28 +19,28 @@ public class AddTodoPointRequestDTO {
 
     private Integer todoDateId;
 
-    public AddTodoPointRequestDTO(String todoContent, Integer todoPointOrder, Integer fromDayNumber, Integer toDayNumber, Integer todoDateId) {
-        this.todoContent = todoContent;
-        this.todoPointOrder = todoPointOrder;
+    public AddTodoPointRequestDTO(String content, Integer pointOrder, Integer fromDayNumber, Integer toDayNumber, Integer todoDateId) {
+        this.content = content;
+        this.pointOrder = pointOrder;
         this.fromDayNumber = fromDayNumber;
         this.toDayNumber = toDayNumber;
         this.todoDateId = todoDateId;
     }
 
-    public String getTodoContent() {
-        return todoContent;
+    public String getContent() {
+        return content;
     }
 
-    public void setTodoContent(String todoContent) {
-        this.todoContent = todoContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Integer getTodoPointOrder() {
-        return todoPointOrder;
+    public Integer getPointOrder() {
+        return pointOrder;
     }
 
-    public void setTodoPointOrder(Integer todoPointOrder) {
-        this.todoPointOrder = todoPointOrder;
+    public void setPointOrder(Integer pointOrder) {
+        this.pointOrder = pointOrder;
     }
 
     public Integer getFromDayNumber() {

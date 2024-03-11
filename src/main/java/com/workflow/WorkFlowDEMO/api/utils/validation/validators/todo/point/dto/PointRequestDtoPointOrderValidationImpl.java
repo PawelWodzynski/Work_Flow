@@ -13,11 +13,11 @@ public class PointRequestDtoPointOrderValidationImpl implements ConstraintValida
     @Override
     public boolean isValid(AddTodoPointRequestDTO addTodoPointRequestDTO, ConstraintValidatorContext context) {
         boolean isValid = true;
-        int order = addTodoPointRequestDTO.getTodoPointOrder();
+        int order = addTodoPointRequestDTO.getPointOrder();
         String responseMessage = "";
 
 
-        if (addTodoPointRequestDTO.getTodoPointOrder() == null){
+        if (addTodoPointRequestDTO.getPointOrder() == null){
             responseMessage = "Point order cannot be null";
             isValid = false;
         }
@@ -30,7 +30,7 @@ public class PointRequestDtoPointOrderValidationImpl implements ConstraintValida
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("todoPointOrder").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("pointOrder").addConstraintViolation();
         }
         return isValid;
     }

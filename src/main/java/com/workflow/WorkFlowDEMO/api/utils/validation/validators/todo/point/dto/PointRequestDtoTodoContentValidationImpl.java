@@ -14,7 +14,7 @@ public class PointRequestDtoTodoContentValidationImpl implements ConstraintValid
     public boolean isValid(AddTodoPointRequestDTO addTodoPointRequestDTO, ConstraintValidatorContext context) {
         // Default validity flag
         boolean isValid = true;
-        String content = addTodoPointRequestDTO.getTodoContent();
+        String content = addTodoPointRequestDTO.getContent();
         String responseMessage = "";
         if (content == null){
             responseMessage = "Content cannot be null";
@@ -31,7 +31,7 @@ public class PointRequestDtoTodoContentValidationImpl implements ConstraintValid
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("todoContent").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("content").addConstraintViolation();
         }
 
         return isValid;

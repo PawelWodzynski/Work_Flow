@@ -9,32 +9,32 @@ import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPo
 @AddExtendedPointRequestDtoTodoPointIdValidation
 public class AddTodoExtendedPointRequestDTO {
 
-    private String todoExtendedPointContent;
+    private String content;
 
-    private Integer todoExtededPointOrder;
+    private Integer pointOrder;
 
     private Integer todoPointId;
 
-    public AddTodoExtendedPointRequestDTO(String todoExtendedPointContent, Integer todoExtededPointOrder, Integer todoPointId) {
-        this.todoExtendedPointContent = todoExtendedPointContent;
-        this.todoExtededPointOrder = todoExtededPointOrder;
+    public AddTodoExtendedPointRequestDTO(String content, Integer pointOrder, Integer todoPointId) {
+        this.content = content;
+        this.pointOrder = pointOrder;
         this.todoPointId = todoPointId;
     }
 
-    public String getTodoExtendedPointContent() {
-        return todoExtendedPointContent;
+    public String getContent() {
+        return content;
     }
 
-    public void setTodoExtendedPointContent(String todoExtendedPointContent) {
-        this.todoExtendedPointContent = todoExtendedPointContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Integer getTodoExtededPointOrder() {
-        return todoExtededPointOrder;
+    public Integer getPointOrder() {
+        return pointOrder;
     }
 
-    public void setTodoExtededPointOrder(Integer todoExtededPointOrder) {
-        this.todoExtededPointOrder = todoExtededPointOrder;
+    public void setPointOrder(Integer pointOrder) {
+        this.pointOrder = pointOrder;
     }
 
     public Integer getTodoPointId() {

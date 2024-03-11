@@ -1,5 +1,6 @@
 package com.workflow.WorkFlowDEMO.api.controllers.todo;
 
+import com.workflow.WorkFlowDEMO.api.documentation.todo.TodoRestControllerDocumentation;
 import com.workflow.WorkFlowDEMO.api.utils.validation.service.ValidationService;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoDateRequestDTO;
@@ -13,6 +14,7 @@ import com.workflow.WorkFlowDEMO.data.entity.todo.TodoExtendedPoint;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
 import com.workflow.WorkFlowDEMO.data.service.employee.EmployeeService;
 import com.workflow.WorkFlowDEMO.data.service.todo.TodoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class TodoRestController {
     @Autowired
     private ValidationService validationService;
 
+    @Operation(summary = "Add To Do Date for Employee",
+            description = TodoRestControllerDocumentation.addTodoDateDsc
+    )
     @PostMapping("/addTodoDate")
     public ResponseEntity<?> addTodoDate(@RequestBody AddTodoDateRequestDTO addTodoDateRequestDTO) {
         try {
@@ -80,6 +85,9 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Add To Do Point for To Do Date",
+            description = TodoRestControllerDocumentation.addTodoPointDsc
+    )
     @PostMapping("/addTodoPoint")
     public ResponseEntity<?> addTodoPoint(@RequestBody AddTodoPointRequestDTO addTodoPointRequestDTO) {
         try {
@@ -89,11 +97,11 @@ public class TodoRestController {
                     if (!todoService.checkOrderExistenceOfTodoPointByTodoDateIdAndOrder
                             (addTodoPointRequestDTO.getTodoDateId(),
                                     addTodoPointRequestDTO.getFromDayNumber(),
-                                    addTodoPointRequestDTO.getTodoPointOrder()
+                                    addTodoPointRequestDTO.getPointOrder()
                             )) {
                         TodoPoint todoPoint = new TodoPoint(
-                                addTodoPointRequestDTO.getTodoContent(),
-                                addTodoPointRequestDTO.getTodoPointOrder(),
+                                addTodoPointRequestDTO.getContent(),
+                                addTodoPointRequestDTO.getPointOrder(),
                                 addTodoPointRequestDTO.getFromDayNumber(),
                                 addTodoPointRequestDTO.getToDayNumber(),
                                 false
@@ -106,8 +114,8 @@ public class TodoRestController {
                             return ResponseEntity.ok(
                                     new AddTodoPointResponseDTO(
                                             "TO DO point successfully added",
-                                            addTodoPointRequestDTO.getTodoContent(),
-                                            addTodoPointRequestDTO.getTodoPointOrder(),
+                                            addTodoPointRequestDTO.getContent(),
+                                            addTodoPointRequestDTO.getPointOrder(),
                                             addTodoPointRequestDTO.getFromDayNumber(),
                                             addTodoPointRequestDTO.getToDayNumber(),
                                             false,
@@ -123,7 +131,7 @@ public class TodoRestController {
                                         "Error adding a point to the TO DO date, " +
                                                 "the added point cannot have the same order as the one already existing on a given fromDayNumber " +
                                                 "(fromDayNumber: " + addTodoPointRequestDTO.getFromDayNumber() + " ) " +
-                                                "(!!!! pointOrder: " + addTodoPointRequestDTO.getTodoPointOrder() + " !!!! ) " +
+                                                "(!!!! pointOrder: " + addTodoPointRequestDTO.getPointOrder() + " !!!! ) " +
                                                 "(todoDateId: " + addTodoPointRequestDTO.getTodoDateId() + " ) "
 
                                 ));
@@ -145,6 +153,9 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Add To Do Extended Point for To Do Point",
+            description = TodoRestControllerDocumentation.addTodoExtendedPointDsc
+    )
     @PostMapping("/addTodoExtendedPoint")
     public ResponseEntity<?> addTodoExtendedPoint(@RequestBody AddTodoExtendedPointRequestDTO addTodoExtendedPointRequestDTO) {
         try {
@@ -153,11 +164,11 @@ public class TodoRestController {
                 if (todoService.checkExistenceOfTodoPointById(addTodoExtendedPointRequestDTO.getTodoPointId())) {
                     if (!todoService.checkOrderExistenceOfTodoExtendedPointByTodoPointIdAndOrder(
                             addTodoExtendedPointRequestDTO.getTodoPointId(),
-                            addTodoExtendedPointRequestDTO.getTodoExtededPointOrder()
+                            addTodoExtendedPointRequestDTO.getPointOrder()
                     )) {
                         TodoExtendedPoint todoExtendedPoint = new TodoExtendedPoint(
-                                addTodoExtendedPointRequestDTO.getTodoExtendedPointContent(),
-                                addTodoExtendedPointRequestDTO.getTodoExtededPointOrder(),
+                                addTodoExtendedPointRequestDTO.getContent(),
+                                addTodoExtendedPointRequestDTO.getPointOrder(),
                                 false
                         );
                         todoExtendedPoint.setTodoPointId(addTodoExtendedPointRequestDTO.getTodoPointId());
@@ -167,8 +178,8 @@ public class TodoRestController {
                             return ResponseEntity.ok(
                                     new AddTodoExtendedPointResponseDTO(
                                             "TO DO extended point successfully added",
-                                            addTodoExtendedPointRequestDTO.getTodoExtendedPointContent(),
-                                            addTodoExtendedPointRequestDTO.getTodoExtededPointOrder(),
+                                            addTodoExtendedPointRequestDTO.getContent(),
+                                            addTodoExtendedPointRequestDTO.getPointOrder(),
                                             addTodoExtendedPointRequestDTO.getTodoPointId(),
                                             false,
                                             todoExtendedPoint.getId()
@@ -182,7 +193,7 @@ public class TodoRestController {
                                         "Error adding a extended point to the TO DO point, " +
                                                 "the added point cannot have the same order as the one already existing on a given todoPointId " +
                                                 "( todoPointId: " + addTodoExtendedPointRequestDTO.getTodoPointId() + ") " +
-                                                "(!!!!! pointOrder: " + addTodoExtendedPointRequestDTO.getTodoExtededPointOrder() + "!!!!! ) "
+                                                "(!!!!! pointOrder: " + addTodoExtendedPointRequestDTO.getPointOrder() + "!!!!! ) "
 
                                 ));
                     }
@@ -203,7 +214,7 @@ public class TodoRestController {
     }
 
     @GetMapping("/findAllTodoDatesByEmployeeId")
-    public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam int employeeId) {
+    public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam  int employeeId) {
         try {
             if (employeeService.existById(employeeId)) {
                 List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);

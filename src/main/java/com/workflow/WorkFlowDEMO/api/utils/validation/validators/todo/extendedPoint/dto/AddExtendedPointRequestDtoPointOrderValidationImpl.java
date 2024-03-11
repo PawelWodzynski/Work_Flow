@@ -13,11 +13,11 @@ public class AddExtendedPointRequestDtoPointOrderValidationImpl implements Const
     @Override
     public boolean isValid(AddTodoExtendedPointRequestDTO addTodoExtendedPointRequestDTO, ConstraintValidatorContext context) {
         boolean isValid = true;
-        int order = addTodoExtendedPointRequestDTO.getTodoExtededPointOrder();
+        int order = addTodoExtendedPointRequestDTO.getPointOrder();
         String responseMessage = "";
 
 
-        if (addTodoExtendedPointRequestDTO.getTodoExtededPointOrder() == null){
+        if (addTodoExtendedPointRequestDTO.getPointOrder() == null){
             responseMessage = "Point order cannot be null";
             isValid = false;
         }
@@ -30,7 +30,7 @@ public class AddExtendedPointRequestDtoPointOrderValidationImpl implements Const
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("todoExtededPointOrder").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(responseMessage).addPropertyNode("pointOrder").addConstraintViolation();
         }
         return isValid;
     }

@@ -14,8 +14,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "todo_date")
-@DateMonthNumberValidation
 @DateIdValidation
+@DateMonthNumberValidation
 @DateYearValidation
 @DateEmployeeIdValidation
 public class TodoDate {

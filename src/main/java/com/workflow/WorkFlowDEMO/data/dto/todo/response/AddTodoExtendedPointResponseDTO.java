@@ -8,16 +8,16 @@ public class AddTodoExtendedPointResponseDTO {
     private int todoExtededPointOrder;
     private int todoPointId;
     private boolean completed;
-    private int getTodoExtededPointId;
+    private int todoExtededPointId;
 
 
-    public AddTodoExtendedPointResponseDTO(String successfulMessage, String todoExtendedPointContent, int todoExtededPointOrder, int todoPointId, boolean completed, int getTodoExtededPointId) {
+    public AddTodoExtendedPointResponseDTO(String successfulMessage, String todoExtendedPointContent, int todoExtededPointOrder, int todoPointId, boolean completed, int todoExtededPointId) {
         this.successfulMessage = successfulMessage;
         this.todoExtendedPointContent = todoExtendedPointContent;
         this.todoExtededPointOrder = todoExtededPointOrder;
         this.todoPointId = todoPointId;
         this.completed = completed;
-        this.getTodoExtededPointId = getTodoExtededPointId;
+        this.todoExtededPointId = todoExtededPointId;
     }
 
     public String getSuccessfulMessage() {
@@ -60,11 +60,11 @@ public class AddTodoExtendedPointResponseDTO {
         this.completed = completed;
     }
 
-    public int getGetTodoExtededPointId() {
-        return getTodoExtededPointId;
+    public int getTodoExtededPointId() {
+        return todoExtededPointId;
     }
 
-    public void setGetTodoExtededPointId(int getTodoExtededPointId) {
-        this.getTodoExtededPointId = getTodoExtededPointId;
+    public void setTodoExtededPointId(int todoExtededPointId) {
+        this.todoExtededPointId = todoExtededPointId;
     }
 }
