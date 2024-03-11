@@ -1,9 +1,17 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
+
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.dto.AddTodoDateRequestDtoEmployeeIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.dto.AddTodoDateRequestDtoMonthNumberValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.dto.AddTodoDateRequestDtoYearValidation;
+
+@AddTodoDateRequestDtoMonthNumberValidation
+@AddTodoDateRequestDtoYearValidation
+@AddTodoDateRequestDtoEmployeeIdValidation
 public class AddTodoDateRequestDTO {
-    private int monthNumber;
-    private int year;
-    private int employeeId;
+    private Integer monthNumber;
+    private Integer year;
+    private Integer employeeId;
 
     public AddTodoDateRequestDTO(int monthNumber, int year, int employeeId) {
         this.monthNumber = monthNumber;
@@ -11,27 +19,27 @@ public class AddTodoDateRequestDTO {
         this.employeeId = employeeId;
     }
 
-    public int getMonthNumber() {
+    public Integer getMonthNumber() {
         return monthNumber;
     }
 
-    public void setMonthNumber(int monthNumber) {
+    public void setMonthNumber(Integer monthNumber) {
         this.monthNumber = monthNumber;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public int getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 }

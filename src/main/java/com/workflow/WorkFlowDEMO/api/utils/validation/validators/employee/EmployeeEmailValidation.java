@@ -1,21 +1,18 @@
-package com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators;
+package com.workflow.WorkFlowDEMO.api.utils.validation.validators.employee;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-
-
 // Custom validation annotate for Employe entity class
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {EmployeeFirstNameValidationImpl.class})
+@Constraint(validatedBy = {EmployeeEmailValidationImpl.class})
 @Documented
-public @interface EmployeeFirstNameValidation {
-
+public @interface EmployeeEmailValidation {
     // define default validation message (required)
-    String message() default "First Name Validation Error";
+    String message() default "Email Validation Error";
 
     // define validation default groups ,
     // it is not assigned to any specific validation groups,

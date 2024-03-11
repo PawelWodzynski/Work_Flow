@@ -1,14 +1,21 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoContentValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoPointOrderValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoTodoPointIdValidation;
+
+@AddExtendedPointRequestDtoContentValidation
+@AddExtendedPointRequestDtoPointOrderValidation
+@AddExtendedPointRequestDtoTodoPointIdValidation
 public class AddTodoExtendedPointRequestDTO {
 
     private String todoExtendedPointContent;
 
-    private int todoExtededPointOrder;
+    private Integer todoExtededPointOrder;
 
-    private int todoPointId;
+    private Integer todoPointId;
 
-    public AddTodoExtendedPointRequestDTO(String todoExtendedPointContent, int todoExtededPointOrder, int todoPointId) {
+    public AddTodoExtendedPointRequestDTO(String todoExtendedPointContent, Integer todoExtededPointOrder, Integer todoPointId) {
         this.todoExtendedPointContent = todoExtendedPointContent;
         this.todoExtededPointOrder = todoExtededPointOrder;
         this.todoPointId = todoPointId;
@@ -22,19 +29,19 @@ public class AddTodoExtendedPointRequestDTO {
         this.todoExtendedPointContent = todoExtendedPointContent;
     }
 
-    public int getTodoExtededPointOrder() {
+    public Integer getTodoExtededPointOrder() {
         return todoExtededPointOrder;
     }
 
-    public void setTodoExtededPointOrder(int todoExtededPointOrder) {
+    public void setTodoExtededPointOrder(Integer todoExtededPointOrder) {
         this.todoExtededPointOrder = todoExtededPointOrder;
     }
 
-    public int getTodoPointId() {
+    public Integer getTodoPointId() {
         return todoPointId;
     }
 
-    public void setTodoPointId(int todoPointId) {
+    public void setTodoPointId(Integer todoPointId) {
         this.todoPointId = todoPointId;
     }
 }

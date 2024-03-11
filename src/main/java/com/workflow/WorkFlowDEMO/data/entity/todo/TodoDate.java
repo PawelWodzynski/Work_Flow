@@ -2,6 +2,10 @@ package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateEmployeeIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateMonthNumberValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateYearValidation;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import jakarta.persistence.*;
 
@@ -10,22 +14,26 @@ import java.util.List;
 
 @Entity
 @Table(name = "todo_date")
+@DateMonthNumberValidation
+@DateIdValidation
+@DateYearValidation
+@DateEmployeeIdValidation
 public class TodoDate {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "month_number")
-    private int monthNumber;
+    private Integer monthNumber;
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "employee_id")
-    private int employeeId;
+    private Integer employeeId;
 
     @JsonIgnore
     @ManyToOne( fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -46,35 +54,35 @@ public class TodoDate {
         this.year = year;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getMonthNumber() {
+    public Integer getMonthNumber() {
         return monthNumber;
     }
 
-    public void setMonthNumber(int monthNumber) {
+    public void setMonthNumber(Integer monthNumber) {
         this.monthNumber = monthNumber;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public int getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 

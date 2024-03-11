@@ -1,20 +1,25 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.point.dto.*;
 
+@PointRequestDtoTodoContentValidation
+@PointRequestDtoPointOrderValidation
+@PointRequestDtoFromDayNumberValidation
+@PointRequestDtoToDayNumberValidation
+@PointRequestDtoTodoDateIdValidation
 public class AddTodoPointRequestDTO {
 
     private String todoContent;
 
-    private int todoPointOrder;
+    private Integer todoPointOrder;
 
-    private int fromDayNumber;
+    private Integer fromDayNumber;
 
-    private int toDayNumber;
+    private Integer toDayNumber;
 
-    private int todoDateId;
+    private Integer todoDateId;
 
-    public AddTodoPointRequestDTO(String todoContent, int todoPointOrder, int fromDayNumber, int toDayNumber, int todoDateId) {
+    public AddTodoPointRequestDTO(String todoContent, Integer todoPointOrder, Integer fromDayNumber, Integer toDayNumber, Integer todoDateId) {
         this.todoContent = todoContent;
         this.todoPointOrder = todoPointOrder;
         this.fromDayNumber = fromDayNumber;
@@ -30,35 +35,35 @@ public class AddTodoPointRequestDTO {
         this.todoContent = todoContent;
     }
 
-    public int getTodoPointOrder() {
+    public Integer getTodoPointOrder() {
         return todoPointOrder;
     }
 
-    public void setTodoPointOrder(int todoPointOrder) {
+    public void setTodoPointOrder(Integer todoPointOrder) {
         this.todoPointOrder = todoPointOrder;
     }
 
-    public int getFromDayNumber() {
+    public Integer getFromDayNumber() {
         return fromDayNumber;
     }
 
-    public void setFromDayNumber(int fromDayNumber) {
+    public void setFromDayNumber(Integer fromDayNumber) {
         this.fromDayNumber = fromDayNumber;
     }
 
-    public int getToDayNumber() {
+    public Integer getToDayNumber() {
         return toDayNumber;
     }
 
-    public void setToDayNumber(int toDayNumber) {
+    public void setToDayNumber(Integer toDayNumber) {
         this.toDayNumber = toDayNumber;
     }
 
-    public int getTodoDateId() {
+    public Integer getTodoDateId() {
         return todoDateId;
     }
 
-    public void setTodoDateId(int todoDateId) {
+    public void setTodoDateId(Integer todoDateId) {
         this.todoDateId = todoDateId;
     }
 }

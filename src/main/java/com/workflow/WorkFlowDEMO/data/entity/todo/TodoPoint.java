@@ -1,6 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.point.entity.*;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -8,6 +9,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "todo_point")
+@PointIdValidation
+@PointContentValidation
+@PointOrderValidation
+@PointFromDayNumberValidation
+@PointToDayNumberValidation
+@PointCompletedValidation
+@PointTodoDateIdValidation
 public class TodoPoint {
 
 
@@ -20,19 +28,19 @@ public class TodoPoint {
     private String content;
 
     @Column(name = "point_order")
-    private int pointOrder;
+    private Integer pointOrder;
 
     @Column(name = "from_day_number")
-    private int fromDayNumber;
+    private Integer fromDayNumber;
 
     @Column(name = "to_day_number")
-    private int toDayNumber;
+    private Integer toDayNumber;
 
     @Column(name = "completed")
     private boolean completed;
 
     @Column(name = "todo_date_id")
-    private int todoDateId;
+    private Integer todoDateId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -70,27 +78,27 @@ public class TodoPoint {
         this.content = content;
     }
 
-    public int getPointOrder() {
+    public Integer getPointOrder() {
         return pointOrder;
     }
 
-    public void setPointOrder(int pointOrder) {
+    public void setPointOrder(Integer pointOrder) {
         this.pointOrder = pointOrder;
     }
 
-    public int getFromDayNumber() {
+    public Integer getFromDayNumber() {
         return fromDayNumber;
     }
 
-    public void setFromDayNumber(int fromDayNumber) {
+    public void setFromDayNumber(Integer fromDayNumber) {
         this.fromDayNumber = fromDayNumber;
     }
 
-    public int getToDayNumber() {
+    public Integer getToDayNumber() {
         return toDayNumber;
     }
 
-    public void setToDayNumber(int toDayNumber) {
+    public void setToDayNumber(Integer toDayNumber) {
         this.toDayNumber = toDayNumber;
     }
 
@@ -102,11 +110,11 @@ public class TodoPoint {
         this.completed = completed;
     }
 
-    public int getTodoDateId() {
+    public Integer getTodoDateId() {
         return todoDateId;
     }
 
-    public void setTodoDateId(int todoDateId) {
+    public void setTodoDateId(Integer todoDateId) {
         this.todoDateId = todoDateId;
     }
 

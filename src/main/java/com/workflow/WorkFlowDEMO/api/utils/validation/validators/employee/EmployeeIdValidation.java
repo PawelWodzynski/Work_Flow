@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators;
+package com.workflow.WorkFlowDEMO.api.utils.validation.validators.employee;
 
 
 import jakarta.validation.Constraint;

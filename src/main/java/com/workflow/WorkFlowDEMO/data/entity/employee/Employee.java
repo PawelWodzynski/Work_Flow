@@ -1,8 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.entity.employee;
 
-import com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators.*;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.employee.*;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoDate;
-import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

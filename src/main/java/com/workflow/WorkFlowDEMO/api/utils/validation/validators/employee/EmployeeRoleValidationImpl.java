@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators;
+package com.workflow.WorkFlowDEMO.api.utils.validation.validators.employee;
 
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Role;

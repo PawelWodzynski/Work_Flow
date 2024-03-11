@@ -1,4 +1,4 @@
-package com.workflow.WorkFlowDEMO.api.utils.validation.employee.validators;
+package com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -7,11 +7,10 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {EmployeeRoleValidationImpl.class})
-@Documented
-public @interface EmployeeRoleValidation {
+@Constraint(validatedBy = {DateIdValidationImpl.class})
+public @interface DateIdValidation {
 
-    String message() default "Role Validation Error";
+    String message() default "ID validation error ";
 
     Class<?>[] groups() default {};
 

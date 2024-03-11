@@ -1,10 +1,16 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.entity.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "todo_extended_point")
+@ExtendedPointIdValidation
+@ExtendedPointContentValidation
+@ExtendedPointPointOrderValidation
+@ExtendedPointCompletedValidation
+@ExtendedPointTodoPointIdValidation
 public class TodoExtendedPoint {
 
     @Id
@@ -16,13 +22,13 @@ public class TodoExtendedPoint {
     private String content;
 
     @Column(name = "point_order")
-    private int pointOrder;
+    private Integer pointOrder;
 
     @Column(name = "completed")
     private boolean completed;
 
     @Column(name = "todo_point_id")
-    private int todoPointId;
+    private Integer todoPointId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -31,17 +37,17 @@ public class TodoExtendedPoint {
 
     public TodoExtendedPoint(){}
 
-    public TodoExtendedPoint(String content, int pointOrder, boolean completed){
+    public TodoExtendedPoint(String content, Integer pointOrder, boolean completed){
         this.content = content;
         this.pointOrder = pointOrder;
         this.completed = completed;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -53,11 +59,11 @@ public class TodoExtendedPoint {
         this.content = content;
     }
 
-    public int getPointOrder() {
+    public Integer getPointOrder() {
         return pointOrder;
     }
 
-    public void setPointOrder(int pointOrder) {
+    public void setPointOrder(Integer pointOrder) {
         this.pointOrder = pointOrder;
     }
 
@@ -73,11 +79,11 @@ public class TodoExtendedPoint {
         return todoPoint;
     }
 
-    public int getTodoPointId() {
+    public Integer getTodoPointId() {
         return todoPointId;
     }
 
-    public void setTodoPointId(int todoPointId) {
+    public void setTodoPointId(Integer todoPointId) {
         this.todoPointId = todoPointId;
     }
 
