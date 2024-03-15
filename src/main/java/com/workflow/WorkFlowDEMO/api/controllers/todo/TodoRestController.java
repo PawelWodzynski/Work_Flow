@@ -3,9 +3,7 @@ package com.workflow.WorkFlowDEMO.api.controllers.todo;
 import com.workflow.WorkFlowDEMO.api.documentation.todo.TodoRestControllerDocumentation;
 import com.workflow.WorkFlowDEMO.api.utils.validation.service.ValidationService;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
-import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoDateRequestDTO;
-import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoExtendedPointRequestDTO;
-import com.workflow.WorkFlowDEMO.data.dto.todo.request.AddTodoPointRequestDTO;
+import com.workflow.WorkFlowDEMO.data.dto.todo.request.*;
 import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoDateResponseDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoExtendedPointResponseDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoPointResponseDTO;
@@ -17,6 +15,7 @@ import com.workflow.WorkFlowDEMO.data.service.todo.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -214,34 +213,34 @@ public class TodoRestController {
     }
 
     @GetMapping("/findAllTodoDatesByEmployeeId")
-    public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam  int employeeId) {
+    public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam int employeeId) {
         try {
-            if (employeeService.existById(employeeId)) {
-                List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
-                if (todoDates.size() > 0) {
-                    List<Map<String, Object>> formattedDates = new ArrayList<>();
-                    int iteration = 0;
-                    for (TodoDate todoDate : todoDates) {
-                        iteration++;
-                        Map<String, Object> dateMap = new HashMap<>();
-                        int year = todoDate.getYear();
-                        int monthNumber = todoDate.getMonthNumber();
-                        dateMap.put("Date-" + iteration, todoDate);
-                        formattedDates.add(dateMap);
+                if (employeeService.existById(employeeId)) {
+                    List<TodoDate> todoDates = todoService.findAllTodoDatesByEmployeeId(employeeId);
+                    if (todoDates.size() > 0) {
+                        List<Map<String, Object>> formattedDates = new ArrayList<>();
+                        int iteration = 0;
+                        for (TodoDate todoDate : todoDates) {
+                            iteration++;
+                            Map<String, Object> dateMap = new HashMap<>();
+                            int year = todoDate.getYear();
+                            int monthNumber = todoDate.getMonthNumber();
+                            dateMap.put("Date-" + iteration, todoDate);
+                            formattedDates.add(dateMap);
+                        }
+                        return ResponseEntity.ok(formattedDates);
+                    } else {
+                        return ResponseEntity.badRequest().body(
+                                new SimpleResponseMessageDTO(
+                                        "Employee with ID: " + employeeId + " has no dates"
+                                ));
                     }
-                    return ResponseEntity.ok(formattedDates);
                 } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "Employee with ID: " + employeeId + " has no dates"
+                                    "Employee not found ID:" + employeeId
                             ));
                 }
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "Employee not found ID:" + employeeId
-                        ));
-            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
                     new SimpleResponseMessageDTO(
@@ -309,22 +308,30 @@ public class TodoRestController {
 
 
     @PutMapping("/updateTodoPoint")
-    public ResponseEntity<?> updateTodoPointById(@RequestParam int todoPointId, @RequestParam String content, @RequestParam int toDay) {
+    public ResponseEntity<?> updateTodoPointById(@RequestBody UpdateTodoPointDTO updateTodoPointDTO) {
         try {
-            if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
-                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
-                todoPoint.setContent(content);
-                if (todoPoint.getToDayNumber() != toDay) {
-                    todoPoint.setToDayNumber(toDay);
+            Map<String,String> dtoErrors = validationService.validateObject(updateTodoPointDTO,"updateTodoPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoPointId = updateTodoPointDTO.getTodoPointId();
+                String content = updateTodoPointDTO.getContent();
+                int toDayNumber = updateTodoPointDTO.getToDayNumber();
+                if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
+                    TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                    todoPoint.setContent(content);
+                    if (todoPoint.getToDayNumber() != toDayNumber) {
+                        todoPoint.setToDayNumber(toDayNumber);
+                    }
+                    todoService.saveTodoPoint(todoPoint);
+                    return ResponseEntity.ok(todoPoint);
+                } else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "To Do point ID:" + todoPointId +
+                                            " does not exist"
+                            ));
                 }
-                todoService.saveTodoPoint(todoPoint);
-                return ResponseEntity.ok(todoPoint);
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do point ID:" + todoPointId +
-                                        " does not exist"
-                        ));
+            }else {
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -336,19 +343,26 @@ public class TodoRestController {
 
 
     @PutMapping("/updateTodoExtendedPoint")
-    public ResponseEntity<?> updateTodoExtendedPoint(int todoExtendedPointId, String content) {
+    public ResponseEntity<?> updateTodoExtendedPoint(@RequestBody UpdateTodoExtendedPointDTO updateTodoExtendedPointDTO) {
         try {
-            if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
-                TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
-                todoExtendedPoint.setContent(content);
-                todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                return ResponseEntity.ok(todoExtendedPoint);
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do Extended Point ID:" + todoExtendedPointId +
-                                        " does not exist"
-                        ));
+            Map<String,String> dtoErrors = validationService.validateObject(updateTodoExtendedPointDTO,"updateTodoExtendedPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoExtendedPointId = updateTodoExtendedPointDTO.getTodoExtendedPointId();
+                String content = updateTodoExtendedPointDTO.getContent();
+                if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
+                    TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
+                    todoExtendedPoint.setContent(content);
+                    todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                    return ResponseEntity.ok(todoExtendedPoint);
+                } else {
+                    return ResponseEntity.badRequest().body(
+                            new SimpleResponseMessageDTO(
+                                    "To Do Extended Point ID:" + todoExtendedPointId +
+                                            " does not exist"
+                            ));
+                }
+            }else {
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -360,26 +374,33 @@ public class TodoRestController {
 
 
     @PutMapping("/changeCompletedStatusOfTodoPoint")
-    public ResponseEntity<?> changeCompletedStatusOfTodoPoint(@RequestParam int todoPointId, @RequestParam boolean isCompleted) {
+    public ResponseEntity<?> changeCompletedStatusOfTodoPoint(@RequestBody ChangeCompletedTodoPointDTO changeCompletedTodoPointDTO) {
         try {
-            if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
-                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
-                if (!todoPoint.isCompleted() == isCompleted) {
-                    todoPoint.setCompleted(isCompleted);
-                    todoService.saveTodoPoint(todoPoint);
-                    return ResponseEntity.ok(todoPoint);
+            Map<String,String> dtoErrors = validationService.validateObject(changeCompletedTodoPointDTO,"changeCompletedTodoPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoPointId = changeCompletedTodoPointDTO.getTodoPointId();
+                boolean isCompleted = changeCompletedTodoPointDTO.getCompleted();
+                if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
+                    TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                    if (!todoPoint.isCompleted() == isCompleted) {
+                        todoPoint.setCompleted(isCompleted);
+                        todoService.saveTodoPoint(todoPoint);
+                        return ResponseEntity.ok(todoPoint);
+                    } else {
+                        return ResponseEntity.badRequest().body(
+                                new SimpleResponseMessageDTO(
+                                        "Status has not changed"
+                                ));
+                    }
                 } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "Status has not changed"
+                                    "To Do point ID:" + todoPointId +
+                                            " does not exist"
                             ));
                 }
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do point ID:" + todoPointId +
-                                        " does not exist"
-                        ));
+            }else {
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -391,26 +412,33 @@ public class TodoRestController {
 
 
     @PutMapping("/changeCompletedStatusOfTodoExtendedPoint")
-    public ResponseEntity<?> changeCompletedStatusOfTodoExtendedPoint(int todoExtendedPointId, boolean isCompleted) {
+    public ResponseEntity<?> changeCompletedStatusOfTodoExtendedPoint(@RequestBody ChangeCompletedExtendedPointDTO changeCompletedExtendedPointDTO) {
         try {
-            if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
-                TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
-                if (!todoExtendedPoint.isCompleted() == isCompleted) {
-                    todoExtendedPoint.setCompleted(isCompleted);
-                    todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                    return ResponseEntity.ok(todoExtendedPoint);
+            Map<String,String> dtoErrors = validationService.validateObject(changeCompletedExtendedPointDTO,"changeCompletedExtendedPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoExtendedPointId = changeCompletedExtendedPointDTO.getTodoExtendedPointId();
+                boolean isCompleted = changeCompletedExtendedPointDTO.getCompleted();
+                if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
+                    TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
+                    if (!todoExtendedPoint.isCompleted() == isCompleted) {
+                        todoExtendedPoint.setCompleted(isCompleted);
+                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                        return ResponseEntity.ok(todoExtendedPoint);
+                    } else {
+                        return ResponseEntity.badRequest().body(
+                                new SimpleResponseMessageDTO(
+                                        "Status has not changed"
+                                ));
+                    }
                 } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "Status has not changed"
+                                    "To Do Extended Point ID:" + todoExtendedPointId +
+                                            " does not exist"
                             ));
                 }
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do Extended Point ID:" + todoExtendedPointId +
-                                        " does not exist"
-                        ));
+            }else {
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -427,94 +455,101 @@ public class TodoRestController {
 
 
     @PutMapping("/changeOrderOfTodoPoint")
-    public ResponseEntity<?> changeOrderOfTodoPoint(@RequestParam int todoPointId, @RequestParam int order) {
+    public ResponseEntity<?> changeOrderOfTodoPoint(@RequestBody ChangeOrderTodoPointDTO changeOrderTodoPointDTO) {
         try {
-            if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
-                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
-                if (order <=todoService.checkCountOfTodoPointsByTodoDateIdAndFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber())) {
-                    if (todoPoint.getPointOrder() < order) {
-                        List<TodoPoint> highterOrders = todoService.findAllTodoPointsInHighterOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
-                        todoPoint.setPointOrder(order);
-                        for (TodoPoint todoPoint1 : highterOrders) {
-                            int pointOrder = todoPoint1.getPointOrder();
-                            if (todoPoint1.getPointOrder() <= order) {
-                                pointOrder--;
-                                todoPoint1.setPointOrder(pointOrder);
+            Map<String,String> dtoErrors = validationService.validateObject(changeOrderTodoPointDTO,"changeOrderTodoPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoPointId = changeOrderTodoPointDTO.getTodoPointId();
+                int order = changeOrderTodoPointDTO.getOrder();
+                if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
+                    TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                    if (order <= todoService.checkCountOfTodoPointsByTodoDateIdAndFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber())) {
+                        if (todoPoint.getPointOrder() < order) {
+                            List<TodoPoint> highterOrders = todoService.findAllTodoPointsInHighterOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
+                            todoPoint.setPointOrder(order);
+                            for (TodoPoint todoPoint1 : highterOrders) {
+                                int pointOrder = todoPoint1.getPointOrder();
+                                if (todoPoint1.getPointOrder() <= order) {
+                                    pointOrder--;
+                                    todoPoint1.setPointOrder(pointOrder);
+                                }
                             }
-                        }
-                        todoService.saveTodoPoint(todoPoint);
-                        List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber){
-                            iteration++;
-                            iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    } else if (todoPoint.getPointOrder() > order && order == 1) {
-                        List<TodoPoint> lowerOrders = todoService.findAllTodoPointsInLowerOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
-                        todoPoint.setPointOrder(order);
-                        for (TodoPoint todoPoint1 : lowerOrders) {
-                            int pointOrder = todoPoint1.getPointOrder();
-                            if (todoPoint1.getPointOrder() >= order) {
-                                pointOrder++;
-                                todoPoint1.setPointOrder(pointOrder);
+                            todoService.saveTodoPoint(todoPoint);
+                            List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber) {
+                                iteration++;
+                                iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
                             }
-                        }
-                        todoService.saveTodoPoint(todoPoint);
-                        List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber){
-                            iteration++;
-                            iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    } else if (todoPoint.getPointOrder() > order && order > 1) {
-                        List<TodoPoint> lowerOrders = todoService.findAllTodoPointsInLowerOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
-                        todoPoint.setPointOrder(order);
-                        for (TodoPoint todoPoint1 : lowerOrders) {
-                            int pointOrder = todoPoint1.getPointOrder();
-                            if (todoPoint1.getPointOrder() >= order) {
-                                if (todoPoint1.getPointOrder() != 1) {
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoPoint.getPointOrder() > order && order == 1) {
+                            List<TodoPoint> lowerOrders = todoService.findAllTodoPointsInLowerOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
+                            todoPoint.setPointOrder(order);
+                            for (TodoPoint todoPoint1 : lowerOrders) {
+                                int pointOrder = todoPoint1.getPointOrder();
+                                if (todoPoint1.getPointOrder() >= order) {
                                     pointOrder++;
                                     todoPoint1.setPointOrder(pointOrder);
                                 }
                             }
+                            todoService.saveTodoPoint(todoPoint);
+                            List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber) {
+                                iteration++;
+                                iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
+                            }
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoPoint.getPointOrder() > order && order > 1) {
+                            List<TodoPoint> lowerOrders = todoService.findAllTodoPointsInLowerOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPoint.getPointOrder());
+                            todoPoint.setPointOrder(order);
+                            for (TodoPoint todoPoint1 : lowerOrders) {
+                                int pointOrder = todoPoint1.getPointOrder();
+                                if (todoPoint1.getPointOrder() >= order) {
+                                    if (todoPoint1.getPointOrder() != 1) {
+                                        pointOrder++;
+                                        todoPoint1.setPointOrder(pointOrder);
+                                    }
+                                }
+                            }
+                            todoService.saveTodoPoint(todoPoint);
+                            List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber) {
+                                iteration++;
+                                iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
+                            }
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoPoint.getPointOrder() == order) {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Cannot be changed to the same order"
+                                    ));
+                        } else {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Unidentified error "
+                                    ));
                         }
-                        todoService.saveTodoPoint(todoPoint);
-                        List<TodoPoint> allTodoPointsFromDayNumber = todoService.findAllTodoPointsByTodoDateIdAndByFromDayNumber(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoPoint todoPoint1 : allTodoPointsFromDayNumber){
-                            iteration++;
-                            iteratedPoints.put("todoPoint-" + iteration, todoPoint1);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    } else if (todoPoint.getPointOrder() == order) {
+                    } else {
                         return ResponseEntity.badRequest().body(
                                 new SimpleResponseMessageDTO(
-                                        "Cannot be changed to the same order"
-                                ));
-                    }else {
-                        return ResponseEntity.badRequest().body(
-                                new SimpleResponseMessageDTO(
-                                        "Unidentified error "
+                                        "the given point order can't be greater than the number of points"
                                 ));
                     }
-                }else {
+
+                } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "the given point order can't be greater than the number of points"
+                                    "To Do Point ID:" + todoPointId +
+                                            " does not exist"
                             ));
                 }
-
-            } else {
-                return ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do Point ID:" + todoPointId +
-                                        " does not exist"
-                        ));
+            }else {
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(
@@ -525,92 +560,99 @@ public class TodoRestController {
 
 
 
-    @PutMapping("/changeOrderOfTodoExtendedoint")
-    public ResponseEntity<?> changeOrderOfTodoExtendedPoint(@RequestParam int todoExtendedPointId, @RequestParam int order) {
+    @PutMapping("/changeOrderOfTodoExtendedPoint")
+    public ResponseEntity<?> changeOrderOfTodoExtendedPoint(@RequestBody ChangeOrderExtendedPointDTO changeOrderExtendedPointDTO) {
         try {
-            if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
-                TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
-                if (order <= todoService.checkCountOfTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId())){
-                    if (todoExtendedPoint.getPointOrder() < order) {
-                        List<TodoExtendedPoint> highterOrders = todoService.findAllTodoExtendedPointsInHighterOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
-                        todoExtendedPoint.setPointOrder(order);
-                        for (TodoExtendedPoint todoExtendedPoint1 : highterOrders) {
-                            int pointOrder = todoExtendedPoint1.getPointOrder();
-                            if (todoExtendedPoint1.getPointOrder() <= order) {
-                                pointOrder--;
-                                todoExtendedPoint1.setPointOrder(pointOrder);
+            Map<String,String> dtoErrors = validationService.validateObject(changeOrderExtendedPointDTO,"changeOrderExtendedPointDTO");
+            if (dtoErrors.isEmpty()) {
+                int todoExtendedPointId = changeOrderExtendedPointDTO.getTodoExtendedPointId();
+                int order = changeOrderExtendedPointDTO.getOrder();
+                if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
+                    TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
+                    if (order <= todoService.checkCountOfTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId())) {
+                        if (todoExtendedPoint.getPointOrder() < order) {
+                            List<TodoExtendedPoint> highterOrders = todoService.findAllTodoExtendedPointsInHighterOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
+                            todoExtendedPoint.setPointOrder(order);
+                            for (TodoExtendedPoint todoExtendedPoint1 : highterOrders) {
+                                int pointOrder = todoExtendedPoint1.getPointOrder();
+                                if (todoExtendedPoint1.getPointOrder() <= order) {
+                                    pointOrder--;
+                                    todoExtendedPoint1.setPointOrder(pointOrder);
+                                }
                             }
-                        }
-                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                        List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint){
-                            iteration++;
-                            iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    }else if (todoExtendedPoint.getPointOrder() > order && order == 1) {
-                        List<TodoExtendedPoint> lowerOrders = todoService.findAllTodoExtendedPointsInLowerOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
-                        todoExtendedPoint.setPointOrder(order);
-                        for (TodoExtendedPoint todoExtendedPoint1 : lowerOrders) {
-                            int pointOrder = todoExtendedPoint1.getPointOrder();
-                            if (todoExtendedPoint1.getPointOrder() >= order) {
-                                pointOrder++;
-                                todoExtendedPoint1.setPointOrder(pointOrder);
+                            todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                            List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint) {
+                                iteration++;
+                                iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
                             }
-                        }
-                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                        List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint){
-                            iteration++;
-                            iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    } else if (todoExtendedPoint.getPointOrder() > order && order > 1) {
-                        List<TodoExtendedPoint> lowerOrders = todoService.findAllTodoExtendedPointsInLowerOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
-                        todoExtendedPoint.setPointOrder(order);
-                        for (TodoExtendedPoint todoExtendedPoint1 : lowerOrders) {
-                            if (todoExtendedPoint1.getPointOrder() >= order && todoExtendedPoint1.getPointOrder() != 1) {
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoExtendedPoint.getPointOrder() > order && order == 1) {
+                            List<TodoExtendedPoint> lowerOrders = todoService.findAllTodoExtendedPointsInLowerOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
+                            todoExtendedPoint.setPointOrder(order);
+                            for (TodoExtendedPoint todoExtendedPoint1 : lowerOrders) {
+                                int pointOrder = todoExtendedPoint1.getPointOrder();
+                                if (todoExtendedPoint1.getPointOrder() >= order) {
+                                    pointOrder++;
+                                    todoExtendedPoint1.setPointOrder(pointOrder);
+                                }
+                            }
+                            todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                            List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint) {
+                                iteration++;
+                                iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
+                            }
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoExtendedPoint.getPointOrder() > order && order > 1) {
+                            List<TodoExtendedPoint> lowerOrders = todoService.findAllTodoExtendedPointsInLowerOrder(todoExtendedPoint.getTodoPointId(), todoExtendedPoint.getPointOrder());
+                            todoExtendedPoint.setPointOrder(order);
+                            for (TodoExtendedPoint todoExtendedPoint1 : lowerOrders) {
+                                if (todoExtendedPoint1.getPointOrder() >= order && todoExtendedPoint1.getPointOrder() != 1) {
                                     int pointOrder = todoExtendedPoint1.getPointOrder();
                                     pointOrder++;
                                     todoExtendedPoint1.setPointOrder(pointOrder);
+                                }
                             }
+                            todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                            List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
+                            Map<String, Object> iteratedPoints = new LinkedHashMap<>();
+                            int iteration = 0;
+                            for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint) {
+                                iteration++;
+                                iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
+                            }
+                            return ResponseEntity.ok(iteratedPoints);
+                        } else if (todoExtendedPoint.getPointOrder() == order) {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Cannot be changed to the same order"
+                                    ));
+                        } else {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Unidentified error "
+                                    ));
                         }
-                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                        List<TodoExtendedPoint> allTodoExtendedPointsFromTodoPoint = todoService.findAllTodoExtendedPointsByTodoPointId(todoExtendedPoint.getTodoPointId());
-                        Map<String, Object> iteratedPoints = new LinkedHashMap<>();
-                        int iteration = 0;
-                        for (TodoExtendedPoint extendedPoint : allTodoExtendedPointsFromTodoPoint){
-                            iteration++;
-                            iteratedPoints.put("extendedPoint-" + iteration, extendedPoint);
-                        }
-                        return ResponseEntity.ok(iteratedPoints);
-                    }else if (todoExtendedPoint.getPointOrder() == order) {
+                    } else {
                         return ResponseEntity.badRequest().body(
                                 new SimpleResponseMessageDTO(
-                                        "Cannot be changed to the same order"
-                                ));
-                    }else {
-                        return ResponseEntity.badRequest().body(
-                                new SimpleResponseMessageDTO(
-                                        "Unidentified error "
+                                        "the given point order can't be greater than the number of points"
                                 ));
                     }
-            }else {
+                } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
-                                    "the given point order can't be greater than the number of points"
+                                    "To Do Extended Point ID:" + todoExtendedPointId +
+                                            " does not exist"
                             ));
                 }
             }else {
-                return  ResponseEntity.badRequest().body(
-                        new SimpleResponseMessageDTO(
-                                "To Do Extended Point ID:" + todoExtendedPointId +
-                                        " does not exist"
-                        ));
+                return ResponseEntity.badRequest().body(dtoErrors);
             }
             }catch (Exception e){
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(
