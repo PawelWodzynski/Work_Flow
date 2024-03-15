@@ -1,22 +1,21 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.point.dto.*;
 
-@PointRequestDtoTodoContentValidation
-@PointRequestDtoPointOrderValidation
-@PointRequestDtoFromDayNumberValidation
-@PointRequestDtoToDayNumberValidation
-@PointRequestDtoTodoDateIdValidation
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.ContentValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NotNullIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NumberValidation;
+
 public class AddTodoPointRequestDTO {
 
+    @ContentValidation
     private String content;
-
+    @NumberValidation
     private Integer pointOrder;
-
+    @NumberValidation
     private Integer fromDayNumber;
-
+    @NumberValidation
     private Integer toDayNumber;
-
+    @NotNullIdValidation
     private Integer todoDateId;
 
     public AddTodoPointRequestDTO(String content, Integer pointOrder, Integer fromDayNumber, Integer toDayNumber, Integer todoDateId) {

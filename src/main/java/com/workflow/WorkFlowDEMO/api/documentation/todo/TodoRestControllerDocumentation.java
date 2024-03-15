@@ -12,7 +12,7 @@ public class TodoRestControllerDocumentation {
             "<br>" +
             "employeeId : (int) date is saved for a specific user ID, the ID must match the real user ID" +
             "<br>" +
-            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo package," +
+            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.implementations package," +
             " there you will find the code regarding DTO and Entity " +
             "<br><br>" +
             "Possible responses with JSON parameters: <br><br>" +
@@ -40,7 +40,7 @@ public class TodoRestControllerDocumentation {
             "fromDayNumber : (int) number of the day on which the point is to be assigned <br> " +
             "toDayNumber : (int) cannot be lower than fromDayNumber<br> " +
             "todoDateId : (int) the ID must match the real To Do Date ID <br> " +
-            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo package," +
+            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.implementations package," +
             " there you will find the code regarding DTO and Entity <br>" +
             "<br>" +
             "Possiible responses with JSON parameters: <br><br>" +
@@ -71,7 +71,7 @@ public class TodoRestControllerDocumentation {
             "content : (string) max 256 characters. <br>" +
             "pointOrder : (int)  cannot be repeated in this same To Do Point ID<br>" +
             "todoPointId : (int) the ID must match the real To Do Point ID <br>"  +
-            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo package," +
+            "If you are curious how exactly validation works in the given parameters, visit the com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.implementations package," +
             " there you will find the code regarding DTO and Entity <br>" +
             "<br>" +
             "Possible responses with JSON parameters <br><br>" +

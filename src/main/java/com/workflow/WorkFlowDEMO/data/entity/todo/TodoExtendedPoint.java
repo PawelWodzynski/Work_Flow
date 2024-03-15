@@ -1,32 +1,28 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.entity.*;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "todo_extended_point")
-@ExtendedPointIdValidation
-@ExtendedPointContentValidation
-@ExtendedPointPointOrderValidation
-@ExtendedPointCompletedValidation
-@ExtendedPointTodoPointIdValidation
 public class TodoExtendedPoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @NullAccessIdValidation
     private int id;
-
+    @ContentValidation
     @Column(name = "content")
     private String content;
-
+    @NumberValidation
     @Column(name = "point_order")
     private Integer pointOrder;
-
+    @BooleanValidation
     @Column(name = "completed")
-    private boolean completed;
-
+    private Boolean completed;
+    @NotNullIdValidation
     @Column(name = "todo_point_id")
     private Integer todoPointId;
 
@@ -37,7 +33,7 @@ public class TodoExtendedPoint {
 
     public TodoExtendedPoint(){}
 
-    public TodoExtendedPoint(String content, Integer pointOrder, boolean completed){
+    public TodoExtendedPoint(String content, Integer pointOrder, Boolean completed){
         this.content = content;
         this.pointOrder = pointOrder;
         this.completed = completed;
@@ -67,11 +63,11 @@ public class TodoExtendedPoint {
         this.pointOrder = pointOrder;
     }
 
-    public boolean isCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 

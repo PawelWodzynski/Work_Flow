@@ -2,10 +2,10 @@ package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateEmployeeIdValidation;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateIdValidation;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateMonthNumberValidation;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.date.entity.DateYearValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.MonthValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NotNullIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NullAccessIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.YearValidation;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import jakarta.persistence.*;
 
@@ -14,25 +14,24 @@ import java.util.List;
 
 @Entity
 @Table(name = "todo_date")
-@DateIdValidation
-@DateMonthNumberValidation
-@DateYearValidation
-@DateEmployeeIdValidation
 public class TodoDate {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @NullAccessIdValidation
     private Integer id;
-
     @Column(name = "month_number")
+    @MonthValidation
     private Integer monthNumber;
 
     @Column(name = "year")
+    @YearValidation
     private Integer year;
 
     @Column(name = "employee_id")
+    @NotNullIdValidation
     private Integer employeeId;
 
     @JsonIgnore

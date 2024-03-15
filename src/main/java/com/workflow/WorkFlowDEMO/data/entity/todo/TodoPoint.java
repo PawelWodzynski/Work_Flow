@@ -1,7 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.entity.todo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.point.entity.*;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.*;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -9,36 +9,30 @@ import java.util.List;
 
 @Entity
 @Table(name = "todo_point")
-@PointIdValidation
-@PointContentValidation
-@PointOrderValidation
-@PointFromDayNumberValidation
-@PointToDayNumberValidation
-@PointCompletedValidation
-@PointTodoDateIdValidation
 public class TodoPoint {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @NullAccessIdValidation
     private int id;
-
+    @ContentValidation
     @Column(name = "content")
     private String content;
-
+    @NumberValidation
     @Column(name = "point_order")
     private Integer pointOrder;
-
+    @NumberValidation
     @Column(name = "from_day_number")
     private Integer fromDayNumber;
-
+    @NumberValidation
     @Column(name = "to_day_number")
     private Integer toDayNumber;
-
+    @BooleanValidation
     @Column(name = "completed")
-    private boolean completed;
-
+    private Boolean completed;
+    @NotNullIdValidation
     @Column(name = "todo_date_id")
     private Integer todoDateId;
 
@@ -54,7 +48,7 @@ public class TodoPoint {
 
     public TodoPoint(){}
 
-    public TodoPoint(String content, int pointOrder, int fromDayNumber, int toDayNumber, boolean completed) {
+    public TodoPoint(String content, int pointOrder, int fromDayNumber, int toDayNumber, Boolean completed) {
         this.content = content;
         this.pointOrder = pointOrder;
         this.fromDayNumber = fromDayNumber;
@@ -102,11 +96,11 @@ public class TodoPoint {
         this.toDayNumber = toDayNumber;
     }
 
-    public boolean isCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 

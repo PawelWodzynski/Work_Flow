@@ -1,18 +1,16 @@
 package com.workflow.WorkFlowDEMO.data.dto.todo.request;
 
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoContentValidation;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoPointOrderValidation;
-import com.workflow.WorkFlowDEMO.api.utils.validation.validators.todo.extendedPoint.dto.AddExtendedPointRequestDtoTodoPointIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.ContentValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NotNullIdValidation;
+import com.workflow.WorkFlowDEMO.api.utils.validation.validators.universal.annotations.NumberValidation;
 
-@AddExtendedPointRequestDtoContentValidation
-@AddExtendedPointRequestDtoPointOrderValidation
-@AddExtendedPointRequestDtoTodoPointIdValidation
 public class AddTodoExtendedPointRequestDTO {
 
+    @ContentValidation
     private String content;
-
+    @NumberValidation
     private Integer pointOrder;
-
+    @NotNullIdValidation
     private Integer todoPointId;
 
     public AddTodoExtendedPointRequestDTO(String content, Integer pointOrder, Integer todoPointId) {
