@@ -3,6 +3,7 @@ package com.workflow.WorkFlowDEMO.data.repository.todo;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,4 +29,7 @@ public interface TodoPointJpaRepository extends JpaRepository<TodoPoint,Integer>
     int countByTodoDateIdAndFromDayNumber(int todoDateId, int fromDayNumber);
 
     TodoPoint deleteById(int todoPointId);
+
+    @Query("SELECT MAX(t.pointOrder) FROM TodoPoint t WHERE t.todoDateId = :todoDateId AND t.fromDayNumber = :fromDayNumber")
+    Integer findMaxPointOrderByTodoDateIdAndFromDayNumber(Integer todoDateId, Integer fromDayNumber);
 }

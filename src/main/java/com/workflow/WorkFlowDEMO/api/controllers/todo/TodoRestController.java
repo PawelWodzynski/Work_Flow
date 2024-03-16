@@ -15,7 +15,6 @@ import com.workflow.WorkFlowDEMO.data.service.todo.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -57,7 +56,9 @@ public class TodoRestController {
                                           todoDate.getId()
                                   ));
                       } else {
-                          return ResponseEntity.badRequest().body(errorsFromEntity);
+                          Map<String,Object> formatedEntityErrors = new HashMap<>();
+                          formatedEntityErrors.put("ENTITY VALIDATION ERRORS",errorsFromEntity);
+                          return ResponseEntity.badRequest().body(formatedEntityErrors);
                       }
                   } else {
                       return ResponseEntity.badRequest().body(
@@ -76,7 +77,9 @@ public class TodoRestController {
                           ));
               }
           }else {
-              return ResponseEntity.badRequest().body(errorsFromDTO);
+              Map<String,Object> formatedDTOerrors = new HashMap<>();
+              formatedDTOerrors.put("DTO VALIDATION ERRORS",errorsFromDTO);
+              return ResponseEntity.badRequest().body(formatedDTOerrors);
           }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
@@ -93,11 +96,9 @@ public class TodoRestController {
             Map<String,String> dtoErrors = validationService.validateObject(addTodoPointRequestDTO,"addTodoPointRequestDTO");
             if (dtoErrors.isEmpty()) {
                 if (todoService.checkExistenceOfTodoDateById(addTodoPointRequestDTO.getTodoDateId())) {
-                    if (!todoService.checkOrderExistenceOfTodoPointByTodoDateIdAndOrder
-                            (addTodoPointRequestDTO.getTodoDateId(),
-                                    addTodoPointRequestDTO.getFromDayNumber(),
-                                    addTodoPointRequestDTO.getPointOrder()
-                            )) {
+                    int theGreatestPointOder = todoService.findTheGreatestPointOrderByTodoDateIdAndByFromDayNumber(addTodoPointRequestDTO.getTodoDateId(), addTodoPointRequestDTO.getFromDayNumber());
+                    int orderFromRequest = addTodoPointRequestDTO.getPointOrder();
+                    if (theGreatestPointOder + 1 == orderFromRequest) {
                         TodoPoint todoPoint = new TodoPoint(
                                 addTodoPointRequestDTO.getContent(),
                                 addTodoPointRequestDTO.getPointOrder(),
@@ -109,31 +110,54 @@ public class TodoRestController {
 
                         Map<String,String> entityErrors = validationService.validateObject(todoPoint,"todoPoint");
                         if (entityErrors.isEmpty()) {
-                            todoService.saveTodoPoint(todoPoint);
-                            return ResponseEntity.ok(
-                                    new AddTodoPointResponseDTO(
-                                            "TO DO point successfully added",
-                                            addTodoPointRequestDTO.getContent(),
-                                            addTodoPointRequestDTO.getPointOrder(),
-                                            addTodoPointRequestDTO.getFromDayNumber(),
-                                            addTodoPointRequestDTO.getToDayNumber(),
-                                            false,
-                                            addTodoPointRequestDTO.getTodoDateId(),
-                                            todoPoint.getId()
-                                    ));
+                            int fromDayNumber = addTodoPointRequestDTO.getFromDayNumber();
+                            int toDayNumber = addTodoPointRequestDTO.getToDayNumber();
+                            if (fromDayNumber <= toDayNumber) {
+                                todoService.saveTodoPoint(todoPoint);
+                                return ResponseEntity.ok(
+                                        new AddTodoPointResponseDTO(
+                                                "TO DO point successfully added",
+                                                addTodoPointRequestDTO.getContent(),
+                                                addTodoPointRequestDTO.getPointOrder(),
+                                                addTodoPointRequestDTO.getFromDayNumber(),
+                                                addTodoPointRequestDTO.getToDayNumber(),
+                                                false,
+                                                addTodoPointRequestDTO.getTodoDateId(),
+                                                todoPoint.getId()
+                                        ));
+                            } else {
+                                return ResponseEntity.badRequest().body(
+                                        new SimpleResponseMessageDTO(
+                                                "Error adding a point to the To Do Date ID:=" +
+                                                        addTodoPointRequestDTO.getTodoDateId() +
+                                                        "   (!!! 'fromDayNumber' cannot be greater than 'toDayNumber' fromDayNumber=" +
+                                                        fromDayNumber + ",  toDayNumber =" + toDayNumber + " !!!)"
+                                        ));
+                            }
                         }else {
-                            return ResponseEntity.badRequest().body(entityErrors);
+                            Map<String,Object> formatedEntityErrors = new HashMap<>();
+                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
-                        return ResponseEntity.badRequest().body(
-                                new SimpleResponseMessageDTO(
-                                        "Error adding a point to the TO DO date, " +
-                                                "the added point cannot have the same order as the one already existing on a given fromDayNumber " +
-                                                "(fromDayNumber: " + addTodoPointRequestDTO.getFromDayNumber() + " ) " +
-                                                "(!!!! pointOrder: " + addTodoPointRequestDTO.getPointOrder() + " !!!! ) " +
-                                                "(todoDateId: " + addTodoPointRequestDTO.getTodoDateId() + " ) "
-
-                                ));
+                        int correctOrder = theGreatestPointOder + 1;
+                        if (orderFromRequest < correctOrder){
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Error of adding a point to the To Do  date, " +
+                                                    "the added point cannot have the lower 'pointOrder' from existed 'pointOrder' in the same 'fromDayNumber' and 'todoDateId' " +
+                                                    " ( Gived pointOrder=" + orderFromRequest + " theGreatestOrder=" + theGreatestPointOder + " )" +
+                                                    " You should add point with pointOrder=" + correctOrder
+                                    ));
+                        }else {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Error of adding a point to the To Do  date, " +
+                                                    "the added point cannot be greater from  " + correctOrder + " number, because this 'poinOrder' does not exist" +
+                                                    " ( Gived pointOrder=" + orderFromRequest + " theGreatestOrder=" + theGreatestPointOder + " )" +
+                                                    " You should add point with pointOrder=" + correctOrder
+                                    ));
+                        }
                     }
                 } else {
                     return ResponseEntity.badRequest().body(
@@ -144,7 +168,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
@@ -161,10 +187,9 @@ public class TodoRestController {
             Map<String,String> dtoErrors = validationService.validateObject(addTodoExtendedPointRequestDTO,"addTodoExtendedPointRequestDTO");
             if (dtoErrors.isEmpty()) {
                 if (todoService.checkExistenceOfTodoPointById(addTodoExtendedPointRequestDTO.getTodoPointId())) {
-                    if (!todoService.checkOrderExistenceOfTodoExtendedPointByTodoPointIdAndOrder(
-                            addTodoExtendedPointRequestDTO.getTodoPointId(),
-                            addTodoExtendedPointRequestDTO.getPointOrder()
-                    )) {
+                    int theGreatestPointOder = todoService.findTheGreatestExtendedPointOrderByTodoPointId(addTodoExtendedPointRequestDTO.getTodoPointId());
+                    int orderFromRequest = addTodoExtendedPointRequestDTO.getPointOrder();
+                    if (theGreatestPointOder + 1 == orderFromRequest) {
                         TodoExtendedPoint todoExtendedPoint = new TodoExtendedPoint(
                                 addTodoExtendedPointRequestDTO.getContent(),
                                 addTodoExtendedPointRequestDTO.getPointOrder(),
@@ -184,17 +209,29 @@ public class TodoRestController {
                                             todoExtendedPoint.getId()
                                     ));
                         }else {
-                            return ResponseEntity.badRequest().body(entityErrors);
+                            Map<String,Object> formatedEntityErrors = new HashMap<>();
+                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
-                        return ResponseEntity.badRequest().body(
-                                new SimpleResponseMessageDTO(
-                                        "Error adding a extended point to the TO DO point, " +
-                                                "the added point cannot have the same order as the one already existing on a given todoPointId " +
-                                                "( todoPointId: " + addTodoExtendedPointRequestDTO.getTodoPointId() + ") " +
-                                                "(!!!!! pointOrder: " + addTodoExtendedPointRequestDTO.getPointOrder() + "!!!!! ) "
-
-                                ));
+                        int correctOrder = theGreatestPointOder + 1;
+                        if (orderFromRequest < correctOrder){
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Error of adding a point to the To Do  date, " +
+                                                    "the added extended point cannot have the lower 'pointOrder' from existed 'pointOrder' in the same 'todoPointId' " +
+                                                    " ( Gived pointOrder=" + orderFromRequest + " theGreatestOrder=" + theGreatestPointOder + " )" +
+                                                    " You should add point with pointOrder=" + correctOrder
+                                    ));
+                        }else {
+                            return ResponseEntity.badRequest().body(
+                                    new SimpleResponseMessageDTO(
+                                            "Error of adding a point to the To Do  date, " +
+                                                    "the added extended point cannot be greater from  " + correctOrder + " number, because this 'poinOrder' does not exist" +
+                                                    " ( Gived pointOrder=" + orderFromRequest + " theGreatestExistedOrder=" + theGreatestPointOder + " )" +
+                                                    " You should add point with pointOrder=" + correctOrder
+                                    ));
+                        }
                     }
                 } else {
                     return ResponseEntity.badRequest().body(
@@ -205,7 +242,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(e.getMessage()));
@@ -321,8 +360,15 @@ public class TodoRestController {
                     if (todoPoint.getToDayNumber() != toDayNumber) {
                         todoPoint.setToDayNumber(toDayNumber);
                     }
-                    todoService.saveTodoPoint(todoPoint);
-                    return ResponseEntity.ok(todoPoint);
+                    Map<String,String> entityErrors = validationService.validateObject(todoPoint,"todoPoint");
+                    if (entityErrors.isEmpty()) {
+                        todoService.saveTodoPoint(todoPoint);
+                        return ResponseEntity.ok(todoPoint);
+                    }else {
+                        Map<String,Object> formatedEntityErrors = new HashMap<>();
+                        formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                        return ResponseEntity.badRequest().body(formatedEntityErrors);
+                    }
                 } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
@@ -331,7 +377,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -352,8 +400,16 @@ public class TodoRestController {
                 if (todoService.checkExistenceOfExtendedPointById(todoExtendedPointId)) {
                     TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
                     todoExtendedPoint.setContent(content);
-                    todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                    return ResponseEntity.ok(todoExtendedPoint);
+
+                    Map<String,String> entityErrors = validationService.validateObject(todoExtendedPoint,"todoExtendedPoint");
+                    if (entityErrors.isEmpty()) {
+                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                        return ResponseEntity.ok(todoExtendedPoint);
+                    }else {
+                        Map<String,Object> formatedEntityErrors = new HashMap<>();
+                        formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                        return ResponseEntity.badRequest().body(formatedEntityErrors);
+                    }
                 } else {
                     return ResponseEntity.badRequest().body(
                             new SimpleResponseMessageDTO(
@@ -362,7 +418,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -384,8 +442,15 @@ public class TodoRestController {
                     TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
                     if (!todoPoint.isCompleted() == isCompleted) {
                         todoPoint.setCompleted(isCompleted);
-                        todoService.saveTodoPoint(todoPoint);
-                        return ResponseEntity.ok(todoPoint);
+                        Map<String,String> entityErrors = validationService.validateObject(todoPoint,"todoPoint");
+                        if (entityErrors.isEmpty()) {
+                            todoService.saveTodoPoint(todoPoint);
+                            return ResponseEntity.ok(todoPoint);
+                        }else {
+                            Map<String,Object> formatedEntityErrors = new HashMap<>();
+                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            return ResponseEntity.badRequest().body(formatedEntityErrors);
+                        }
                     } else {
                         return ResponseEntity.badRequest().body(
                                 new SimpleResponseMessageDTO(
@@ -400,7 +465,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -422,8 +489,15 @@ public class TodoRestController {
                     TodoExtendedPoint todoExtendedPoint = todoService.findTodoExtendedPointById(todoExtendedPointId);
                     if (!todoExtendedPoint.isCompleted() == isCompleted) {
                         todoExtendedPoint.setCompleted(isCompleted);
-                        todoService.saveTodoExtendedPoint(todoExtendedPoint);
-                        return ResponseEntity.ok(todoExtendedPoint);
+                        Map<String,String> entityErrors = validationService.validateObject(todoExtendedPoint,"todoExtendedPoint");
+                        if (entityErrors.isEmpty()) {
+                            todoService.saveTodoExtendedPoint(todoExtendedPoint);
+                            return ResponseEntity.ok(todoExtendedPoint);
+                        }else {
+                            Map<String,Object> formatedEntityErrors = new HashMap<>();
+                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            return ResponseEntity.badRequest().body(formatedEntityErrors);
+                        }
                     } else {
                         return ResponseEntity.badRequest().body(
                                 new SimpleResponseMessageDTO(
@@ -438,7 +512,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
@@ -549,7 +625,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(
@@ -652,7 +730,9 @@ public class TodoRestController {
                             ));
                 }
             }else {
-                return ResponseEntity.badRequest().body(dtoErrors);
+                Map<String,Object> formatedDtoErrors = new HashMap<>();
+                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
             }catch (Exception e){
             return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(

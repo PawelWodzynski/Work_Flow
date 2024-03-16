@@ -45,6 +45,8 @@ public interface TodoService {
 
     TodoPoint deleteTodoPointById(int todoPointId);
 
+    int findTheGreatestPointOrderByTodoDateIdAndByFromDayNumber(int todoDateId, int fromDayNumber);
+
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////
     TodoExtendedPoint saveTodoExtendedPoint(TodoExtendedPoint todoExtendedPoint);
@@ -66,6 +68,9 @@ public interface TodoService {
     List<TodoExtendedPoint> findAllTodoExtendedPointsInLowerOrder(int todoPointId, int pointOrder);
 
     TodoExtendedPoint deleteTodoExtendedPoint(int extendedPointId);
+
+    int findTheGreatestExtendedPointOrderByTodoPointId(int todoPointId);
+
 
 
 

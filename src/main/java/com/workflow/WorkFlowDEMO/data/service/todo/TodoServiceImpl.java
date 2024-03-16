@@ -105,6 +105,16 @@ public class TodoServiceImpl implements TodoService {
         return todoPointJpaRepository.deleteById(todoPointId);
     }
 
+    @Override
+    public int findTheGreatestPointOrderByTodoDateIdAndByFromDayNumber(int todoDateId, int fromDayNumber) {
+        Integer greatestOrder = todoPointJpaRepository.findMaxPointOrderByTodoDateIdAndFromDayNumber(todoDateId,fromDayNumber);
+        if (greatestOrder == null){
+            return 0;
+        }else {
+            return greatestOrder;
+        }
+    }
+
 
     //////////////////////////////////// TODO EXTENDED POINT //////////////////////////////////////////////////////
     @Override
@@ -155,6 +165,16 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoExtendedPoint deleteTodoExtendedPoint(int extendedPointId) {
         return todoExtendedPointJpaRepository.deleteById(extendedPointId);
+    }
+
+    @Override
+    public int findTheGreatestExtendedPointOrderByTodoPointId(int todoPointId) {
+        Integer greatestOrder = todoExtendedPointJpaRepository.findMaxExtendedPointOrderByTodoPointId(todoPointId);
+        if (greatestOrder == null){
+            return 0;
+        }else {
+            return greatestOrder;
+        }
     }
 
 
