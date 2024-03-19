@@ -57,7 +57,7 @@ public class TodoRestController {
                                   ));
                       } else {
                           Map<String,Object> formatedEntityErrors = new HashMap<>();
-                          formatedEntityErrors.put("ENTITY VALIDATION ERRORS",errorsFromEntity);
+                          formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",errorsFromEntity);
                           return ResponseEntity.badRequest().body(formatedEntityErrors);
                       }
                   } else {
@@ -78,7 +78,7 @@ public class TodoRestController {
               }
           }else {
               Map<String,Object> formatedDTOerrors = new HashMap<>();
-              formatedDTOerrors.put("DTO VALIDATION ERRORS",errorsFromDTO);
+              formatedDTOerrors.put("DTO_VALIDATION_ERRORS",errorsFromDTO);
               return ResponseEntity.badRequest().body(formatedDTOerrors);
           }
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class TodoRestController {
                             }
                         }else {
                             Map<String,Object> formatedEntityErrors = new HashMap<>();
-                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                             return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
@@ -169,7 +169,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -210,7 +210,7 @@ public class TodoRestController {
                                     ));
                         }else {
                             Map<String,Object> formatedEntityErrors = new HashMap<>();
-                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                             return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
@@ -243,7 +243,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -251,6 +251,10 @@ public class TodoRestController {
         }
     }
 
+
+    @Operation(summary = "Find All To Do Dates Belonging To The Employee With Appropriate ID",
+            description = TodoRestControllerDocumentation.findAllTodoDatesByEmployeeIdDsc
+    )
     @GetMapping("/findAllTodoDatesByEmployeeId")
     public ResponseEntity<?> findAllTodoDatesByEmployeeId(@RequestParam int employeeId) {
         try {
@@ -262,8 +266,6 @@ public class TodoRestController {
                         for (TodoDate todoDate : todoDates) {
                             iteration++;
                             Map<String, Object> dateMap = new HashMap<>();
-                            int year = todoDate.getYear();
-                            int monthNumber = todoDate.getMonthNumber();
                             dateMap.put("Date-" + iteration, todoDate);
                             formattedDates.add(dateMap);
                         }
@@ -288,6 +290,10 @@ public class TodoRestController {
         }
     }
 
+
+    @Operation(summary = "Find All 'To Do Point' With 'To Do Extended Points' Belonging To The 'To Do Date' With Appropriate ID",
+            description = TodoRestControllerDocumentation.findAllTodoPointsByTodoDateIdDsc
+    )
     @GetMapping("/findAllTodoPointsByTodoDateId")
     public ResponseEntity<?> findAllTodoPointsByTodoDateId(@RequestParam int todoDateId) {
         try {
@@ -345,7 +351,8 @@ public class TodoRestController {
         }
     }
 
-
+    @Operation(summary = "Update the To Do Point 'content' and 'toDayNumber'",
+    description = TodoRestControllerDocumentation.updateTodoPointByIdDsc)
     @PutMapping("/updateTodoPoint")
     public ResponseEntity<?> updateTodoPointById(@RequestBody UpdateTodoPointDTO updateTodoPointDTO) {
         try {
@@ -366,7 +373,7 @@ public class TodoRestController {
                         return ResponseEntity.ok(todoPoint);
                     }else {
                         Map<String,Object> formatedEntityErrors = new HashMap<>();
-                        formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                        formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                         return ResponseEntity.badRequest().body(formatedEntityErrors);
                     }
                 } else {
@@ -378,7 +385,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -390,6 +397,8 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Update the To Do Extended Point 'content'" ,
+    description = TodoRestControllerDocumentation.updateTodoExtendedPointDsc)
     @PutMapping("/updateTodoExtendedPoint")
     public ResponseEntity<?> updateTodoExtendedPoint(@RequestBody UpdateTodoExtendedPointDTO updateTodoExtendedPointDTO) {
         try {
@@ -407,7 +416,7 @@ public class TodoRestController {
                         return ResponseEntity.ok(todoExtendedPoint);
                     }else {
                         Map<String,Object> formatedEntityErrors = new HashMap<>();
-                        formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                        formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                         return ResponseEntity.badRequest().body(formatedEntityErrors);
                     }
                 } else {
@@ -419,7 +428,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -430,7 +439,8 @@ public class TodoRestController {
         }
     }
 
-
+    @Operation(summary = "Change 'completed' status of 'To Do Point'",
+    description = TodoRestControllerDocumentation.changeCompletedStatusOfTodoPointDsc)
     @PutMapping("/changeCompletedStatusOfTodoPoint")
     public ResponseEntity<?> changeCompletedStatusOfTodoPoint(@RequestBody ChangeCompletedTodoPointDTO changeCompletedTodoPointDTO) {
         try {
@@ -448,7 +458,7 @@ public class TodoRestController {
                             return ResponseEntity.ok(todoPoint);
                         }else {
                             Map<String,Object> formatedEntityErrors = new HashMap<>();
-                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                             return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
@@ -466,7 +476,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -478,6 +488,8 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Change 'completed' status of 'To Do Extended Point'",
+    description = TodoRestControllerDocumentation.changeCompletedStatusOfTodoExtendedPointDsc)
     @PutMapping("/changeCompletedStatusOfTodoExtendedPoint")
     public ResponseEntity<?> changeCompletedStatusOfTodoExtendedPoint(@RequestBody ChangeCompletedExtendedPointDTO changeCompletedExtendedPointDTO) {
         try {
@@ -495,7 +507,7 @@ public class TodoRestController {
                             return ResponseEntity.ok(todoExtendedPoint);
                         }else {
                             Map<String,Object> formatedEntityErrors = new HashMap<>();
-                            formatedEntityErrors.put("ENTITY VALIDATION ERRORS",entityErrors);
+                            formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
                             return ResponseEntity.badRequest().body(formatedEntityErrors);
                         }
                     } else {
@@ -513,7 +525,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -530,6 +542,8 @@ public class TodoRestController {
 
 
 
+    @Operation(summary = "Change order of 'To Do Point'",
+    description = TodoRestControllerDocumentation.changeOrderOfTodoPointDsc)
     @PutMapping("/changeOrderOfTodoPoint")
     public ResponseEntity<?> changeOrderOfTodoPoint(@RequestBody ChangeOrderTodoPointDTO changeOrderTodoPointDTO) {
         try {
@@ -626,7 +640,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
         } catch (Exception e) {
@@ -638,6 +652,8 @@ public class TodoRestController {
 
 
 
+    @Operation(summary = "Change order of 'To Do Extended Point'",
+    description = TodoRestControllerDocumentation.changeOrderOfTodoExtendedPointDsc)
     @PutMapping("/changeOrderOfTodoExtendedPoint")
     public ResponseEntity<?> changeOrderOfTodoExtendedPoint(@RequestBody ChangeOrderExtendedPointDTO changeOrderExtendedPointDTO) {
         try {
@@ -731,7 +747,7 @@ public class TodoRestController {
                 }
             }else {
                 Map<String,Object> formatedDtoErrors = new HashMap<>();
-                formatedDtoErrors.put("DTO VALIDATION ERRORS",dtoErrors);
+                formatedDtoErrors.put("DTO_VALIDATION_ERRORS",dtoErrors);
                 return ResponseEntity.badRequest().body(formatedDtoErrors);
             }
             }catch (Exception e){
@@ -742,6 +758,8 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Delete the 'To Do Date'",
+    description = TodoRestControllerDocumentation.deleteTodoDateDsc)
     @DeleteMapping("/deleteTodoDate")
     public ResponseEntity<?> deleteTodoDate(@RequestParam int todoDateId){
         try{
@@ -768,6 +786,8 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Delete 'To Do Point'",
+    description = TodoRestControllerDocumentation.deleteTodoPointDsc)
     @DeleteMapping("/deleteTodoPoint")
     public ResponseEntity<?> deleteTodoPoint(@RequestParam int todoPointId){
         try{
@@ -794,6 +814,8 @@ public class TodoRestController {
     }
 
 
+    @Operation(summary = "Delete 'To Do Extended Point'",
+    description = TodoRestControllerDocumentation.deleteTodoExtendedPointDsc)
     @DeleteMapping("/deleteTodoExtendedPoint")
     public ResponseEntity<?> deleteTodoExtendedPoint(@RequestParam int todoExtendedPointId){
         try {
