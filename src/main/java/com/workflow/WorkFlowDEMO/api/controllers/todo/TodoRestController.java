@@ -4,9 +4,7 @@ import com.workflow.WorkFlowDEMO.api.documentation.todo.TodoRestControllerDocume
 import com.workflow.WorkFlowDEMO.api.utils.validation.service.ValidationService;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.request.*;
-import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoDateResponseDTO;
-import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoExtendedPointResponseDTO;
-import com.workflow.WorkFlowDEMO.data.dto.todo.response.AddTodoPointResponseDTO;
+import com.workflow.WorkFlowDEMO.data.dto.todo.response.*;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoDate;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoExtendedPoint;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoPoint;
@@ -271,8 +269,9 @@ public class TodoRestController {
                         }
                         return ResponseEntity.ok(formattedDates);
                     } else {
-                        return ResponseEntity.badRequest().body(
-                                new SimpleResponseMessageDTO(
+                        return ResponseEntity.ok(
+                                new DatesDoesNotExistResponseDTO(
+                                        false,
                                         "Employee with ID: " + employeeId + " has no dates"
                                 ));
                     }
@@ -333,8 +332,9 @@ public class TodoRestController {
                     }
                     return ResponseEntity.ok(formattedPoints);
                 } else {
-                    return ResponseEntity.badRequest().body(
-                            new SimpleResponseMessageDTO(
+                    return ResponseEntity.ok(
+                            new TodoPointDoesNotExistResponseDTO(
+                                    false,
                                     "TO DO Date ID:" + todoDateId +
                                             " has no TO DO points"
                             ));

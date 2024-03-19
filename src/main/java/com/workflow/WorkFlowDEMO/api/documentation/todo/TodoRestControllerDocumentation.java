@@ -159,6 +159,10 @@ public class TodoRestControllerDocumentation {
                     "year : (int) <br>" +
                     "employeeId : (int) <br>" +
                     "<br>" +
+                    "OR: if employee has no dates<br>" +
+                    "existed : (boolean = false)<br>" +
+                    "message : (String)<br>" +
+                    "<br>" +
                     "<br>" +
                     "Bad Request: <br>" +
                     "<br>" +
@@ -203,6 +207,10 @@ public class TodoRestControllerDocumentation {
                     "pointOrder : (int)<br>" +
                     "completed : (boolean)<br>" +
                     "todoPointId : (int)<br>" +
+                    "<br>" +
+                    "OR: if date has no 'To Do Points'<br>" +
+                    "existed : (boolean = false)<br>" +
+                    "message : (String)<br>" +
                     "<br>" +
                     "<br>" +
                     "Bad Request: <br>" +
