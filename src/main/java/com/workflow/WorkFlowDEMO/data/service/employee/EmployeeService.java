@@ -38,6 +38,7 @@ public interface EmployeeService {
 
     boolean existById(int theId);
 
+    Integer findIdByUsername(String username);
 
 
 

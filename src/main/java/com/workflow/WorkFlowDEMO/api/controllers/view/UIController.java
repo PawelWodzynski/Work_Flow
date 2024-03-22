@@ -13,4 +13,11 @@ public class UIController {
     public String showHomeAppCenter(){
         // Returns the view name "app-center" to be rendered
         return "UI/app-center";}
+
+    @GetMapping("/todo")
+    public String todoApp(){
+        return "todo/todo-app";
+    }
+
+
 }

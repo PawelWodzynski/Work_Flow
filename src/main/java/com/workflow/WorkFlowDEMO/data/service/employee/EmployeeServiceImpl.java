@@ -133,4 +133,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeJPARepository.existsById(theId);
     }
 
+    @Override
+    public Integer findIdByUsername(String username) {
+        return employeeJPARepository.findIdByUserName(username);
+    }
+
 }

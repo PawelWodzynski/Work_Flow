@@ -74,6 +74,19 @@ public class EmployeeRestController {
     }
 
 
+    @GetMapping("/getEmployeeIdByUsername")
+    public ResponseEntity<?> getEmployeeIdByUsername(@RequestParam String username){
+        try{
+            int id = employeeService.findIdByUsername(username);
+            return ResponseEntity.ok(id);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new SimpleResponseMessageDTO(
+                            "Username: " + username + ", not found"
+                    )
+            );
+        }
+    }
 
     @Operation(summary = "Create new employee with authorization role",
             description = EmployeeRestControllerDocumentation.saveEmployeeDsc
