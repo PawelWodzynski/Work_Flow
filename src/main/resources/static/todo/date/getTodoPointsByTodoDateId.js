@@ -1,10 +1,9 @@
-async function doSomething(todoDateID) {
+async function getTodoPointsByTodoDateId(todoDateID) {
 
     try {
-        var todoDateId = todoDateID
-        ;
+
         const requestData = {
-            todoDateId : todoDateId
+            todoDateId : todoDateID
         };
 
         const params = new URLSearchParams(requestData);

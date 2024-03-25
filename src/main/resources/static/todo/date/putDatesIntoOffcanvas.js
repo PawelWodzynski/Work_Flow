@@ -22,10 +22,11 @@ document.addEventListener("gettingDatesCompleted", function (){
         const container = document.createElement('div');
         container.style.marginTop = '20px';
         container.style.marginBottom = '20px';
+        container.id = year + '-' + monthNumber;
 
         // Creating table rows begins here
         const tbody = document.createElement('tbody');
-        tbody.id = 'dateBody';
+        tbody.id = 'dateBody-' + year + '-' + monthNumber;
 
         // Loop through to create rows for each week
         for (let i = 0; i < monthDays.length / 7; i++){
@@ -38,7 +39,7 @@ document.addEventListener("gettingDatesCompleted", function (){
                 if (monthDays[i * 7 + j].currentMonth === false){
                     cell.classList.add('day-gray-text');
                 }else {
-                    cell.classList.add('day-bold-text');
+                    cell.classList.add('day-number-bold-text');
                 }
 
                 // Place the day of the month in the cell
@@ -51,22 +52,39 @@ document.addEventListener("gettingDatesCompleted", function (){
 
         // Creating HTML content for displaying calendar
         const htmlContent = `
-            <div class="row" type="button" onclick="doSomething(${todoDateId})">
+          
+            <div id="callendarRow-${year}-${monthNumber}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateId})">
                 <div class="col-12">
+                  <div id="dateCollapse-${year}-${monthNumber}" class="collapse show">
                     <div class="card">
                         <div class="card-header bg-warning">
                             <div class="row">
                                 <div class="col-4"></div>
                                 <div class="col-4 text-black text-center">
-                                    <h4>${getMonthName(monthNumber)}</h4>
+                                    <h5 class="day-name-bold-text">${getMonthName(monthNumber)}</h5>
                                 </div>
                                 <div class="col-4 d-flex justify-content-end">
-                                    <button class="btn-close"></button>
+                                   <button class="btn-close" onclick="DeleteDate(
+                                       ${todoDateId},
+                                         'dateCollapse-' +
+                                           ${year} + '-' +
+                                            ${monthNumber}, ${year} + 
+                                             '-' + ${monthNumber},
+                                             ${year},
+                                             ${monthNumber}); 
+                                              event.stopPropagation();"></button>
+
                                 </div>
                             </div>
+                              <div class="row">
+                                <div class="col-12 text-black text-center ">
+                                   <h7>${year}</h7>
+                                </div>
+                              </div>
                         </div>
                         <div class="card-body text-center">
-                            <table class="table table-sm mx-auto">
+                        <div id="content"">
+                           <table class="table table-sm mx-auto">
                                 <thead>
                                     <tr class="text-black">
                                         <th>Sun</th>
@@ -80,7 +98,9 @@ document.addEventListener("gettingDatesCompleted", function (){
                                 </thead>
                             </table>
                         </div>
+                        </div>
                     </div>
+                  </div>
                 </div>
            </div>
         `;
@@ -92,6 +112,10 @@ document.addEventListener("gettingDatesCompleted", function (){
         const datesOffcanvasList = document.getElementById('datesOffcanvasList');
         datesOffcanvasList.appendChild(container);
     }
+
+    const event = new Event('puttingDatesCompleted');
+    document.dispatchEvent(event);
+
 });
 
 // Function to retrieve the name of the month based on its number
