@@ -22,6 +22,10 @@
     <script src="/todo/date/AddDateCollapseData.js"></script>
     <script src="/todo/date/AddDate.js" defer></script>
     <script src="/todo/date/DeleteDate.js" defer></script>
+    <script src="/todo/date/PutTodoDaysWithPointsIntoBody.js"></script>
+    <script src="/todo/date/DayComponent.js"></script>
+    <script src="/todo/date/PointComponent.js"></script>
+    <script src="/todo/date/CheckboxOnclick.js" defer></script>
 
     <style>
         .day-gray-text{
@@ -38,6 +42,52 @@
             white-space: nowrap;
         }
 
+        .todo-size{
+            width: 350px;
+            height: 450px;
+
+        }
+
+        .carousel-control-next,
+        .carousel-control-prev {
+            width: auto;
+        }
+
+
+        .input-no-bg {
+            border: none;
+            background-color: transparent;
+            border-bottom: 1px solid #ced4da;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .left-aligned-text {
+            text-align: left;
+        }
+
+        .max-height-div{
+            height: 100%;
+            background-color: aqua;
+        }
+        .max-width{
+            width: 100%;
+        }
+
+        html, body, .full-height-div {
+            height: 100%; /* Wysokość równa 100% wysokości ekranu */
+            width: 100%;
+            margin: 0; /* Usunięcie marginesów */
+            padding: 0; /* Usunięcie paddingu */
+        }
+
+        .striketrought-text{
+            text-decoration: line-through;
+            color: darkgray;
+        }
+
+
+
     </style>
 
 </head>
@@ -51,7 +101,7 @@
 
 <!-- Navbar -->
 <nav class = "navbar navbar-expand-lg navbar-dark bg-dark shadow-lg">
-    <div class = "container-fluid">
+    <div class = "container-fluid ">
         <a class="navbar-brand">Work Flow || To Do</a>
         <ul class="navbar-nav ms-auto">
 
@@ -91,6 +141,23 @@
             </button>
         </div>
     </div>
+
+
+
+
+
+    <div id="daysHolder"  class="container-fluid" >
+
+
+
+    </div>
+
+
+
+
+
+
+
 
 
 

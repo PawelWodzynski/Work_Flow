@@ -1,4 +1,4 @@
-async function getTodoPointsByTodoDateId(todoDateID) {
+async function getTodoPointsByTodoDateId(todoDateID,year,monthNumber) {
 
     try {
 
@@ -17,12 +17,21 @@ async function getTodoPointsByTodoDateId(todoDateID) {
 
         const data = await response.json();
 
-       console.log(data);
+        globalPointsList = [];
+        for (let key in data){
+            if (data.hasOwnProperty(key)){
+                globalPointsList.push(data[key])
+            }
+        }
+
+        console.log(globalPointsList);
+
+        putTodoDaysWithPointsIntoBody(year,monthNumber);
 
 
     } catch (error) {
         errorText = 'Unidentified error';
-        console.log(errorText)
+        console.log(errorText + error);
     }
 
 }

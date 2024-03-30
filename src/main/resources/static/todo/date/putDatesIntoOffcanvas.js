@@ -53,7 +53,7 @@ document.addEventListener("gettingDatesCompleted", function (){
         // Creating HTML content for displaying calendar
         const htmlContent = `
           
-            <div id="callendarRow-${year}-${monthNumber}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateId})">
+            <div id="callendarRow-${year}-${monthNumber}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateId},${year},${monthNumber})">
                 <div class="col-12">
                   <div id="dateCollapse-${year}-${monthNumber}" class="collapse show">
                     <div class="card">

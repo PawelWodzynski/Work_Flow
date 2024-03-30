@@ -102,7 +102,7 @@ async function saveTodoDate(event){
 
             // Creating HTML content
             const htmlContent = `
-<div id="callendarRow-${yearFromResponse}-${monthNumberFromResponse}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateIdFromResponse})">
+<div id="callendarRow-${yearFromResponse}-${monthNumberFromResponse}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateIdFromResponse},${yearFromResponse},${monthNumberFromResponse})">
     <div class="col-12">
       <div id="dateCollapse-${yearFromResponse}-${monthNumberFromResponse}" class="collapse">
         <div class="card">
