@@ -1,4 +1,4 @@
-function dayComponent(date, dayName){
+function dayComponent(date, dayName, dayNumber,todoDateId){
     return `
           
         <div class="card todo-size bg-dark text-white">
@@ -15,11 +15,11 @@ function dayComponent(date, dayName){
                 </div>
             </div>
             <div id="todoDayBody-${date}" class="card-body">
-
-
                 <div id="addPointRow-${date}" class="row">
                     <div class="col-12">
-                        <input type="text" class="form-control input-no-bg text-white" placeholder="add new point" style=" background-color: transparent; ">
+                        <input id="inputId-${date}" type="text" class="form-control input-no-bg text-white" placeholder="add new point" style=" background-color: transparent;" 
+                        onkeydown="if(event.key ==='Enter') 
+                            addPoint('inputId-${date}','todoDayBody-${date}','todoDayBody-${date}',${dayNumber},'${todoDateId}','addPointRow-${date}','${date}')">
                     </div>
                 </div>
 

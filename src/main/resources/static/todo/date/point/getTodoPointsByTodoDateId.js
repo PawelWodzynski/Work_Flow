@@ -26,7 +26,7 @@ async function getTodoPointsByTodoDateId(todoDateID,year,monthNumber) {
 
         console.log(globalPointsList);
 
-        putTodoDaysWithPointsIntoBody(year,monthNumber);
+        putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateID);
 
 
     } catch (error) {

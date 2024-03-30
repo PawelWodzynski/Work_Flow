@@ -1,4 +1,4 @@
-function putTodoDaysWithPointsIntoBody(year,monthNumber){
+function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
 
     const daysHolder = document.getElementById('daysHolder');
     daysHolder.innerHTML = '';
@@ -46,10 +46,10 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber){
                     const col = document.createElement('div');
                     col.classList.add('col-3');
 
-                    col.innerHTML =  dayComponent(formattedDate,dayName);
+                    const htmlRowId = 'addPointRow-' + formattedDate;
+                    col.innerHTML =  dayComponent(formattedDate,dayName,dayNumber,todoDateId);
                     row.appendChild(col);
 
-                    const htmlRowId = 'addPointRow-' + formattedDate;
                     if (result.length !== 0){
                         result.forEach(function(object) {
                             Object.keys(object).forEach(function(key) {
