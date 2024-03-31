@@ -17,14 +17,17 @@ async function getTodoPointsByTodoDateId(todoDateID,year,monthNumber) {
 
         const data = await response.json();
 
-        globalPointsList = [];
-        for (let key in data){
-            if (data.hasOwnProperty(key)){
-                globalPointsList.push(data[key])
+        if (data.hasOwnProperty('existed') && data.existed === false){
+            todoPointsExisted = false;
+        }else {
+            todoPointsExisted = true;
+            globalPointsList = [];
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    globalPointsList.push(data[key])
+                }
             }
         }
-
-        console.log(globalPointsList);
 
         putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateID);
 

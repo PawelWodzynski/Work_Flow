@@ -1,7 +1,6 @@
 // Listening for the 'puttingDatesCompleted' event, which is triggered after completing
 // operations related to setting dates
 document.addEventListener("puttingDatesCompleted", function () {
-
     // Getting a reference to the save calendar button
     var saveCallendarButton = document.getElementById('saveCallendarButton');
 
@@ -96,25 +95,25 @@ function getListOfMonths(year) {
         // Append the <li> element to the dropdown menu
         monthDropdownMenu.appendChild(li);
 
-        // Initialize variables for date iteration and checking if the date is found
-        let dateIteration = 0;
-        let found = false;
-
-        // Iterate through globalDatesList to check if the date exists for the current month and year
-        globalDatesList.forEach(dateData => {
-            dateIteration++;
-            if (dateData['Date-' + dateIteration].year === year) {
-                if (dateData && 'Date-' + dateIteration in dateData) {
-                    if (dateData['Date-' + dateIteration].monthNumber === i + 1) {
-                        found = true;
+        if (datesExisted) {
+            // Initialize variables for date iteration and checking if the date is found
+            let dateIteration = 0;
+            let found = false;
+            // Iterate through globalDatesList to check if the date exists for the current month and year
+            globalDatesList.forEach(dateData => {
+                dateIteration++;
+                if (dateData['Date-' + dateIteration].year === year) {
+                    if (dateData && 'Date-' + dateIteration in dateData) {
+                        if (dateData['Date-' + dateIteration].monthNumber === i + 1) {
+                            found = true;
+                        }
                     }
                 }
+            });
+            // If the date is found, add 'disabled' class to the <a> element
+            if (found) {
+                a.classList.add('disabled');
             }
-        });
-
-        // If the date is found, add 'disabled' class to the <a> element
-        if (found) {
-            a.classList.add('disabled');
         }
     }
 }

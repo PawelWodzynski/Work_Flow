@@ -32,11 +32,7 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                     dayNumber = '0' + `${dayNumber}`;
                 }
 
-                var result = globalPointsList.filter(function(object) {
-                    return Object.keys(object).some(function(key) {
-                        return object[key].todoPoint.fromDayNumber === dayIteration;
-                    });
-                });
+
                 if (dayIteration === daysCountInMonth + 1){
                     break;
                 }else {
@@ -50,19 +46,31 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                     col.innerHTML =  dayComponent(formattedDate,dayName,dayNumber,todoDateId);
                     row.appendChild(col);
 
-                    if (result.length !== 0){
-                        result.forEach(function(object) {
-                            Object.keys(object).forEach(function(key) {
-                                if (object[key].todoPoint.fromDayNumber === dayIteration) {
-                                    pointsToIntroduceIteration++;
-                                    const objectKey = 'Point-' + pointsToIntroduceIteration;
-                                    const pointContent = object[key].todoPoint.content;
-                                    const pointCompleted = object[key].todoPoint.completed;
-                                    const pointId = object[key].todoPoint.id;
-                                    pointsToIntroduceObject[objectKey] = {rowId: htmlRowId,completed: pointCompleted ,content: pointContent, todoPointId : pointId };
-                                }
+                    if (todoPointsExisted) {
+                        var result = globalPointsList.filter(function (object) {
+                            return Object.keys(object).some(function (key) {
+                                return object[key].todoPoint.fromDayNumber === dayIteration;
                             });
                         });
+                        if (result.length !== 0) {
+                            result.forEach(function (object) {
+                                Object.keys(object).forEach(function (key) {
+                                    if (object[key].todoPoint.fromDayNumber === dayIteration) {
+                                        pointsToIntroduceIteration++;
+                                        const objectKey = 'Point-' + pointsToIntroduceIteration;
+                                        const pointContent = object[key].todoPoint.content;
+                                        const pointCompleted = object[key].todoPoint.completed;
+                                        const pointId = object[key].todoPoint.id;
+                                        pointsToIntroduceObject[objectKey] = {
+                                            rowId: htmlRowId,
+                                            completed: pointCompleted,
+                                            content: pointContent,
+                                            todoPointId: pointId
+                                        };
+                                    }
+                                });
+                            });
+                        }
                     }
 
                 }
@@ -72,16 +80,12 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
 
             let pointsIteration = 0;
             for (let key in pointsToIntroduceObject){
-                // jeslu klucz o nazwie fromDayNumber-X  istnieje w obiekcie pointsToIntroduceObject
-                // wyciagnij w petli parametry rowId(row nad ktory ma byc wlozony punkt), completed, content
-                // i uzyj to
                 pointsIteration++;
 
                 const rowId = pointsToIntroduceObject[`Point-${pointsIteration}`].rowId;
                 const content = pointsToIntroduceObject[`Point-${pointsIteration}`].content;
                 const completed = pointsToIntroduceObject[`Point-${pointsIteration}`].completed;
                 const pointId = pointsToIntroduceObject[`Point-${pointsIteration}`].todoPointId;
-                console.log(content);
 
                 let contentId = 'content-' + `${rowId}` + '-' + `${pointsIteration}`;
                 let checkBoxId = 'checkBox' + `${rowId}` + '-' + `${pointsIteration}`;

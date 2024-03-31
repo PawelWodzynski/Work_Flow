@@ -1,57 +1,60 @@
 // This event listener triggers when dates are successfully fetched
 document.addEventListener("gettingDatesCompleted", function (){
-    var dateIteration = 0;
-    // Loop through the global dates list to process each date
-    for (let i = 0; i < globalDatesList.length; i++){
-        const dateData = globalDatesList[i];
-        dateIteration++;
 
-        // Extract necessary date information
-        var year = dateData['Date-' + dateIteration].year;
-        var monthNumber = dateData['Date-' + dateIteration].monthNumber;
-        var todoDateId=  dateData['Date-' + dateIteration].id;
+    if (datesExisted) {
 
-        // Call function to retrieve days for the specified month and year
-        getDays(year,monthNumber);
+        var dateIteration = 0;
+        // Loop through the global dates list to process each date
+        for (let i = 0; i < globalDatesList.length; i++) {
+            const dateData = globalDatesList[i];
+            dateIteration++;
 
-        // Calculate the name of the first day of the month
-        const firstDayOfMonth = moment([year, monthNumber - 1]).startOf('month');
-        const firstDayName = firstDayOfMonth.format('dddd');
+            // Extract necessary date information
+            var year = dateData['Date-' + dateIteration].year;
+            var monthNumber = dateData['Date-' + dateIteration].monthNumber;
+            var todoDateId = dateData['Date-' + dateIteration].id;
 
-        // Create a container to hold the calendar display
-        const container = document.createElement('div');
-        container.style.marginTop = '20px';
-        container.style.marginBottom = '20px';
-        container.id = year + '-' + monthNumber;
+            // Call function to retrieve days for the specified month and year
+            getDays(year, monthNumber);
 
-        // Creating table rows begins here
-        const tbody = document.createElement('tbody');
-        tbody.id = 'dateBody-' + year + '-' + monthNumber;
+            // Calculate the name of the first day of the month
+            const firstDayOfMonth = moment([year, monthNumber - 1]).startOf('month');
+            const firstDayName = firstDayOfMonth.format('dddd');
 
-        // Loop through to create rows for each week
-        for (let i = 0; i < monthDays.length / 7; i++){
-            const row = document.createElement('tr');
+            // Create a container to hold the calendar display
+            const container = document.createElement('div');
+            container.style.marginTop = '20px';
+            container.style.marginBottom = '20px';
+            container.id = year + '-' + monthNumber;
 
-            // Insert data into each row
-            for (let j = 0; j < 7; j++) {
-                const cell = document.createElement('td');
-                // Set appropriate styling for the cell based on whether it belongs to the current month
-                if (monthDays[i * 7 + j].currentMonth === false){
-                    cell.classList.add('day-gray-text');
-                }else {
-                    cell.classList.add('day-number-bold-text');
+            // Creating table rows begins here
+            const tbody = document.createElement('tbody');
+            tbody.id = 'dateBody-' + year + '-' + monthNumber;
+
+            // Loop through to create rows for each week
+            for (let i = 0; i < monthDays.length / 7; i++) {
+                const row = document.createElement('tr');
+
+                // Insert data into each row
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    // Set appropriate styling for the cell based on whether it belongs to the current month
+                    if (monthDays[i * 7 + j].currentMonth === false) {
+                        cell.classList.add('day-gray-text');
+                    } else {
+                        cell.classList.add('day-number-bold-text');
+                    }
+
+                    // Place the day of the month in the cell
+                    cell.textContent = monthDays[i * 7 + j].day;
+                    row.appendChild(cell);
                 }
 
-                // Place the day of the month in the cell
-                cell.textContent = monthDays[i * 7 + j].day;
-                row.appendChild(cell);
+                tbody.appendChild(row);
             }
 
-            tbody.appendChild(row);
-        }
-
-        // Creating HTML content for displaying calendar
-        const htmlContent = `
+            // Creating HTML content for displaying calendar
+            const htmlContent = `
           
             <div id="callendarRow-${year}-${monthNumber}" class="row" type="button" onclick="getTodoPointsByTodoDateId(${todoDateId},${year},${monthNumber})">
                 <div class="col-12">
@@ -105,16 +108,19 @@ document.addEventListener("gettingDatesCompleted", function (){
            </div>
         `;
 
-        // Insert the generated HTML content into the container
-        container.innerHTML = htmlContent;
-        // Append the container to the offcanvas list
-        container.querySelector('table').appendChild(tbody);
-        const datesOffcanvasList = document.getElementById('datesOffcanvasList');
-        datesOffcanvasList.appendChild(container);
-    }
+            // Insert the generated HTML content into the container
+            container.innerHTML = htmlContent;
+            // Append the container to the offcanvas list
+            container.querySelector('table').appendChild(tbody);
+            const datesOffcanvasList = document.getElementById('datesOffcanvasList');
+            datesOffcanvasList.appendChild(container);
+        }
 
+    }
     const event = new Event('puttingDatesCompleted');
     document.dispatchEvent(event);
+
+
 
 });
 

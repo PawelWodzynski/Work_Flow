@@ -19,15 +19,23 @@ document.addEventListener("gettingIdCompleted", async function() {
 
         const data = await response.json();
 
-        globalDatesList = [];
-
-        for (let key in data) {
-            if (data.hasOwnProperty(key)) {
-                globalDatesList.push(data[key]);
+        if (data.hasOwnProperty('existed') && data.existed === false){
+            datesExisted = false;
+        }else{
+            datesExisted = true;
+            globalDatesList = [];
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    globalDatesList.push(data[key]);
+                }
             }
         }
         const event = new Event('gettingDatesCompleted');
         document.dispatchEvent(event);
+
+
+
+
 
 
     } catch (error) {
