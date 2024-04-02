@@ -792,6 +792,14 @@ public class TodoRestController {
     public ResponseEntity<?> deleteTodoPoint(@RequestParam int todoPointId){
         try{
             if (todoService.checkExistenceOfTodoPointById(todoPointId)){
+                TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
+                int todoPointOrder = todoPoint.getPointOrder();
+                List<TodoPoint> highterOrders = todoService.findAllTodoPointsInHighterOrder(todoPoint.getTodoDateId(), todoPoint.getFromDayNumber(), todoPointOrder);
+                for (TodoPoint todoPoint1 : highterOrders) {
+                        int pointOrder = todoPoint1.getPointOrder();
+                        pointOrder--;
+                        todoPoint1.setPointOrder(pointOrder);
+                }
                 todoService.deleteTodoPointById(todoPointId);
                 return ResponseEntity.ok(
                         new SimpleResponseMessageDTO(

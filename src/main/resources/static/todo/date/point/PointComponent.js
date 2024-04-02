@@ -6,7 +6,7 @@ function pointComponent(deadLine,date,checkBoxId, contentId, rowId, completed, c
 
 
     return `
-                <div class="row mb-2">
+                <div id="point-${todoPointId}" class="row mb-2">
                     <div class="col-12">
                         <div type="button" id="pointButton-${todoPointId}" class="w-100 text-white border-bottom" onclick="showPointModal('${todoPointId}','${date}','${deadLine}','${content}')">
                             <div class="row">
