@@ -27,7 +27,6 @@ async function addPoint(inputId,inputRowId,pointsBodyId,dayNumber,todoDateId,add
         const responseData = await response.json();
 
         if (response.ok){
-
             const checkBoxId = 'checkBox' + `${inputRowId}` + '-' + `${childElementsCountInDayBody}`;
             const contentId = 'content-' + `${inputRowId}` + '-' + `${childElementsCountInDayBody}`;
             const rowId = `InputId-${date}`;
@@ -35,6 +34,8 @@ async function addPoint(inputId,inputRowId,pointsBodyId,dayNumber,todoDateId,add
             document.getElementById(`${addPointRowId}`).insertAdjacentHTML(
                 'beforebegin',
                 pointComponent(
+                    responseData.toDayNumber,
+                    date,
                     checkBoxId,
                     contentId,
                     rowId,

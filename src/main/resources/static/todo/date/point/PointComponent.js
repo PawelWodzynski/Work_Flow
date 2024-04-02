@@ -1,4 +1,4 @@
-function pointComponent(checkBoxId, contentId, rowId, completed, content, todoPointId){
+function pointComponent(deadLine,date,checkBoxId, contentId, rowId, completed, content, todoPointId){
 
 
 
@@ -8,7 +8,7 @@ function pointComponent(checkBoxId, contentId, rowId, completed, content, todoPo
     return `
                 <div class="row mb-2">
                     <div class="col-12">
-                        <div type="button" class="w-100 text-white border-bottom">
+                        <div type="button" id="pointButton-${todoPointId}" class="w-100 text-white border-bottom" onclick="showPointModal('${todoPointId}','${date}','${deadLine}','${content}')">
                             <div class="row">
                                 <div class="col-1">
                                     <input class="form-check-input" type="checkbox" id="${checkBoxId}" name="option1" value="something" 

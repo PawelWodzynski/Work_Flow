@@ -1,9 +1,9 @@
-function pointModalComponent(todoPointDate,toDayNumber,content){
+function pointModalComponent(todoPointDate,deadLine,content){
 
 
 
     return `
-           <div class="modal" id="todoPointModal-">
+           <div class="modal" id="todoPointModal-${todoPointDate}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
@@ -11,7 +11,7 @@ function pointModalComponent(todoPointDate,toDayNumber,content){
                 <div class="modal-body border rounded-3 border-warning text-white bg-dark">
                     <div class="row mb-3">
                         <div class="col-4 text-left">
-                            <h6 class="modal-title">${date}</h6>
+                            <h6 class="modal-title">${todoPointDate}</h6>
                         </div>
                         <div class="col-4 d-flex justify-content-center">
                             <div class="dropdown">

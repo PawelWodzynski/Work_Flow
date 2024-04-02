@@ -61,7 +61,10 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                                         const pointContent = object[key].todoPoint.content;
                                         const pointCompleted = object[key].todoPoint.completed;
                                         const pointId = object[key].todoPoint.id;
+                                        const toDayNumber = object[key].todoPoint.toDayNumber;
                                         pointsToIntroduceObject[objectKey] = {
+                                            deadLine : toDayNumber,
+                                            date : formattedDate,
                                             rowId: htmlRowId,
                                             completed: pointCompleted,
                                             content: pointContent,
@@ -86,12 +89,16 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                 const content = pointsToIntroduceObject[`Point-${pointsIteration}`].content;
                 const completed = pointsToIntroduceObject[`Point-${pointsIteration}`].completed;
                 const pointId = pointsToIntroduceObject[`Point-${pointsIteration}`].todoPointId;
+                const pointDate = pointsToIntroduceObject[`Point-${pointsIteration}`].date;
+                const deadLine = pointsToIntroduceObject[`Point-${pointsIteration}`].deadLine;
 
                 let contentId = 'content-' + `${rowId}` + '-' + `${pointsIteration}`;
                 let checkBoxId = 'checkBox' + `${rowId}` + '-' + `${pointsIteration}`;
                 document.getElementById(`${rowId}`).insertAdjacentHTML(
                     'beforebegin',
                     pointComponent(
+                        deadLine,
+                        pointDate,
                         checkBoxId,
                         contentId,
                         rowId,
