@@ -1,6 +1,7 @@
-function pointModalComponent(todoPointId,todoPointDate,deadLine,content){
+function pointModalComponent(keyForContentObject,todoButtonContentId,todoPointId,todoPointDate,deadLine){
 
-
+    const contentFromObject = pointContentGlobalObject[keyForContentObject];
+    const decodedContent = decodeURIComponent(contentFromObject);
 
     return `
            <div class="modal" id="todoPointModal-${todoPointDate}">
@@ -43,16 +44,14 @@ function pointModalComponent(todoPointId,todoPointDate,deadLine,content){
                     <div class="row mb-3">
                         <div class="col-12">
                             <div class="form-group">
-                                <textarea class="form-control bg-secondary text-white" style="width: 100%;" id="myTextarea" rows="15" placeholder="Point Content">
-                                ${content}
-                                </textarea>
+                                <textarea class="form-control bg-dark text-white" style="width: 100%;" id="pointModalTextarea-${todoPointId}" rows="15" placeholder="Point Content">${decodedContent}</textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="button" class="btn btn-success" onclick=""> Save Changes</button>
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="editTodoPoint('${keyForContentObject}','${todoButtonContentId}','${todoPointId}','${deadLine}','pointModalTextarea-${todoPointId}')"> Save Changes</button>
                         </div>
                     </div>
 

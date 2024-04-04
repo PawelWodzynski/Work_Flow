@@ -30,17 +30,21 @@ async function addPoint(inputId,inputRowId,pointsBodyId,dayNumber,todoDateId,add
             const checkBoxId = 'checkBox' + `${inputRowId}` + '-' + `${childElementsCountInDayBody}`;
             const contentId = 'content-' + `${inputRowId}` + '-' + `${childElementsCountInDayBody}`;
             const rowId = `InputId-${date}`;
+            const todoPointId = responseData.todoPointId;
+            const contentFromResponse = responseData.todoContent;
+            const keyForContentGlobalObject =  'pointContent-' + todoPointId;
+
+            pointContentGlobalObject[keyForContentGlobalObject] = contentFromResponse;
 
             document.getElementById(`${addPointRowId}`).insertAdjacentHTML(
                 'beforebegin',
                 pointComponent(
+                    keyForContentGlobalObject,
                     responseData.toDayNumber,
                     date,
                     checkBoxId,
                     contentId,
-                    rowId,
                     false,
-                    responseData.todoContent,
                     responseData.todoPointId
                 ));
 

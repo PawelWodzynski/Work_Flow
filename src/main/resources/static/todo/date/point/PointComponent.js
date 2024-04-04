@@ -1,6 +1,8 @@
-function pointComponent(deadLine,date,checkBoxId, contentId, rowId, completed, content, todoPointId){
+function pointComponent(keyForContentObject,deadLine,date,checkBoxId, contentId, completed, todoPointId){
 
 
+    const contentFromObject = pointContentGlobalObject[keyForContentObject];
+    const decodedContent = decodeURIComponent(contentFromObject);
 
 
 
@@ -8,7 +10,8 @@ function pointComponent(deadLine,date,checkBoxId, contentId, rowId, completed, c
     return `
                 <div id="point-${todoPointId}" class="row mb-2">
                     <div class="col-12">
-                        <div type="button" id="pointButton-${todoPointId}" class="w-100 text-white border-bottom" onclick="showPointModal('${todoPointId}','${date}','${deadLine}','${content}')">
+                        <div type="button" id="pointButton-${todoPointId}" class="w-100 text-white border-bottom" 
+                        onclick="showPointModal('${keyForContentObject}','pointButtonContent-${todoPointId}','${todoPointId}','${date}','${deadLine}')">
                             <div class="row">
                                 <div class="col-1">
                                     <input class="form-check-input" type="checkbox" id="${checkBoxId}" name="option1" value="something" 
@@ -16,7 +19,7 @@ function pointComponent(deadLine,date,checkBoxId, contentId, rowId, completed, c
                                 </div>
                                 <div class="col-11">
                                     <div class="left-aligned-text">
-                                        <span id="${contentId}">${content}</span>
+                                        <span id="pointButtonContent-${todoPointId}">${decodedContent}</span>
                                     </div>
                                 </div>
                             </div>

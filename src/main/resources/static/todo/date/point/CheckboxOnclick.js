@@ -1,7 +1,7 @@
 async function checkboxOnclick(checkBoxId, pointContentId, todoPointId){
 
     const checkBox = document.getElementById(checkBoxId);
-    const content = document.getElementById(pointContentId);
+    const content = document.getElementById('pointButtonContent-'+todoPointId);
     let isChecked = document.getElementById(checkBoxId).checked;
 
     try{
