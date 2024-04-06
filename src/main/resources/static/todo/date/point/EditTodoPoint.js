@@ -1,16 +1,19 @@
-async function editTodoPoint(keyForContentObject,todoButtonContentId,todoPointId, toDayNumber, textareaId){
+async function editTodoPoint(dropdownButtonId,keyForContentObject,todoButtonContentId,todoPointId, toDayNumber, textareaId){
     console.log(keyForContentObject);
     try{
 
         const textarea = document.getElementById(textareaId);
         const textareaContent = textarea.value;
-
         const encodeTextAreaContent = encodeURIComponent(textareaContent);
+
+        const dropdownButton = document.getElementById(dropdownButtonId);
+        const dropdownButtonValue = dropdownButton.innerText;
+        const formattedButtonValue = dropdownButtonValue.replace(/\D/g, '');
 
         const formData= {
           todoPointId : todoPointId,
           content : encodeTextAreaContent,
-          toDayNumber : toDayNumber
+          toDayNumber : formattedButtonValue
         };
 
         const response = await fetch('http://localhost:8080/todoRequest/updateTodoPoint',{
@@ -30,9 +33,10 @@ async function editTodoPoint(keyForContentObject,todoButtonContentId,todoPointId
             const trimmedContent = decodedContent.replace(/[\n\r]/g, ' ');
             pointContentGlobalObject[keyForContentObject] = responseContent;
 
+            pointDeadlineGlobalObject[keyForContentObject] = formattedButtonValue;
+
             const todoPointComponentContent = document.getElementById(todoButtonContentId);
             todoPointComponentContent.innerText = trimmedContent;
-            globalAreaContent = decodedContent;
 
 
 

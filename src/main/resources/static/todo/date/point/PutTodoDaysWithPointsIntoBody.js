@@ -16,6 +16,7 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
     let dayIteration = 0;
     let generatedDaysCount = 0;
     pointContentGlobalObject = {};
+    pointDeadlineGlobalObject = {};
     for (let i = 0; i < pageCount; i++){
         generatedDaysCount = generatedDaysCount + 4;
         const row = document.createElement('div');
@@ -63,7 +64,9 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                                         const pointCompleted = object[key].todoPoint.completed;
                                         const pointId = object[key].todoPoint.id;
                                         const toDayNumber = object[key].todoPoint.toDayNumber;
+                                        const fromDayNumber = object[key].todoPoint.fromDayNumber;
                                         pointsToIntroduceObject[objectKey] = {
+                                            fromDayNumber : fromDayNumber,
                                             deadLine : toDayNumber,
                                             date : formattedDate,
                                             rowId: htmlRowId,
@@ -92,11 +95,17 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                 const pointId = pointsToIntroduceObject[`Point-${pointsIteration}`].todoPointId;
                 const pointDate = pointsToIntroduceObject[`Point-${pointsIteration}`].date;
                 const deadLine = pointsToIntroduceObject[`Point-${pointsIteration}`].deadLine;
+                const fromDayNumber = pointsToIntroduceObject[`Point-${pointsIteration}`].fromDayNumber;
 
-                const keyForContentObject = 'pointContent-' + pointId;
-                console.log(keyForContentObject);
-                const value = content;
-                pointContentGlobalObject[keyForContentObject] =  value;
+                const keyForDataObjects = 'pointContent-' + pointId;
+
+                const contentValue = content;
+                pointContentGlobalObject[keyForDataObjects] =  contentValue;
+
+                const deadlineValue = deadLine;
+                pointDeadlineGlobalObject[keyForDataObjects] = deadlineValue;
+
+
 
                 let contentId = 'pointButtonContent-' + pointId;
                 let checkBoxId = 'checkBox' + `${rowId}` + '-' + `${pointsIteration}`;
@@ -104,7 +113,8 @@ function putTodoDaysWithPointsIntoBody(year,monthNumber, todoDateId){
                 document.getElementById(`${rowId}`).insertAdjacentHTML(
                     'beforebegin',
                     pointComponent(
-                        keyForContentObject,
+                        fromDayNumber,
+                        keyForDataObjects,
                         deadLine,
                         pointDate,
                         checkBoxId,

@@ -33,12 +33,16 @@ async function addPoint(inputId,inputRowId,pointsBodyId,dayNumber,todoDateId,add
             const todoPointId = responseData.todoPointId;
             const contentFromResponse = responseData.todoContent;
             const keyForContentGlobalObject =  'pointContent-' + todoPointId;
+            const fromDayNumber   = responseData.fromDayNumber;
+            const deadlineNumber = responseData.toDayNumber;
 
             pointContentGlobalObject[keyForContentGlobalObject] = contentFromResponse;
+            pointDeadlineGlobalObject[keyForContentGlobalObject] = deadlineNumber;
 
             document.getElementById(`${addPointRowId}`).insertAdjacentHTML(
                 'beforebegin',
                 pointComponent(
+                    fromDayNumber,
                     keyForContentGlobalObject,
                     responseData.toDayNumber,
                     date,
