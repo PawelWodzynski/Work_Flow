@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Hidden
@@ -50,6 +51,7 @@ public interface TodoService {
 
     int findTheGreatestPointOrderByTodoDateIdAndByFromDayNumber(int todoDateId, int fromDayNumber);
 
+    List<Map<String, String>> findAllPointsDeadlinesRangesByTodoDateId(int todoDateId);
 
     //////////////////////////////////// TODO EXTENDED POINT/////////////////////////////////////////////////////
     TodoExtendedPoint saveTodoExtendedPoint(TodoExtendedPoint todoExtendedPoint);

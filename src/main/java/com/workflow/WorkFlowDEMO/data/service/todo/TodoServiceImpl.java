@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Hidden
@@ -123,6 +124,11 @@ public class TodoServiceImpl implements TodoService {
         }else {
             return greatestOrder;
         }
+    }
+
+    @Override
+    public List<Map<String, String>> findAllPointsDeadlinesRangesByTodoDateId(int todoDateId) {
+        return todoPointJpaRepository.findDayRangesMapByTodoDateIdOrderByFromDayNumberAndPointOrder(todoDateId);
     }
 
 
