@@ -51,7 +51,7 @@ function pointModalComponent(keyForContentObject,todoButtonContentId,todoPointId
 
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="editTodoPoint('pointDropdownButton-${todoPointId}','${keyForContentObject}','${todoButtonContentId}','${todoPointId}','${deadLine}','pointModalTextarea-${todoPointId}')"> Save Changes</button>
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="editTodoPoint('${todoPointDate}','pointDropdownButton-${todoPointId}','${keyForContentObject}','${todoButtonContentId}','${todoPointId}','${deadLine}','pointModalTextarea-${todoPointId}')"> Save Changes</button>
                         </div>
                     </div>
 

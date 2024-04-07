@@ -1,4 +1,4 @@
-async function editTodoPoint(dropdownButtonId,keyForContentObject,todoButtonContentId,todoPointId, toDayNumber, textareaId){
+async function editTodoPoint(todoPointDate,dropdownButtonId,keyForContentObject,todoButtonContentId,todoPointId, toDayNumber, textareaId){
     console.log(keyForContentObject);
     try{
 
@@ -8,7 +8,14 @@ async function editTodoPoint(dropdownButtonId,keyForContentObject,todoButtonCont
 
         const dropdownButton = document.getElementById(dropdownButtonId);
         const dropdownButtonValue = dropdownButton.innerText;
-        const formattedButtonValue = dropdownButtonValue.replace(/\D/g, '');
+        let formattedButtonValue = dropdownButtonValue.replace(/\D/g, '');
+        const buttonValueContainsNumber = /\d/.test(formattedButtonValue);
+        const definedDate = moment(todoPointDate,"YYYY-MM-DD");
+        const dayNumber = definedDate.date();
+
+        if (!buttonValueContainsNumber){
+            formattedButtonValue = dayNumber;
+        }
 
         const formData= {
           todoPointId : todoPointId,
