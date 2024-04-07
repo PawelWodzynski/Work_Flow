@@ -264,7 +264,7 @@ public class TodoRestController {
                         int iteration = 0;
                         for (TodoDate todoDate : todoDates) {
                             iteration++;
-                            Map<String, Object> dateMap = new HashMap<>();
+                            Map<String, Object> dateMap = new LinkedHashMap<>();
                             dateMap.put("Date-" + iteration, todoDate);
 
                             List<Map<String, String>> deadlineRangesMap = todoService.findAllPointsDeadlinesRangesByTodoDateId(todoDate.getId());
@@ -276,7 +276,7 @@ public class TodoRestController {
                                 deadlineMap.put(key, value);
                             });
                             deadlineMap.forEach((key, value) -> formattedDeadlineMap.put(key,value));
-                            dateMap.put("deadlineRanges",formattedDeadlineMap);
+                            dateMap.put("DeadlineRanges-" + iteration,formattedDeadlineMap);
 
                             formattedDates.add(dateMap);
                         }

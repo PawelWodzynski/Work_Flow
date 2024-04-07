@@ -159,6 +159,16 @@ public class TodoRestControllerDocumentation {
                     "year : (int) <br>" +
                     "employeeId : (int) <br>" +
                     "<br>" +
+                    "|KEY|<br>" +
+                    "<br>" +
+                    "DeadlineRanges-x : ( x = iteration ) <br>" +
+                    "<br>" +
+                    "|PARAMETERS|<br>" +
+                    "<br>" +
+                    "point-${todoPointId} : 1-3 (string) <br>" +
+                    "${todoPointId} = real ID from DB |  '1-3' is the format of the received deadline value, firstPart-SecondPart <br>" +
+                    "firstPart = fromDayNumber | SecondPart = toDayNumber <br>" +
+                    "<br>" +
                     "OR: if employee has no dates<br>" +
                     "existed : (boolean = false)<br>" +
                     "message : (String)<br>" +
