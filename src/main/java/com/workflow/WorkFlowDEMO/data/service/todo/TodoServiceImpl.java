@@ -53,6 +53,16 @@ public class TodoServiceImpl implements TodoService {
         return todoDateJpaRepository.deleteById(todoDateId);
     }
 
+    @Override
+    public Integer findYearByTodoDateId(int todoDateId) {
+        return todoDateJpaRepository.findYearById(todoDateId);
+    }
+
+    @Override
+    public Integer findMonthByTodoDateId(int todoDateId) {
+        return todoDateJpaRepository.findMonthNumberById(todoDateId);
+    }
+
 
     ///////////////////////////////////// TODO POINT ////////////////////////////////////////////////////////////
     @Override

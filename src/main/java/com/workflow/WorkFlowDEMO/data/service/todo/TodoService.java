@@ -23,6 +23,9 @@ public interface TodoService {
 
     TodoDate deleteTodoDateById(int todoDateId);
 
+    Integer findYearByTodoDateId(int todoDateId);
+
+    Integer findMonthByTodoDateId(int todoDateId);
 
     /////////////////////////////////////// TODO POINT ///////////////////////////////////////////////////////////
     TodoPoint saveTodoPoint(TodoPoint todoPoint);

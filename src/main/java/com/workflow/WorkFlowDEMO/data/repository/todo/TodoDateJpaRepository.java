@@ -3,6 +3,7 @@ package com.workflow.WorkFlowDEMO.data.repository.todo;
 import com.workflow.WorkFlowDEMO.data.entity.todo.TodoDate;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +20,9 @@ public interface TodoDateJpaRepository extends JpaRepository<TodoDate,Integer> {
 
     TodoDate deleteById(int todoDateId);
 
+    @Query("SELECT td.year FROM TodoDate td WHERE td.id = :todoDateId")
+    Integer findYearById(int todoDateId);
+
+    @Query("SELECT td.monthNumber FROM TodoDate td WHERE td.id = :todoDateId")
+    Integer findMonthNumberById(int todoDateId);
 }

@@ -1,6 +1,7 @@
 package com.workflow.WorkFlowDEMO.api.controllers.todo;
 
 import com.workflow.WorkFlowDEMO.api.documentation.todo.TodoRestControllerDocumentation;
+import com.workflow.WorkFlowDEMO.api.utils.todo.NumberOfDaysInMonth;
 import com.workflow.WorkFlowDEMO.api.utils.validation.service.ValidationService;
 import com.workflow.WorkFlowDEMO.data.dto.employee.response.SimpleResponseMessageDTO;
 import com.workflow.WorkFlowDEMO.data.dto.todo.request.*;
@@ -363,18 +364,32 @@ public class TodoRestController {
                 int toDayNumber = updateTodoPointDTO.getToDayNumber();
                 if (todoService.checkExistenceOfTodoPointById(todoPointId)) {
                     TodoPoint todoPoint = todoService.findTodoPointById(todoPointId);
-                    todoPoint.setContent(content);
-                    if (todoPoint.getToDayNumber() != toDayNumber) {
-                        todoPoint.setToDayNumber(toDayNumber);
-                    }
-                    Map<String,String> entityErrors = validationService.validateObject(todoPoint,"todoPoint");
-                    if (entityErrors.isEmpty()) {
-                        todoService.saveTodoPoint(todoPoint);
-                        return ResponseEntity.ok(todoPoint);
+                    int todoDateId = todoPoint.getTodoDateId();
+                    int fromDayNumber = todoPoint.getFromDayNumber();
+                    int yearValue = todoService.findYearByTodoDateId(todoDateId);
+                    int monthValue = todoService.findMonthByTodoDateId(todoDateId);
+                    NumberOfDaysInMonth daysCount = new NumberOfDaysInMonth();
+                    int definedDaysCountInMonth = daysCount.numberOfDays(yearValue,monthValue);
+                    boolean isBiggerFromDeadline = fromDayNumber > toDayNumber;
+                    boolean deadlineIsBiggerFromDaysCountInMonth = toDayNumber > definedDaysCountInMonth;
+                    if (!isBiggerFromDeadline && !deadlineIsBiggerFromDaysCountInMonth ) {
+                        todoPoint.setContent(content);
+                        if (todoPoint.getToDayNumber() != toDayNumber) {
+                            todoPoint.setToDayNumber(toDayNumber);
+                        }
+                        Map<String, String> entityErrors = validationService.validateObject(todoPoint, "todoPoint");
+                        if (entityErrors.isEmpty()) {
+                            todoService.saveTodoPoint(todoPoint);
+                            return ResponseEntity.ok(todoPoint);
+                        } else {
+                            Map<String, Object> formatedEntityErrors = new HashMap<>();
+                            formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS", entityErrors);
+                            return ResponseEntity.badRequest().body(formatedEntityErrors);
+                        }
                     }else {
-                        Map<String,Object> formatedEntityErrors = new HashMap<>();
-                        formatedEntityErrors.put("ENTITY_VALIDATION_ERRORS",entityErrors);
-                        return ResponseEntity.badRequest().body(formatedEntityErrors);
+                        return ResponseEntity.badRequest().body(new SimpleResponseMessageDTO(
+                                "Given 'toDayNumber' cannot be lower from 'fromDayNumber' or 'toDayNumber' cannot be higher from days count in appropriate month "
+                                ));
                     }
                 } else {
                     return ResponseEntity.badRequest().body(
