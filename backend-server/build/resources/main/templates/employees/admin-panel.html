@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/employee/admin-panel/SaveEmployeeForm.js" defer></script>
+    <script src="/employee/admin-panel/EditEmployeeForm.js" defer></script>
+    <script src="/employee/admin-panel/ModalUnlockButtons.js" defer></script>
+    <script src="/employee/admin-panel/ResetPasswordForm.js" defer></script>
+    <script src="/employee/admin-panel/DeleteEmployeeForm.js" defer></script>
+
+    <style>
+        .no-anim {
+            transition: none !important; /* toggle off animation of Edit collapse button */
+        }
+         .reset-button {
+            margin-left: 150px;
+         }
+    </style>
+    </style>
+</head>
+<body class="bg-secondary">
+
+<!-- Navbar -->
+
+<nav class = "navbar navbar-expand-lg navbar-dark bg-dark shadow-lg">
+    <div class = "container-fluid">
+        <a class="navbar-brand">Work Flow || Admin Panel</a>
+        <ul class="navbar-nav ms-auto">
+
+
+
+
+            <!-- Navbar Admin Panel Button -->
+            <li  class="nav-item"  sec:authorize="hasRole('ADMIN')">   <!-- Add a link to point to /adminPanel ... this is for the admins -->
+                <form class="nav-link" th:action="@{/employees/adminPanel}" method="get">
+                    <input type= "submit" value="ADMIN" class="btn btn-outline-warning"/>
+                </form>
+            </li>
+
+            <!-- Navbar App Center button -->
+            <li class="nav-item">
+                <form class="nav-link" th:action="@{/}" method="get">
+                    <input type= "submit" value="Apps" class="btn btn-outline-secondary"/>
+                </form>
+            </li>
+
+
+            <!-- Navbar Logout Button -->
+            <li class="nav-item">
+                <form class="nav-link" th:action="@{/logout}" method="POST">
+                    <input type="submit" value="Logout" class="btn btn-outline-danger"/>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</nav> <!-- Navbar End -->
+
+
+
+
+
+
+
+<div class="container">
+
+
+    <br> <!-- page header -->
+    <h3 class="container d-flex justify-content-center align-items-center text-orange ">Admin Panel</h3>
+    <hr> <!-- END page header -->
+
+    <div class="row"> <!-- Search bar -->
+            <form class="d-flex justify-content-center" th:action="@{/employees/adminPanelFindByUsername/0}" method="GET">
+                <div class="col-4 d-flex justify-content-end">
+                    <a class="btn btn-dark btn-sm" th:href="@{/employees/adminPanel}">Reset</a>
+                </div>
+                <div class="col-4 d-flex">
+                    <input class="form-control " name="findByUsername" type="text" placeholder="Search employee by username">
+                </div>
+                <div class="col-4 d-flex">
+                    <button class="btn btn-primary btn-sm" type="button">Search</button>
+                </div>
+            </form>
+    </div> <!-- END Search bar -->
+
+
+
+    <!-- Collapse Add Employee Button -->
+    <div>
+        <button class="btn btn-success btn-sm mb-1" data-bs-toggle="collapse" data-bs-target="#employeeFormCollapse">Add Employee</button>
+
+        <div id="employeeFormCollapse" class="collapse mt-3">
+
+            <!-- Create Employee Form -->
+            <form id="employeeForm" th:action="@{/employeeRequest/saveEmployee}"  method="POST" onsubmit="employeeSaveForm(event)">
+
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <input type="text" name="firstName"  class="form-control form-control-sm" placeholder="First Name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="text" name="lastName" class="form-control form-control-sm" placeholder="Last Name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="text" name="email" class="form-control form-control-sm" placeholder="Email">
+                    </div>
+
+                    <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio1" name="role" value="ADMIN">ADMIN
+                            <label class="form-check-label" for="radio1"></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio2" name="role" value="MANAGER">MANAGER
+                            <label class="form-check-label" for="radio2"></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio3" name="role" value="EMPLOYEE" checked>EMPLOYEE
+                            <label class="form-check-label" for="radio3"></label>
+                        </div> <!-- END radio buttons -->
+                    </div>
+
+                    <div  class="col-md-2 mb-3">
+                        <input id="sendEmployee" type="submit" value="Save Employee" class="btn btn-success btn-sm"/>
+                    </div>
+                </div>
+
+            </form>   <!-- END create employee form -->
+            <div id="validationTextPlaceholder" class="alert alert-danger" style="display: none;"></div>
+        </div>
+    </div> <!-- END Collapse Add Employee Button -->
+
+
+
+
+
+
+
+    <div class="table-responsive">
+    <!-- Existing Employees Table  -->
+    <table class="table table-lg table-dark table-bordered table-striped">
+
+        <!-- Table Header -->
+        <thead>
+
+        <!-- Table Rows For Header Cells -->
+               <tr>
+                   <!-- Defined Cells For Table -->
+                   <th>First Name</th>
+                   <th>Last Name</th>
+                   <th>Username</th>
+                   <th>Email</th>
+                   <th>Role</th>
+                   <th>Actions</th><!-- END Defined Cells For Table -->
+               </tr><!-- END Table Row For Header Cells -->
+
+        </thead><!-- End Table Header -->
+
+
+
+        <!-- Body of Table -->
+        <tbody>
+        <tr th:each="tempEmployee, iterStat : ${employees}">
+            <!-- Table Row For Data Cells -->
+            <td th:id ="'firstNameCell' + ${iterStat.index}" th:text="${tempEmployee.firstName}"/> <!-- First Name Cell -->
+            <td th:id ="'lastNameCell' + ${iterStat.index}" th:text="${tempEmployee.lastName}"/>  <!-- Last Name Cell -->
+            <td th:id ="'usernameCell' + ${iterStat.index}" th:text="${tempEmployee.userName}"/>  <!-- Username Cell -->
+            <td th:id ="'emailCell' + ${iterStat.index}" th:text="${tempEmployee.email}"/>     <!-- Email Cell -->
+
+            <!-- Data (ROLE) Cell Which Gets Only One Role, The Highest In Hierarchy -->
+            <td th:id = "'roleCell' + ${iterStat.index}">
+                                <span th:if="${tempEmployee.roles != null and
+                          #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+    Admin <!-- this will be displayed when user have the ADMIN role -->
+                </span>
+
+                <span th:if="${tempEmployee.roles != null and
+                 #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+    Manager <!-- this will be displayed when user not have ADMIN role but only has the MANAGER role -->
+                </span>
+
+                <span th:if="${tempEmployee.roles != null and
+                 #strings.contains(tempEmployee.roles.toString(), 'ROLE_EMPLOYEE') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN') and
+                 not #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')}">
+    Employee <!-- this will be displayed when user not have ADMIN and MANAGER roles but only has the EMPLOYEE role -->
+                </span>
+            </td><!-- END Data (ROLE) Cell Which Gets Only One Role, The Highest In Hierarchy -->
+
+
+
+            <!-- Actions Cell -->
+            <td class="d-flex">
+                <div class="row"> <!-- row -->
+                    <div class="col-12"> <!-- col -->
+
+                        <div class="row"> <!-- row na delete i edit -->
+
+                            <div class="col-12 d-flex">
+                    <!-- Delete Employee Button -->
+                    <form th:id="'deleteEmployeeForm'+${iterStat.index}" th:data-delete-index="${iterStat.index}" th:action="@{/employeeRequest/deleteEmployee}" method="DELETE" onsubmit="deleteEmployee(event)">
+                        <input type="hidden" name="employeeId" th:value="${tempEmployee.id}" />
+                        <button type="submit" class="btn btn-danger btn-sm text-dark"
+                                onclick="return confirm('Are you sure you want to delete this employee?')">
+                            Delete
+                        </button>
+                    </form>
+                    <!-- END Delete Employee Button -->
+
+                <!-- Edit Employee Button Collapse Button -->
+                <button
+                        class="btn btn-warning btn-sm text-dark ms-2" data-bs-toggle="collapse"
+                        th:data-bs-target="'#editEmployeeCollapse-' + ${iterStat.index}">
+                    Edit
+                </button> <!-- END Edit Employee Collapse Button -->
+                            </div>
+                        </div>
+
+
+                <!-- Grid Of Edit Form -->
+                <!-- Collapsible Edit Employee Section -->
+                <div class="row">
+                <div th:id="'editEmployeeCollapse-' + ${iterStat.index}" class="col-12 collapse no-anim mt-2">
+
+                    <div class = "container" >
+                        <!-- Edit Employee Form -->
+                        <form th:id="'editEmployeeForm-' + ${iterStat.index}"   th:data-index="${iterStat.index}" action="#" th:action="@{/employeeRequest/updateEmployee}"  th:method="POST" onsubmit="editEmployeeSaveForm(event)">
+
+                            <input type="hidden" name="updatedEmployeeId" th:value="${tempEmployee.id}"/>
+
+                            <div class = "row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm no-anim"
+                                           name="firstName"    th:value="${tempEmployee.firstName}"  placeholder="First Name">
+                                </div>
+                                <div class="col-4">
+                                    <input type="text" class="form-control form-control-sm no-anim"
+                                           name="lastName" th:value="${tempEmployee.lastName}" placeholder="Last Name">
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" class="form-control form-control-sm no-anim"
+                                           name="email" th:value="${tempEmployee.email}" placeholder="Email">
+                                </div>
+
+                            </div>
+
+                            <div class = "row" > <!-- ROW -->
+                                <div class="d-flex"> <!-- d-flex container -->
+
+                                <div class="col-9 d-flex"> <!-- col-9 -->
+                                    <!-- Radio buttons for choose role for employee, "selectedRole" parameter, will be forwarded by EmployeeController to EmployeeService -->
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="radio4" name="role" value="ADMIN"
+                                               th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+                                        ADMIN<!-- this will be checked when user have the ADMIN role -->
+                                        <label class="form-check-label" for="radio4"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="radio6" name="role" value="MANAGER"
+                                               th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')and
+                                           not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')}">
+                                        MANAGER<!-- this will be checked when user not have ADMIN role but only has the MANAGER role -->
+                                        <label class="form-check-label" for="radio6"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="radio5" name="role" value="EMPLOYEE"
+                                               th:checked="${tempEmployee.roles != null and #strings.contains(tempEmployee.roles.toString(), 'ROLE_EMPLOYEE')and
+                                           not #strings.contains(tempEmployee.roles.toString(), 'ROLE_ADMIN')and
+                                           not #strings.contains(tempEmployee.roles.toString(), 'ROLE_MANAGER')}" >
+                                        EMPLOYEE<!-- this will be checked when user not have ADMIN and MANAGER roles but only has the EMPLOYEE role -->
+                                        <label class="form-check-label" for="radio5"></label>
+                                    </div><!-- END radio buttons -->
+                                </div> <!-- end of col-9 -->
+                                <div class="col-3"> <!-- Save Changes Butoon -->
+                                    <input th:id="'sendEditedEmployee' + ${iterStat.index}" type="submit" value="Save Changes" class="btn btn-success btn-sm"/>
+                                </div> <!-- End Save Changes Button -->
+                                </div> <!-- END of d-flex container -->
+                            </div> <!-- END of ROW -->
+                        </form><!-- End Edit Employee Form -->
+
+                        <form th:id="'resetEmployeeForm' +${iterStat.index}" th:data-reset-index="${iterStat.index}" action="#" th:action="@{/employeeRequest/resetPassword}" method="POST" onsubmit="resetPasswordForm(event)">
+                            <input type="hidden" name="employeeId" th:value="${tempEmployee.id}" />
+                            <button th:id="'resetPasswordButton' +${iterStat.index}" type="submit" class="btn btn-secondary btn-sm reset-button"
+                                    onclick="if (!(confirm('If you agree, the user will have his password reset' ))) return false;">
+                                Reset Password
+                            </button>
+                        </form>
+
+                    </div> <!-- End of Container -->
+                </div>
+                </div><!-- END Collapsible Edit Employee Section -->
+            </div> <!-- end of col -->
+            </div><!--end of row -->
+            </td><!-- END Actions Cell -->
+        </tr><!-- END Table Row For Data Cells -->
+        </tbody><!-- End Body of Table -->
+    </table> <!--  END Existing Employees Table  -->
+    </div> <!-- END Of Table Responsive DIV -->
+
+
+    <!-- Paging -->
+    <div class = "row">
+        <div class="col-12">
+            <ul class="pagination pagination-sm justify-content-center">
+
+                <!-- if statement for assessing the situation, whether the user is looking for an employee or not,
+                    if it searches, site pagination must be working, for searched username pages -->
+
+                    <li th:if="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity - 1)}">
+                        <a class="page-link" th:href="@{/employees/adminPanelFindByUsername/{page}(page=${pageNumber},findByUsername=${searchedName})}" th:text="${pageNumber + 1}"></a>
+                    </li>
+
+                    <li th:unless="${findByUsername}" class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pageQuantity - 1)}">
+                        <a class="page-link" th:href="@{/employees/adminPanel/{page}(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                    </li>
+
+            </ul>
+        </div>
+    </div> <!-- END Paging -->
+
+
+
+
+
+    <!-- The Modal -->
+    <div class="modal" id="DialogModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="modalBody" class="modal-body"></div>
+
+                <!-- Modal footer -->
+                <div id="modalFooter" class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" >Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div> <!-- End Of Modal -->
+
+
+
+</div>
+
+</body>
+</html>

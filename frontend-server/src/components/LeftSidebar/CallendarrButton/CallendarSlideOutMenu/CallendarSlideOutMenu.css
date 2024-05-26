@@ -1,0 +1,68 @@
+.slide-out-callendar-menu {
+  background-color: rgb(56, 56, 56);
+  height: 94.8vh;
+  width: 0;
+  position: fixed;
+  top: 5vh;
+  left: 0;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(255, 187, 0);
+  overflow: hidden;
+  transition: width 0.3s ease, transform 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 9999;
+}
+
+.slide-out-callendar-menu-grid {
+  display: grid;
+  grid-template-rows: 5vh 95vh;
+}
+
+.slide-out-callendar-menu.visible {
+  width: 20%;
+  transform: translateX(0);
+}
+
+.slide-out-callendar-menu-header-item-1 {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 1fr 3fr 1fr;
+  background-color: rgb(41, 41, 41);
+  border-width: 0px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-color: rgb(255, 187, 0);
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-out-callendar-menu-header-title-item {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 180%;
+  color: rgb(255, 187, 0);
+}
+
+.slide-out-callendar-menu-header-close {
+  grid-column: 1;
+  background-color: transparent;
+  border: none;
+}
+
+@media (max-width: 800px) {
+  .slide-out-callendar-menu.visible {
+    width: 99%;
+  }
+}
+
+@media (max-width: 550px) {
+  .slide-out-callendar-menu.visible {
+    width: 99%;
+  }
+}

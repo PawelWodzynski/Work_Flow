@@ -1,0 +1,8 @@
+.sidebar-right-arrow-item {
+  grid-row: 5;
+  background-color: rgb(53, 53, 53);
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+}

@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "LogoFont";
+  src: url("assets/fonts/Beyond.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.workflow-logo {
+  margin-left: 5px;
+  font-family: "LogoFont", sans-serif;
+  font-size: 200%;
+  color: rgb(255, 187, 0);
+}

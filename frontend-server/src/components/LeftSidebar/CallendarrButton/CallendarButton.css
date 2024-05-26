@@ -1,0 +1,8 @@
+.left-sidebar-callendar-button-item {
+    grid-row: 1;
+    background-color: rgb(53, 53, 53);
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+  }

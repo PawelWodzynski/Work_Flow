@@ -1,0 +1,23 @@
+.navbar-menu-list {
+  grid-column-start: 10;
+  grid-column-end: 10;
+  background-color: rgb(53, 53, 53);
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  border: none;
+  outline: none;
+  visibility: hidden;
+}
+
+@media (max-width: 800px) {
+  .navbar-menu-list {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 550px) {
+  .navbar-menu-list {
+    visibility: visible;
+  }
+}
