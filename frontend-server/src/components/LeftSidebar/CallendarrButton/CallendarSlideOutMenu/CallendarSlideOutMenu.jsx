@@ -1,5 +1,5 @@
 import React from "react";
-import { useSlideOutButtons } from "../CallendarButtonsContext";
+import { useSlideOutButtons } from "../SlideOutsContext";
 import "./CallendarSlideOutMenu.css";
 
 export const CallendarSlideOutMenu = () => {

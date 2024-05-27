@@ -1,7 +1,7 @@
 import React from "react";
 import "./CallendarButton.css";
 import "../../../assets/styles/to-do/icons.css";
-import { useSlideOutButtons } from "./CallendarButtonsContext";
+import { useSlideOutButtons } from "./SlideOutsContext";
 
 const CallendarButton = () => {
   const { isCallendarSlideOutVisible, setCallendarSlideOutVisible } =

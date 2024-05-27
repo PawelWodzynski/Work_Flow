@@ -1,6 +1,6 @@
 import React from "react";
 import "./SlideOutMenu.css";
-import { useSlideOutButtons } from "../../../LeftSidebar/CallendarrButton/CallendarButtonsContext";
+import { useSlideOutButtons } from "../../../LeftSidebar/CallendarrButton/SlideOutsContext";
 
 export const SlideOutMenu = () => {
   const { isMenuSlideOutVisible, setMenuSlideOutVisible } =

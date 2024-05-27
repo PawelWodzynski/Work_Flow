@@ -5,7 +5,7 @@ import LeftSidebar from "../LeftSidebar/LeftSidebar";
 import RightSidebar from "../RightSidebar/RightSidebar";
 import ContentContainer from "../ContentContainer/ContentContainer";
 import { CarouselProvider } from "../Carousel/CarouselContext";
-import { SlideOutButtonsProvider } from "../LeftSidebar/CallendarrButton/CallendarButtonsContext";
+import { SlideOutButtonsProvider } from "../LeftSidebar/CallendarrButton/SlideOutsContext";
 import { CallendarSlideOutMenu } from "../LeftSidebar/CallendarrButton/CallendarSlideOutMenu/CallendarSlideOutMenu";
 import { SlideOutMenu } from "../Navbar/MenuButton/SlideOutMenu/SlideOutMenu";
 
