@@ -1,0 +1,20 @@
+.side-task-list-1 {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: center;
+  justify-self: center;
+}
+
+.side-task-list-2 {
+  grid-row: 1;
+  grid-column: 2;
+  align-self: center;
+  justify-self: center;
+}
+
+.side-task-list-3 {
+  grid-row: 1;
+  grid-column: 3;
+  align-self: center;
+  justify-self: center;
+}

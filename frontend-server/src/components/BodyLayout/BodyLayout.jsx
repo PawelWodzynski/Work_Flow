@@ -8,14 +8,20 @@ import { CarouselProvider } from "../Carousel/CarouselContext";
 import { SlideOutButtonsProvider } from "../LeftSidebar/CallendarrButton/SlideOutsContext";
 import { CallendarSlideOutMenu } from "../LeftSidebar/CallendarrButton/CallendarSlideOutMenu/CallendarSlideOutMenu";
 import { SlideOutMenu } from "../Navbar/MenuButton/SlideOutMenu/SlideOutMenu";
+import TaskModal from "../TaskModal/TaskModal";
 
 const BodyLayout = () => {
+
+
   return (
     <>
       <SlideOutButtonsProvider>
         <CallendarSlideOutMenu />
         <SlideOutMenu />
         <div className="body-container body-grid">
+          <TaskModal></TaskModal>
+
+
           <Navbar />
           <CarouselProvider>
             <LeftSidebar />

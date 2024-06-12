@@ -1,0 +1,10 @@
+.add-save-button {
+    height: 2rem;
+    width: 4rem;
+    margin: 0.5rem;
+    background-color: rgb(255, 187, 0);
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+  }
+  

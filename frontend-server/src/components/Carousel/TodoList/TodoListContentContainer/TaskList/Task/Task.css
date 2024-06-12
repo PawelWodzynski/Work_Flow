@@ -1,0 +1,16 @@
+.task-content {
+  color: rgb(212, 212, 212);
+  font-weight: 400;
+  white-space: nowrap;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.strikethroughed-task-content {
+  color: rgb(192, 192, 192);
+  text-decoration: line-through;
+}
+
+.check {
+  border-radius: 10px;
+}

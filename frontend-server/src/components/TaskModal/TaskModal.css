@@ -1,0 +1,35 @@
+.task-modal-body {
+  position: fixed;
+  align-self: center;
+  justify-self: center;
+  width: 30%;
+  height: 40vh;
+  background-color: rgb(33, 77, 102);
+  border: solid 1px rgb(196, 169, 16);
+  border-radius: 10px;
+  z-index: 9997;
+  visibility: hidden;
+}
+
+.task-modal-body-grid {
+  display: grid;
+  grid-template-rows: 1fr 8fr 1.2fr;
+  grid-template-columns: 1fr 8fr 1fr;
+}
+
+.task-modal-showed {
+  visibility: visible;
+}
+
+.modal-shadow-screen {
+  position: fixed;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  width: 100%;
+  visibility: hidden;
+}
+
+.modal-shadow-screen-showed {
+  visibility: visible;
+}

@@ -1,0 +1,11 @@
+.task-modal-button-group {
+  grid-row: 1;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  align-self: center;
+  justify-self: right;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

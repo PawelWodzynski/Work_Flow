@@ -1,0 +1,9 @@
+.month-name {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-self: start;
+  justify-content: center;
+  margin-top: 0.5vh;
+  font-weight: 700;
+}

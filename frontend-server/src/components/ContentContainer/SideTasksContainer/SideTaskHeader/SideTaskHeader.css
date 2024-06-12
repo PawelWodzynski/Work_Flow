@@ -1,0 +1,18 @@
+.side-task-header {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(33, 77, 102);
+  grid-row: 1;
+  grid-column: 1;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom: solid 1px rgb(102, 102, 102);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-task-header-text {
+  color: rgb(255, 187, 0);
+  font-size: large;
+}

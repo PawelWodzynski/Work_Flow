@@ -10,8 +10,8 @@
   border-top: 2px solid rgb(255, 187, 0);
 
   display: grid;
-  grid-template-rows: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 2fr 8fr;
+  grid-template-columns: 100%;
 }
 
 .content-container-side-tasks-grid-item {

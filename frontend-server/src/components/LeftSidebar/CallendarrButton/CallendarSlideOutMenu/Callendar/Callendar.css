@@ -1,0 +1,15 @@
+.callendar-card {
+  width: 90%;
+  height: 35vh;
+  margin: 10px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 7px;
+  border: 1px;
+  border-style: groove;
+  border-color: rgb(255, 255, 255);
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1.5fr 8.5fr;
+  align-self: center;
+  justify-self: centers;
+}

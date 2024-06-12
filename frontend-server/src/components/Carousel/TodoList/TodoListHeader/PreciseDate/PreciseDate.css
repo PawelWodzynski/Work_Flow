@@ -1,0 +1,9 @@
+.precise-date {
+  color: rgb(214, 214, 214);
+  align-self: center;
+  justify-self: center;
+  grid-row: 2;
+  grid-column: 1;
+  font-size: small;
+  font-weight: 700;
+}

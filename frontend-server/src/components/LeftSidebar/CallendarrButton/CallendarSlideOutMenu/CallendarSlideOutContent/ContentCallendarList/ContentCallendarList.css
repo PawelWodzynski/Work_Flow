@@ -1,0 +1,36 @@
+.slide-out-callendar-list {
+  list-style-type: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.slide-out-callendar-list-li-hidden {
+  opacity: 0;
+  height: 0;
+  visibility: hidden;
+  transition: height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.slide-out-callendar-list-li-showed {
+  height: 5vh;
+  visibility: visible;
+  opacity: 1;
+  transition: height 0.2s ease, opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.slide-out-callendar-li {
+  display: flex;
+  justify-content: center;
+}
+
+.add-slider {
+  grid-row: 2;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  width: 100%;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,6 @@
+.slide-out-callendar-menu-header-close {
+  grid-row: 1;
+  grid-column: 1;
+  background-color: transparent;
+  border: none;
+}

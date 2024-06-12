@@ -10,6 +10,7 @@
   border-width: 0px;
   border-style: solid;
   border-color: rgb(255, 187, 0);
+  border-right: 0px;
   overflow: hidden;
   transition: width 0.3s ease, transform 0.3s ease;
   transform: translateX(-100%);

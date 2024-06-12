@@ -1,0 +1,27 @@
+.no-dots {
+  list-style: none;
+  padding-left: 0;
+  width: 90%;
+}
+
+.no-dots li {
+  padding: 0.1rem;
+  margin: 0.2rem 0;
+}
+
+.task-border {
+  border-bottom: solid 0.03rem rgb(202, 202, 202);
+}
+
+.task-flex {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  overflow: hidden;
+}
+
+.faded-task-border {
+  border-bottom: solid 0.03rem rgb(185, 185, 185);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}

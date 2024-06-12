@@ -1,0 +1,14 @@
+.task-modal-textarea {
+  resize: none;
+  grid-row: 2;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  width: 98%;
+  height: 100%;
+  color: white;
+  outline: none;
+  align-self: center;
+  justify-self: center;
+  background-color: rgb(56, 56, 56);
+  border-radius: 0.7rem;
+}

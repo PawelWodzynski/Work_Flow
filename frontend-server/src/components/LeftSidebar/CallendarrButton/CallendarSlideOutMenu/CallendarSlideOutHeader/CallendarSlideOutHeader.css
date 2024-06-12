@@ -1,0 +1,13 @@
+.slide-out-callendar-menu-header-item-1 {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 1fr 3fr 1fr;
+  background-color: rgb(41, 41, 41);
+  border-width: 0px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-color: rgb(255, 187, 0);
+  border-bottom-color: rgb(94, 94, 94);
+  align-items: center;
+  justify-content: center;
+}

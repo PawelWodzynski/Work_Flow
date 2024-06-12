@@ -1,0 +1,8 @@
+.slide-out-callendar-menu-body {
+  grid-row: 2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}

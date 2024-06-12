@@ -1,0 +1,7 @@
+.close-modal-button {
+  display: inline-flex;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

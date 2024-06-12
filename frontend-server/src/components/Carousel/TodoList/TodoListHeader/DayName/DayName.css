@@ -1,0 +1,9 @@
+.day-name {
+  align-self: center;
+  justify-self: center;
+  grid-row: 1;
+  grid-column: 1;
+  font-weight: 700;
+  font-size: larger;
+  color: rgb(189, 189, 189);
+}
