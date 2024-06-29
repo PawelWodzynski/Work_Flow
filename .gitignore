@@ -3,11 +3,11 @@
 frontend-server/node_modules/.cache/
 
 # IntelliJ IDEA
-.idea/
+backend-server/.idea/
 
 # Gradle
-.gradle/*
-build/*
+backend-server/.gradle/*
+backend-server/build/*
 
 # Binaries
 bin/

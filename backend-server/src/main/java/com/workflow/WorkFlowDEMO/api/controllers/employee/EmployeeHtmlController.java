@@ -81,8 +81,8 @@ public class EmployeeHtmlController {
     // This method has the task of adding to the model a list of all employees searched by the word in the search bar in admin-panel.html
     // And add to model object of new employee for add employee form
     @GetMapping("/adminPanelFindByUsername/{page}")
-    public  String listOfEmployeesFindedByUsername(@PathVariable int page, @RequestParam("findByUsername") String searchedName, Model theModel){
-        // If the user, manual enter page uder 0 number, redirect to page 0
+    public  String listOfEmployeesFindByUsername(@PathVariable int page, @RequestParam("findByUserName") String searchedName, Model theModel){
+        // If the user, manual enter page under 0 number, redirect to page 0
         if (page<0  ){
             page = 0;
         }
@@ -110,7 +110,7 @@ public class EmployeeHtmlController {
 
         // Adding boolean for if statement for paging in admin-panel.html
         boolean findByUsernamePaging = true;
-        theModel.addAttribute("findByUsername",findByUsernamePaging);
+        theModel.addAttribute("findByUserName",findByUsernamePaging);
 
         // Return the view name to be rendered
         return "employees/admin-panel";

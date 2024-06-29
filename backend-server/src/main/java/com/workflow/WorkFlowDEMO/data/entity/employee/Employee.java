@@ -37,7 +37,7 @@ public class Employee {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "employee_roles", // Table for mapping roles
             joinColumns = @JoinColumn(name = "user_id"), // Owning side of the relationship
             inverseJoinColumns = @JoinColumn(name = "role_id")) // Inverse side of the relationship

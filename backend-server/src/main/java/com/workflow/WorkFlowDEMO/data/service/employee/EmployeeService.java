@@ -1,5 +1,7 @@
 package com.workflow.WorkFlowDEMO.data.service.employee;
 
+import com.workflow.WorkFlowDEMO.data.dto.authorization.CredentialsDto;
+import com.workflow.WorkFlowDEMO.data.dto.employee.EmployeeDto;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +41,12 @@ public interface EmployeeService {
     boolean existById(int theId);
 
     Integer findIdByUsername(String username);
+
+    public EmployeeDto findByLogin(String username);
+
+    public EmployeeDto login(CredentialsDto credentialsDto);
+
+
 
 
 

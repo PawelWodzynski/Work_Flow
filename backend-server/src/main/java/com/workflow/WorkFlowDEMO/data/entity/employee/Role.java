@@ -1,10 +1,11 @@
 package com.workflow.WorkFlowDEMO.data.entity.employee;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id // Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment strategy
@@ -41,6 +42,12 @@ public class Role {
         this.name = name;
     }
 
+    // Implementation of getAuthority method from GrantedAuthority interface
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+
     // Adding toString method for debugging
     @Override
     public String toString() {
@@ -48,5 +55,24 @@ public class Role {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    // Override equals and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Role role = (Role) o;
+
+        if (id != null ? !id.equals(role.id) : role.id != null) return false;
+        return name != null ? name.equals(role.name) : role.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

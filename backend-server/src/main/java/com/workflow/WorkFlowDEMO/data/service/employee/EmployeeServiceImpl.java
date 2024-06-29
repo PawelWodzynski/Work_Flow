@@ -1,15 +1,21 @@
 package com.workflow.WorkFlowDEMO.data.service.employee;
 
+import com.workflow.WorkFlowDEMO.data.dto.authorization.CredentialsDto;
+import com.workflow.WorkFlowDEMO.data.dto.employee.EmployeeDto;
 import com.workflow.WorkFlowDEMO.data.repository.employee.EmployeeJpaRepository;
 import com.workflow.WorkFlowDEMO.data.repository.employee.PageEmployeeRepository;
 import com.workflow.WorkFlowDEMO.data.repository.employee.RoleJpaRepository;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Employee;
 import com.workflow.WorkFlowDEMO.data.entity.employee.Role;
+import com.workflow.WorkFlowDEMO.exceptions.AppException;
+import com.workflow.WorkFlowDEMO.mapper.EmployeeMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,7 +25,7 @@ import java.util.*;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private EmployeeJpaRepository employeeJPARepository;
+    private EmployeeJpaRepository employeeJpaRepository;
 
     @Autowired
     private RoleJpaRepository roleRepository;
@@ -30,10 +36,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PageEmployeeRepository pageEmployeeRepository;
 
+    @Autowired
+    private  EmployeeMapper employeeMapper;
+
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
+
     // Implementation of the method to retrieve a list of all employees sorted by last name asc and role hierarchy
     @Override
     public List<Employee> findAll(Pageable pageable) {
-        List<Employee> employees = employeeJPARepository.findAllByOrderByLastNameAsc(pageable);
+        List<Employee> employees = employeeJpaRepository.findAllByOrderByLastNameAsc(pageable);
 
         // Sort employees by role hierarchy : ROLE_ADMIN > ROLE_MANAGER > ROLE_EMPLOYEE
         employees.sort(Comparator.comparing(employee -> {
@@ -75,7 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         // Save employee in DB
-        return employeeJPARepository.save(theEmployee);
+        return employeeJpaRepository.save(theEmployee);
     }
 
 
@@ -83,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findByUsernameContaining(String userName) {
         // find appriocrate usernames
-        return employeeJPARepository.findByUserNameContaining(userName);
+        return employeeJpaRepository.findByUserNameContaining(userName);
     }
 
 
@@ -107,19 +119,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     // implementation method to find employee by id using employee repository (JpaRepository)
     @Override
     public Optional<Employee> findById(int theId) {
-        return employeeJPARepository.findById(theId);
+        return employeeJpaRepository.findById(theId);
     }
 
     // implementation method to save employee without role using employee repository (JpaRepository)
     @Override
     public Employee saveWithoutRole(Employee theEmployee) {
-        return employeeJPARepository.save(theEmployee);
+        return employeeJpaRepository.save(theEmployee);
     }
 
     // implementation method to define count of employees in DB
     @Override
     public long employeesCountInDB() {
-        return employeeJPARepository.count();
+        return employeeJpaRepository.count();
     }
 
     @Override
@@ -130,12 +142,32 @@ public class EmployeeServiceImpl implements EmployeeService {
     // implementation method for checking whether record exist in DB by ID
     @Override
     public boolean existById(int theId) {
-        return employeeJPARepository.existsById(theId);
+        return employeeJpaRepository.existsById(theId);
     }
 
     @Override
     public Integer findIdByUsername(String username) {
-        return employeeJPARepository.findIdByUserName(username);
+        return employeeJpaRepository.findIdByUserName(username);
+    }
+
+    @Override
+    public EmployeeDto findByLogin(String username) {
+        Employee employee = employeeJpaRepository.findByUserName(username)
+                .orElseThrow(() -> new AppException("Unknown employee", HttpStatus.NOT_FOUND));
+
+        return employeeMapper.toUserDto(employee);
+    }
+
+    @Override
+    public EmployeeDto login(CredentialsDto credentialsDto) {
+        Employee employee = employeeJpaRepository.findByUserName(credentialsDto.getLogin())
+                .orElseThrow(() -> new AppException("Unknown employee", HttpStatus.NOT_FOUND));
+
+        if (!passwordEncoder.matches(String.valueOf(credentialsDto.getPassword()), employee.getPassword())) {
+            throw new AppException("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+
+        return employeeMapper.toUserDto(employee);
     }
 
 }

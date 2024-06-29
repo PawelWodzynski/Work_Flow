@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 // EmployeeJPARepository interface extending JpaRepository for database operations
 @Repository
@@ -26,4 +27,7 @@ public interface EmployeeJpaRepository extends JpaRepository<Employee, Integer> 
 
     @Query("SELECT e.id FROM Employee e WHERE e.userName = ?1")
     Integer findIdByUserName(String username);
+
+    Optional<Employee> findByUserName(String userName);
+
 }
