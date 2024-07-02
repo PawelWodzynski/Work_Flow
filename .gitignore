@@ -64,3 +64,32 @@ replay_pid*
 hs_err_pid*
 replay_pid*
 node_modules/.cache/
+
+
+
+# Ignore node_modules directory in frontend-server
+frontend-server/node_modules/
+
+# Ignore build files in frontend-server
+frontend-server/build/
+frontend-server/dist/
+
+# Ignore IDE/Editor specific files in frontend-server
+frontend-server/.vscode/
+frontend-server/.idea/
+frontend-server/*.swp
+
+# Ignore log files in frontend-server
+frontend-server/npm-debug.log*
+frontend-server/yarn-debug.log*
+frontend-server/yarn-error.log*
+
+# Ignore temporary and system files in frontend-server
+frontend-server/.DS_Store
+frontend-server/.env.local
+frontend-server/.env.development.local
+frontend-server/.env.test.local
+frontend-server/.env.production.local
+
+# Ignore Gradle files in frontend-server
+frontend-server/.gradle/
